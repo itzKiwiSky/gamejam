@@ -1,0 +1,17 @@
+{
+	"name": "gamejam",
+	"type": "module",
+	"scripts": {
+		"build": "vite build",
+		"dev": "vite",
+		"preview": "vite preview",
+		"zip": "npm run build && mkdir -p dist && zip -r dist/game.zip dist -x \"**/.DS_Store\""
+	},
+	"dependencies": {
+		"kaplay": "^3001.0.19"
+	},
+	"devDependencies": {
+		"@types/node": "^26.1.1",
+		"vite": "^8.1.4"
+	}
+}
