@@ -1,12 +1,6 @@
-import kaplay from "kaplay";
+import k from "./Engine";
+import "./Loader";
 
-const k = kaplay();
+import.meta.glob("./Scenes/*.js", { eager: true });
 
-k.loadRoot("./"); // A good idea for Itch.io publishing later
-
-k.loadSprite("bean", "sprites/bean.png");
-
-k.add([
-    k.pos(120, 80), 
-    k.sprite("bean")
-]);
+k.onLoad(() => k.go("playscene"));

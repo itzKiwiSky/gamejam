@@ -18,7 +18,9 @@ export default defineConfig({
     base: "./",
     server: {
         port: 3001,
+        hmr: true,
     },
+    publicDir: "./assets",
     build: {
         // disable this for low bundle sizes
         sourcemap: true,
