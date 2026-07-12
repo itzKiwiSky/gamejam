@@ -10,8 +10,3 @@ k.add([
     k.pos(120, 80), 
     k.sprite("bean")
 ]);
-
-const obj = ([
-    k.pos(120, 80), 
-    k.sprite("bean")
-]);
