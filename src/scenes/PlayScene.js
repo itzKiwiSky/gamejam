@@ -1,17 +1,17 @@
 import k from "../Engine";
+import createPlayer from "../game/Player";
 
 k.scene("playscene", () => {
-    const bean = k.add([
-        k.pos(k.center()),
-        k.sprite("nd"),
-        k.rotate(),
-        k.anchor("center")
+    const player = createPlayer();
+
+    const text = k.add([
+        k.pos(20, 20),
+        k.text("Stamina: "),
+        k.fixed(),
     ]);
 
-    bean.onUpdate(() => {
-        bean.pos.y = k.wave(180, 30, k.time() + 2);
-        bean.angle = k.wave(-10, 10, k.time() + 2)
-    });
 
-    // write more of your stuff here :3 //
+    text.onUpdate(() => {
+        text.text = `stamina: ${player.stamina.toFixed(3)}`;
+    });
 });
