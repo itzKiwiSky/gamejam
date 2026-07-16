@@ -1,7 +1,6 @@
 
-import { Color } from "kaplay"; //importando a classe color pra usar o .fromHex()
 import k from "../Engine";
-
+// () => função curta
 k.scene("menuscene", () => {
   // Fundo
   k.add([
