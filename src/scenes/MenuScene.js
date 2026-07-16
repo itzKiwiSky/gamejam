@@ -5,9 +5,9 @@ k.scene("menuscene", () => {
   // Fundo
   k.add([
     k.rect(k.width(), k.height()),
-    k.color(0.1, 0.1, 0.15),
+    k.color(10, 10, 35),
     k.fixed(), // fixa o fundo na câmera
-     //cria um retangulo pra ocupar toda largura e altura da tela, tbm é o fundo
+    //cria um retangulo pra ocupar toda largura e altura da tela, tbm é o fundo
     //e coloca a cor também
   ]) // tudo dentro do [] faz parte do retangulo
 
@@ -16,14 +16,14 @@ k.scene("menuscene", () => {
     k.text("Teste", { size: 64, weight: "bold" }),
     k.pos(k.center().x, 150), //horizontal, centralizado
     k.anchor("center"), //ponto de referencia é o centro
-    k.color(1, 1, 1), //cor branca
+    k.color(k.WHITE), //cor branca
   ])
 
   // Botão Play
   const playBtn = k.add([ //cria um botao chamado playBtn e armazena em uma variavel
     k.rect(300, 80, { radius: 10 }), //radius deixa os cantos rendondinhos
-    k.pos(k.center().x - 150, 350), //centralizado horizontalmente, recua 150 pra ficar no meio  e 350 do topo
-    k.color(0.2, 0.8, 0.3),
+    k.pos(k.center().x, 350), //centralizado horizontalmente, recua 150 pra ficar no meio  e 350 do topo
+    k.color(25, 180, 64),
     k.area(), //ativa a detecção de clique e colisão
     k.anchor("center"),
   ])
@@ -49,13 +49,13 @@ k.scene("menuscene", () => {
   // Botão sair
   const exitBtn = k.add([
     k.rect(300, 80, { radius: 10 }),
-    k.pos(k.center().x - 150, 470),
-    k.color(0.8, 0.2, 0.2),
+    k.pos(k.center().x, 470),
+    k.color(200, 30, 30),
     k.area(),
     k.anchor("center"),
   ])
 
-  exitBtn.add([ 
+  exitBtn.add([
     k.text("Sair", { size: 40, weight: "bold" }),
     k.anchor("center"),
   ])
