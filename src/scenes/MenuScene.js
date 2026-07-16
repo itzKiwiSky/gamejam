@@ -34,7 +34,7 @@ k.scene("menuscene", () => {
   ])
 
   playBtn.onClick(() => {
-    k.go("PlayScene") //vai pra cena "PlayScene"
+    k.go("playscene") //vai pra cena "PlayScene"
   })
 
   // Hover do Play
