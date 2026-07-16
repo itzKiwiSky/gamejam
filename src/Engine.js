@@ -1,5 +1,6 @@
 import kaplay from "kaplay";
 import { crew } from "@kaplayjs/crew";
+import ErrorListenerPlugin from "./plugins/ErrorTrigger";
 
 const k = kaplay({
     width: 1280,
@@ -8,7 +9,7 @@ const k = kaplay({
     stretch: false,
     debug: true,
     crisp: true,
-    plugins: [crew],
+    plugins: [crew, ErrorListenerPlugin],
     font: "happy-o"
 });
 

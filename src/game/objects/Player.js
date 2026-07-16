@@ -1,4 +1,4 @@
-import k from "../Engine";
+import k from "../../Engine";
 
 export default function createPlayer() {
     let dir = k.vec2(0, 0);
@@ -6,6 +6,10 @@ export default function createPlayer() {
         k.pos(k.center()),
         k.rect(32, 32),
         k.color(k.RED),
+
+        k.area(),
+        k.body(),
+
         {
             speed: 250,
             speedMulti: 2.5,        // velocidade do jogador quando o shift estiver apertado
