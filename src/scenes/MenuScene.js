@@ -16,14 +16,14 @@ k.scene("menuscene", () => {
     k.text("Teste", { size: 64, weight: "bold" }),
     k.pos(k.center().x, 150), //horizontal, centralizado
     k.anchor("center"), //ponto de referencia é o centro
-    k.color(k.WHITE), //cor branca
+    k.color(k.Color.fromHex("#dd2100")), //cor branca
   ])
 
   // Botão Play
   const playBtn = k.add([ //cria um botao chamado playBtn e armazena em uma variavel
     k.rect(300, 80, { radius: 10 }), //radius deixa os cantos rendondinhos
     k.pos(k.center().x, 350), //centralizado horizontalmente, recua 150 pra ficar no meio  e 350 do topo
-    k.color(25, 180, 64),
+  k.color(k.Color.fromHex("#29e438")),
     k.area(), //ativa a detecção de clique e colisão
     k.anchor("center"),
   ])
@@ -50,7 +50,7 @@ k.scene("menuscene", () => {
   const exitBtn = k.add([
     k.rect(300, 80, { radius: 10 }),
     k.pos(k.center().x, 470),
-    k.color(200, 30, 30),
+    k.color(k.Color.fromHex("#a80202")),
     k.area(),
     k.anchor("center"),
   ])
