@@ -1,14 +1,23 @@
+import { Rect } from "kaplay";
 import k from "../../Engine";
 
 
-export default function createEnemy(target) {
+export default function createEnemy(target, player) {
     const tomato = k.add([
         k.pos(),
-        k.sprite("tomaicon"),
-        k.scale(3),
-        k.area(),
+        k.sprite("tomaicon", {
+            anim: "idle",
+            animSpeed: 3,
+
+        }),
+        //k.rect(16, 16),
+        k.area({
+            shape: new Rect(k.vec2(), 16, 16)
+        }),
         k.body(),
-        k.state("idle", ["idle", "walk", "attack"]),
+        k.scale(3),
+        k.state("idle", ["idle", "move", "attack"]),
+        k.anchor("center"),
 
         {
             speed: 40,
@@ -27,14 +36,19 @@ export default function createEnemy(target) {
 
     tomato.onStateEnter("idle", () => {
         if (k.exists(target)) {
-
+            tomato.play("idle");
+            k.wait(2, () => {
+                tomato.play("walk");
+                tomato.enterState("move");
+            })
         }
     });
 
-    tomato.onStateUpdate("walk", () => {
+    tomato.onStateUpdate("move", () => {
         if (!k.exists(target)) return;
 
         const dir = target.pos.sub(tomato.pos).unit();
+        tomato.flipX = dir.x > 0;
         tomato.move(dir.scale(tomato.speed));
     });
 }

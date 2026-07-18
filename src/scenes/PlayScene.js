@@ -6,9 +6,9 @@ import createPlayer from "../game/objects/Player";
 k.scene("playscene", () => {
     const player = createPlayer();
 
-    createBigTomate();
+    const bigTomate = createBigTomate();
 
-    createEnemy();
+    createEnemy(bigTomate, player);
 
     const text = k.add([
         k.pos(20, 20),

@@ -5,7 +5,7 @@ export default function createPlayer() {
     const player = k.add([
         k.pos(k.center()),
         k.rect(32, 32),
-        k.color(k.RED),
+        k.color(k.BLUE),
 
         k.area(),
         k.body(),
