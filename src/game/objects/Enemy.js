@@ -1,4 +1,4 @@
-import { Rect } from "kaplay";
+
 import k from "../../Engine";
 
 
@@ -11,9 +11,7 @@ export default function createEnemy(target, player) {
 
         }),
         //k.rect(16, 16),
-        k.area({
-            shape: new Rect(k.vec2(), 16, 16)
-        }),
+        k.area(),
         k.body(),
         k.scale(3),
         k.state("idle", ["idle", "move", "attack"]),
