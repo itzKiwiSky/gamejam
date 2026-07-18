@@ -5,15 +5,10 @@ import k from "../Engine";
     // Barra de volume - variáveis iniciais
     let volumeAtual = 1
     let barraMostrando = false // controla se a barra ta visivel
+    let musicaTocando = false // controla se a musica ja foi iniciada
     const barraX = k.width() - 250 // posicao X da barra (mais perto do botao)
     const barraLargura = 150 // largura da barra
     const barraY = 30
-
-    // Toca a música de fundo do menu
-    k.play("menuMusic", {
-      volume: volumeAtual,
-      loop: true, // faz a musica repetir
-    })
 
     // Fundo
    k.add([
@@ -47,9 +42,7 @@ import k from "../Engine";
     ])
 
     playBtn.onClick(() => {
-      // Paralisa a musica do menu antes de ir pra proxima cena
-      k.stop()
-      // vai pra cena "playscene" (certifique-se que a cena existe)
+      // vai pra cena "playscene" (a musica para automaticamente)
       k.go("playscene")
     })
 
@@ -204,7 +197,8 @@ import k from "../Engine";
       
       volumeAtual = novoVolume
       
-       k.setVolume(volumeAtual)
+      // aplica o volume no kaplay
+      k.setVolume(volumeAtual)
       
       // Atualiza a largura da barra de preenchimento
       volumeBarFill.width = barraLargura * volumeAtual
@@ -222,9 +216,17 @@ import k from "../Engine";
       settingsBtn.color = k.Color.fromHex("#646464") // volta ao cinza original
     })
 
-    // Ativa o audio contexto ao primeiro clique (necessario para tocar som no navegador)
+    // Ativa o audio context
     k.onMousePress(() => {
-      k.setVolume(volumeAtual) // isso ativa o audio context 
-      // no navegador vai ter que interagir, eu acho
+      k.setVolume(volumeAtual) // isso ativa o audio context
+      
+      // Toca a musica apenas na primeira vez que o usuario clica
+      if (!musicaTocando) {
+        k.play("menuMusic", {
+          volume: volumeAtual,
+          loop: true, // faz a musica repetir
+        })
+        musicaTocando = true // marca que a musica foi iniciada
+      }
     })
   })
