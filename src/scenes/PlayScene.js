@@ -1,23 +1,14 @@
 import k from "../Engine";
-import createBigTomate from "../game/objects/BigTomato";
-import createEnemy from "../game/objects/Enemy";
 import createPlayer from "../game/objects/Player";
+import createUI from "../game/objects/UI";
+import createEnemy from "../game/objects/Enemy";
 
 k.scene("playscene", () => {
     const player = createPlayer();
 
-    const bigTomate = createBigTomate();
+    // Cria a UI (barra de vida + estamina)
+    const ui = createUI(player);
 
-    createEnemy(bigTomate, player);
-
-    const text = k.add([
-        k.pos(20, 20),
-        k.text("Stamina: "),
-        k.fixed(),
-    ]);
-
-
-    text.onUpdate(() => {
-        text.text = `stamina: ${player.stamina.toFixed(1)}`;
-    });
+     
+    createEnemy(player, player);
 });
