@@ -1,4 +1,3 @@
-import { Rect } from "kaplay";
 import k from "../../Engine";
 
 
@@ -11,9 +10,7 @@ export default function createEnemy(target, player) {
 
         }),
         //k.rect(16, 16),
-        k.area({
-            shape: new Rect(k.vec2(), 16, 16)
-        }),
+        k.area(),
         k.body(),
         k.scale(3),
         k.state("idle", ["idle", "move", "attack"]),
@@ -35,18 +32,16 @@ export default function createEnemy(target, player) {
     ]);
 
     tomato.onStateEnter("idle", () => {
-        if (k.exists(target)) {
-            tomato.play("idle");
-            k.wait(2, () => {
-                tomato.play("walk");
-                tomato.enterState("move");
-            })
-        }
+
+        tomato.play("idle");
+        k.wait(2, () => {
+            tomato.play("walk");
+            tomato.enterState("move");
+        });
+
     });
 
     tomato.onStateUpdate("move", () => {
-        if (!k.exists(target)) return;
-
         const dir = target.pos.sub(tomato.pos).unit();
         tomato.flipX = dir.x > 0;
         tomato.move(dir.scale(tomato.speed));
