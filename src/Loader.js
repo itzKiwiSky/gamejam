@@ -1,5 +1,5 @@
 import k from "./Engine";
-//import { assets, happyData } from "@kaplayjs/crew";
+import { assets, happyData } from "@kaplayjs/crew";
 
 k.loadRoot("./");
 
@@ -39,4 +39,6 @@ k.loadSprite("tomaicon", "sprites/tomaicon.png", {
     }
 })
 
-//k.loadBitmapFont("happy-o", happyData.outlined, happyData.width_o, happyData.height_o);
+k.loadMusic("menuMusic", "sounds/blossom.wav");
+
+k.loadBitmapFont("happy-o", happyData.outlined, happyData.width_o, happyData.height_o);
