@@ -74,3 +74,38 @@ k.scene("menuscene", () => {
     exitBtn.color = k.Color.fromHex("#dc2626")
   })
 })
+
+const settingBtn = k.add([
+  k.rect(60,60,{radius:5}),
+  k.pos(k.width() - 80,30),
+  k.color(k.Color.fromHex("#646464")),
+  k.area(),
+  k.anchor("center"),
+  k.fixed(),
+])
+settingsBtn.add([
+  k.text("Config", {size:32}),
+  k.anchor("center"),
+])
+let volumeAtual = 1
+
+//Clique esquerdo = aumenta
+
+settingsBtn.onClick(() =>{
+  volumeAtual = Math.min(volumeAtual +0.1,1)
+  k.volume(volumeAtual)}
+)
+//clique direito diminui
+settingsBtn.onMousePress("right",() => {
+  volumeAtual = Math.max(volumeAtual - 0.1, 0)
+  k.volume(volumeAtual)
+})
+//hover
+settingBtn.onHover(() =>{
+  settingBtn.color = k.Color.fromHex("#808080")
+
+})
+
+settingsBtn.onHoverEnd(() =>{
+  settingBtn.color = k.Color.fromHex("#646464")
+})
