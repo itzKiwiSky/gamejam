@@ -2,6 +2,19 @@ import k from "../Engine";
 // () => funcao curta
 
   k.scene("menuscene", () => {
+    // Barra de volume - variáveis iniciais
+    let volumeAtual = 1
+    let barraMostrando = false // controla se a barra ta visivel
+    const barraX = k.width() - 250 // posicao X da barra (mais perto do botao)
+    const barraLargura = 150 // largura da barra
+    const barraY = 30
+
+    // Toca a música de fundo do menu
+    k.play("menuMusic", {
+      volume: volumeAtual,
+      loop: true, // faz a musica repetir
+    })
+
     // Fundo
    k.add([
     k.rect(k.width(), k.height()),
@@ -34,7 +47,10 @@ import k from "../Engine";
     ])
 
     playBtn.onClick(() => {
-      k.go("playscene") // vai pra cena "PlayScene"
+      // Paralisa a musica do menu antes de ir pra proxima cena
+      k.stop()
+      // vai pra cena "playscene" (certifique-se que a cena existe)
+      k.go("playscene")
     })
 
         // Hover do Play
@@ -89,106 +105,126 @@ import k from "../Engine";
          k.anchor("center"),
         ])
 
-            // Barra de volume
-              let volumeAtual = 1
-              let barraMostrando = false // controla se a barra ta visivel
-              const barraX = k.width() - 250 // posicao X da barra (mais perto do botao)
-              const barraLargura = 150 // largura da barra
-              const barraY = 30
+    // Variaveis pra armazenar os elementos da barra
+    let volumeBarBg = null
+    let volumeBarFill = null
+    let volumeText = null
 
-    // Fundo da barra (preto)
-    const volumeBarBg = k.add([
-    k.rect(barraLargura, 20),
-    k.pos(barraX, barraY),
-    k.color(k.Color.fromHex("#1a1a1a")),
-    k.area(),
-    k.anchor("center"),
-    k.fixed(),
-    k.opacity(0), // comeca invisivel
-  ])
+    // Funcao pra criar/recriar a barra de volume
+    function criarBarraVolume() {
+      // Remove elementos antigos se existirem
+      if (volumeBarBg) k.destroy(volumeBarBg)
+      if (volumeBarFill) k.destroy(volumeBarFill)
+      if (volumeText) k.destroy(volumeText)
 
-  // Indicador da barra (verde - mostra volume atual)
-  const volumeBarFill = k.add([
-    k.rect(barraLargura * volumeAtual, 20),
-    k.pos(barraX, barraY),
-    k.color(k.Color.fromHex("#22c55e")),
-    k.anchor("center"),
-    k.fixed(),
-    k.opacity(0), // comeca invisivel
-  ])
+      // Fundo da barra (preto)
+      volumeBarBg = k.add([
+        k.rect(barraLargura, 20),
+        k.pos(barraX, barraY),
+        k.color(k.Color.fromHex("#1a1a1a")),
+        k.area(),
+        k.anchor("center"),
+        k.fixed(),
+        k.opacity(barraMostrando ? 1 : 0), // inicia invisivel ou visivel
+      ])
 
-  // Texto do percentual
-  const volumeText = k.add([
-    k.text("100%", { size: 14 }),
-    k.pos(barraX + 100, barraY),
-    k.anchor("center"),
-    k.color(k.WHITE),
-    k.fixed(),
-    k.opacity(0), // comeca invisivel
-  ])
+      // Indicador da barra (verde - mostra volume atual)
+      volumeBarFill = k.add([
+        k.rect(barraLargura * volumeAtual, 20),
+        k.pos(barraX, barraY),
+        k.color(k.Color.fromHex("#22c55e")),
+        k.anchor("center"),
+        k.fixed(),
+        k.opacity(barraMostrando ? 1 : 0), // inicia invisivel ou visivel
+      ])
 
-  // Quando clica no botao de som, mostra/esconde a barra
-  settingsBtn.onClick(() => {
-    barraMostrando = !barraMostrando // inverte o estado
-    
-    // mostra ou esconde a barra
-    if (barraMostrando) {
-      volumeBarBg.opacity = 1
-      volumeBarFill.opacity = 1
-      volumeText.opacity = 1
-    } else {
-      volumeBarBg.opacity = 0
-      volumeBarFill.opacity = 0
-      volumeText.opacity = 0
+      // Texto do percentual
+      volumeText = k.add([
+        k.text(Math.round(volumeAtual * 100) + "%", { size: 14 }),
+        k.pos(barraX + 100, barraY),
+        k.anchor("center"),
+        k.color(k.WHITE),
+        k.fixed(),
+        k.opacity(barraMostrando ? 1 : 0), // inicia invisivel ou visivel
+      ])
+
+      // Hover na barra
+      volumeBarBg.onHover(() => {
+        volumeBarBg.color = k.Color.fromHex("#2a2a2a") // preto mais claro
+      })
+
+      volumeBarBg.onHoverEnd(() => {
+        volumeBarBg.color = k.Color.fromHex("#1a1a1a") // volta ao preto original
+      })
     }
-  })
 
-  // Quando clica ou arrasta na barra, muda o volume
-  volumeBarBg.onMousePress(() => {
-    atualizarVolume()
-  })
+    // Cria a barra pela primeira vez
+    criarBarraVolume()
 
-  // Tambem atualiza enquanto arrasta (drag)
-  k.onMouseMove(() => {
-    if (barraMostrando && k.isMousePressed()) {
-      atualizarVolume()
+    // Quando clica no botao de som, mostra/esconde a barra
+    settingsBtn.onClick(() => {
+      barraMostrando = !barraMostrando // inverte o estado
+      
+      // mostra ou esconde a barra
+      if (barraMostrando) {
+        volumeBarBg.opacity = 1
+        volumeBarFill.opacity = 1
+        volumeText.opacity = 1
+      } else {
+        volumeBarBg.opacity = 0
+        volumeBarFill.opacity = 0
+        volumeText.opacity = 0
+      }
+    })
+
+    // Quando clica ou arrasta na barra, muda o volume
+    volumeBarBg.onMousePress(() => {
+      if (barraMostrando) {
+        atualizarVolume()
+      }
+    })
+
+    // Tambem atualiza enquanto arrasta (drag)
+    k.onMouseMove(() => {
+      if (barraMostrando && k.isMousePressed()) {
+        atualizarVolume()
+      }
+    })
+
+    // Funcao auxiliar pra calcular e atualizar o volume
+    function atualizarVolume() {
+      const mousePos = k.mousePos() // pega a posicao do mouse
+      const esquerda = barraX - (barraLargura / 2) // comeco da barra
+      const direita = barraX + (barraLargura / 2) // final da barra
+      const clicX = mousePos.x
+      
+      // calcula a posicao do clique relativa a barra (0 a 1)
+      let novoVolume = (clicX - esquerda) / barraLargura
+      novoVolume = Math.max(0, Math.min(1, novoVolume)) // garante que fica entre 0 e 1
+      
+      volumeAtual = novoVolume
+      
+       k.setVolume(volumeAtual)
+      
+      // Atualiza a largura da barra de preenchimento
+      volumeBarFill.width = barraLargura * volumeAtual
+      
+      // Atualiza o texto com o percentual
+      volumeText.text = Math.round(volumeAtual * 100) + "%"
     }
-  })
 
-  // Funcao auxiliar pra calcular e atualizar o volume
-  function atualizarVolume() {
-    const mousePos = k.mousePos() // pega a posicao do mouse
-    const esquerda = barraX - (barraLargura / 2) // comeco da barra
-    const direita = barraX + (barraLargura / 2) // final da barra
-    const clicX = mousePos.x
-    
-    // calcula a posicao do clique relativa a barra (0 a 1)
-    let novoVolume = (clicX - esquerda) / barraLargura
-    novoVolume = Math.max(0, Math.min(1, novoVolume)) // garante que fica entre 0 e 1
-    
-    volumeAtual = novoVolume
-    k.volume(volumeAtual) // aplica o volume
-    
-    // atualiza a barra visual
-    volumeBarFill.width = barraLargura * volumeAtual
-    volumeText.text = Math.round(volumeAtual * 100) + "%" // mostra percentual
-  }
+    // Hover no botao de som
+    settingsBtn.onHover(() => {
+      settingsBtn.color = k.Color.fromHex("#808080") // cinza mais claro ao passar mouse
+    })
 
-  // Hover na barra
-  volumeBarBg.onHover(() => {
-    volumeBarBg.color = k.Color.fromHex("#2a2a2a") // preto mais claro
-  })
+    settingsBtn.onHoverEnd(() => {
+      settingsBtn.color = k.Color.fromHex("#646464") // volta ao cinza original
+    })
 
-  volumeBarBg.onHoverEnd(() => {
-    volumeBarBg.color = k.Color.fromHex("#1a1a1a") // volta ao preto original
+    // Ativa o audio contexto ao primeiro clique (necessario para tocar som no navegador)
+    k.onMousePress(() => {
+      k.setVolume(volumeAtual) // isso ativa o audio context 
+      // no navegador vai ter que interagir, eu acho
+    })
   })
-
-  // Hover no botao de som
-  settingsBtn.onHover(() => {
-    settingsBtn.color = k.Color.fromHex("#808080") // cinza mais claro ao passar mouse
-  })
-
-  settingsBtn.onHoverEnd(() => {
-    settingsBtn.color = k.Color.fromHex("#646464") // volta ao cinza original
-  })
-})
