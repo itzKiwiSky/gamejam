@@ -1,50 +1,51 @@
 import k from "../../Engine";
 
+//função que criaa  UI (barra de vida+barra de estamina)
 export default function createUI(player) {
     // Posições da UI
-    const uiX = 20;
-    const uiY = 20;
-    const barWidth = 200;
-    const barHeight = 20;
+    const uiX = 20; //posição X (esquerda)
+    const uiY = 20; //posição Y (topo)
+    const barWidth = 200; //largura das barras
+    const barHeight = 20; //altura das barras
     const spacing = 10; // espaçamento entre as barras
 
-    // Container da UI (pra tudo ficar junto)
+    // contrainer que agrupa todos elementos da UI 
     const uiContainer = k.add([
-        k.pos(uiX, uiY),
+        k.pos(uiX, uiY), //posiciona no topo esquerdo
         k.fixed(), // fica fixo na câmera
-        k.layer("ui"), // fica na frente dos outros elementos
+        k.layer("ui"), // fica na frente dos outros elementos (ainda não ta funcionando)
     ]);
 
     // Barra de vida 
     // Fundo da barra de vida (cinza)
     const healthBarBg = uiContainer.add([
-        k.rect(barWidth, barHeight),
-        k.pos(0, 0),
+        k.rect(barWidth, barHeight), //retangulo 200x20
+        k.pos(0, 0), //posição relativa ao container
         k.color(k.Color.fromHex("#333333")),
-        k.anchor("topleft"),
+        k.anchor("topleft"), // o ponto de referencia eh o canto superior esquerdo
     ]);
 
-    // Barra de vida (verde)
+    // Barra de vida da parte visual (verde)
     const healthBar = uiContainer.add([
-        k.rect(barWidth, barHeight),
-        k.pos(0, 0),
+        k.rect(barWidth, barHeight), //mesmo tamanho do fundo
+        k.pos(0, 0), //mesma posicao
         k.color(k.Color.fromHex("#22c55e")),
-        k.anchor("topleft"),
+        k.anchor("topleft"),    
     ]);
 
-    // Texto de vida
+    // Texto de vida (valores dela)
     const healthText = uiContainer.add([
-        k.text("", { size: 14 }),
-        k.pos(barWidth / 2, barHeight / 2),
-        k.anchor("center"),
-        k.color(k.WHITE),
+        k.text("", { size: 14 }), // texto vazio que vai atualizando
+        k.pos(barWidth / 2, barHeight / 2), // centralizado na barra
+        k.anchor("center"), //ponto de referencia é o centro
+        k.color(k.WHITE), //cor branca
     ]);
 
     // Barra de Estamina
     // Fundo da barra de estamina (cinza)
     const estaminaBarBg = uiContainer.add([
         k.rect(barWidth, barHeight),
-        k.pos(0, barHeight + spacing),
+        k.pos(0, barHeight + spacing), //posiciona abaixo da vida
         k.color(k.Color.fromHex("#333333")),
         k.anchor("topleft"),
     ]);
@@ -52,30 +53,31 @@ export default function createUI(player) {
     // Barra de estamina  
     const estaminaBar = uiContainer.add([
         k.rect(barWidth, barHeight),
-        k.pos(0, barHeight + spacing),
+        k.pos(0, barHeight + spacing),//mesma posição que o fundo
         k.color(k.Color.fromHex("#f59e0b")),
         k.anchor("topleft"),
     ]);
 
     // Texto de estamina
     const estaminaText = uiContainer.add([
-        k.text("", { size: 14 }),
-        k.pos(barWidth / 2, barHeight + spacing + barHeight / 2),
+        k.text("", { size: 14 }), //texto vazio
+        k.pos(barWidth / 2, barHeight + spacing + barHeight / 2), //centralizado na barra de estamina
         k.anchor("center"),
         k.color(k.WHITE),
     ]);
 
-//Atualizar a Ui
+//função que atualiza a UI a cada frame
     uiContainer.onUpdate(() => {
-        // Atualizar a vida 
+        // Atualizar a barra de vida 
+        //verifica se o player tem a propriedade de vida primeiro
         if (player.health !== undefined && player.maxHealth !== undefined) {
-            // Calcula a porcentagem de vida
+            // Calcula a porcentagem de vida (entre 0 a 1)
             const healthPercent = Math.max(0, player.health / player.maxHealth);
             
-            // Atualiza a largura da barra
+            // Atualiza a largura da barra (quanto mais vida, mais larga)
             healthBar.width = barWidth * healthPercent;
             
-            // Atualiza o texto
+            // Atualiza o texto mostrando os valores
             healthText.text = `HP: ${Math.round(player.health)}/${player.maxHealth}`;
             
             // Muda cor baseado na vida  
@@ -93,15 +95,17 @@ export default function createUI(player) {
         }
 
         // Atualizar estamina
+        //verifica se tem o player tem estamina
         if (player.stamina !== undefined) {
             // Estamina máxima é de 100
             const maxEstamina = 100;
+            //calcula a porcentagem de estamina entre 0 e 1
             const estaminaPercent = Math.max(0, Math.min(1, player.stamina / maxEstamina));
             
             // Atualiza a largura da barra
             estaminaBar.width = barWidth * estaminaPercent;
             
-            // Atualiza o texto
+            // Atualiza o texto com valor da estamina
             estaminaText.text = `Estamina: ${player.stamina.toFixed(1)}/${maxEstamina}`;
             
             // Muda cor baseado na estamina  
