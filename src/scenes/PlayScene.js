@@ -18,6 +18,6 @@ k.scene("playscene", () => {
 
 
     text.onUpdate(() => {
-        text.text = `stamina: ${player.stamina.toFixed(3)}`;
+        text.text = `stamina: ${player.stamina.toFixed(1)}`;
     });
 });
