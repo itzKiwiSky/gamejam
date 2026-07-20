@@ -1,7 +1,8 @@
 import k from "../../Engine";
 
 export default function createEnemy(target, player) {
-    const tomato = k.add([
+    const root = k.get("root_game")[0];;
+    const tomato = root.add([
         k.pos(),
         k.rect(16, 16),
         k.area(),
@@ -90,5 +91,5 @@ export default function createEnemy(target, player) {
         if (!attackArea.isOverlapping(tomato.currentTarget))
             tomato.enterState("idle");
     });
-     return tomato;
+    return tomato;
 }

@@ -9,14 +9,26 @@ k.setLayers([
     "background",
     "game",
     "ui",
+    "pause",
 ], "game");
+
+
 
 // cena principal do jogo
 k.scene("playscene", () => {
-    // cria o player
-    const root = k.getTreeRoot();
+    const root = k.add([
+        k.layer("game"),
+        "root_game",
+    ]);
 
-    const player = createPlayer();
+    const uiObjects = k.add([
+        k.layer("ui"),
+        "root_ui", // strings na lista de componentes sao tratados como tags, essas tags pode ser usada para busca de objetos //
+    ]);
+
+
+    // cria o player
+    const player = createPlayer(root);
 
     // cria a UI (barra de vida + estamina)
     const ui = createUI(player);
@@ -33,8 +45,8 @@ k.scene("playscene", () => {
     // Esc pra pausar
     // quando o usuario aperta ESC, pausa o jogo
     k.onKeyPress("escape", () => {
-        pauseMenu.enabled = !pauseMenu.enabled;
-        pauseMenu.hidden = !pauseMenu.enabled;
-        root.paused = pauseMenu.enabled;
+        pauseMenu.enabled = true;
+        pauseMenu.hidden = false;
+        root.paused = true;
     });
 });
