@@ -28,13 +28,13 @@ k.loadSprite("tomaicon", "sprites/tomaicon.png", {
             from: 8,
             to: 14,
             speed: 3,
-            loop: true,
+            loop: false,
         },
         "attack": {
             from: 15,
-            to: 19,
+            to: 18,
             speed: 3,
-            loop: true,
+            loop: false,
         },
     }
 })

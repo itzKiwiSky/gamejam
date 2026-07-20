@@ -2,7 +2,10 @@ import k from "../../Engine";
 
 export default function createPlayer() {
     let dir = k.vec2(0, 0);
-    const player = k.add([
+
+    const root = k.get("root_game")[0];
+
+    const player = root.add([
         k.pos(k.center()),
         k.rect(32, 32),
         k.color(k.BLUE),
@@ -34,10 +37,11 @@ export default function createPlayer() {
 
         player.isRunning = k.isKeyDown("shift") && player.stamina > 0 && dir.len() > 0;
 
+        // a stamina so e perdida quando o jogador estiver se movendo de fato //
         if (player.isRunning) {
             speedMultiplier = player.speedMulti;
             player.stamina = player.stamina - player.staminaPenalty * dt;
-        }
+        } //caso contrario a stamina se estiver abaixo do valor maximo, começa a regerenar
         else if (player.stamina < 100)
             player.stamina = player.stamina + player.staminaRecover * dt;
 

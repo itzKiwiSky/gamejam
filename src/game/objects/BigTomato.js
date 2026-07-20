@@ -2,7 +2,8 @@ import k from "../../Engine";
 
 
 export default function createBigTomate(params) {
-    const big = k.add([
+    const root = k.get("root_game")[0];;
+    const big = root.add([
         k.pos(k.center()),
         k.rect(128, 128),
         k.color(k.RED),

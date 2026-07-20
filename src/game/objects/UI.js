@@ -8,9 +8,10 @@ export default function createUI(player) {
     const barWidth = 200; //largura das barras
     const barHeight = 20; //altura das barras
     const spacing = 10; // espaçamento entre as barras
+    const root = k.get("root_game")[0];;
 
     // contrainer que agrupa todos elementos da UI 
-    const uiContainer = k.add([
+    const uiContainer = root.add([
         k.pos(uiX, uiY), //posiciona no topo esquerdo
         k.fixed(), // fica fixo na câmera
         k.layer("ui"), // fica na frente dos outros elementos (ainda não ta funcionando)
@@ -30,7 +31,7 @@ export default function createUI(player) {
         k.rect(barWidth, barHeight), //mesmo tamanho do fundo
         k.pos(0, 0), //mesma posicao
         k.color(k.Color.fromHex("#22c55e")),
-        k.anchor("topleft"),    
+        k.anchor("topleft"),
     ]);
 
     // Texto de vida (valores dela)
@@ -66,20 +67,20 @@ export default function createUI(player) {
         k.color(k.WHITE),
     ]);
 
-//função que atualiza a UI a cada frame
+    //função que atualiza a UI a cada frame
     uiContainer.onUpdate(() => {
         // Atualizar a barra de vida 
         //verifica se o player tem a propriedade de vida primeiro
         if (player.health !== undefined && player.maxHealth !== undefined) {
             // Calcula a porcentagem de vida (entre 0 a 1)
             const healthPercent = Math.max(0, player.health / player.maxHealth);
-            
+
             // Atualiza a largura da barra (quanto mais vida, mais larga)
             healthBar.width = barWidth * healthPercent;
-            
+
             // Atualiza o texto mostrando os valores
             healthText.text = `HP: ${Math.round(player.health)}/${player.maxHealth}`;
-            
+
             // Muda cor baseado na vida  
             if (healthPercent > 0.5) {
                 healthBar.color = k.Color.fromHex("#22c55e"); // Verde
@@ -101,13 +102,13 @@ export default function createUI(player) {
             const maxEstamina = 100;
             //calcula a porcentagem de estamina entre 0 e 1
             const estaminaPercent = Math.max(0, Math.min(1, player.stamina / maxEstamina));
-            
+
             // Atualiza a largura da barra
             estaminaBar.width = barWidth * estaminaPercent;
-            
+
             // Atualiza o texto com valor da estamina
             estaminaText.text = `Estamina: ${player.stamina.toFixed(1)}/${maxEstamina}`;
-            
+
             // Muda cor baseado na estamina  
             if (estaminaPercent > 0.5) {
                 estaminaBar.color = k.Color.fromHex("#f59e0b"); // Amarelo 

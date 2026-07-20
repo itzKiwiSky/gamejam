@@ -3,11 +3,32 @@ import createPlayer from "../game/objects/Player";
 import createUI from "../game/objects/UI";
 import createEnemy from "../game/objects/Enemy";
 import createVolumeControl from "../game/objects/VolumeControl";
+import createPauseMenu from "../game/interface/PauseMenu";
+
+k.setLayers([
+    "background",
+    "game",
+    "ui",
+    "pause",
+], "game");
+
+
 
 // cena principal do jogo
 k.scene("playscene", () => {
+    const root = k.add([
+        k.layer("game"),
+        "root_game",
+    ]);
+
+    const uiObjects = k.add([
+        k.layer("ui"),
+        "root_ui", // strings na lista de componentes sao tratados como tags, essas tags pode ser usada para busca de objetos //
+    ]);
+
+
     // cria o player
-    const player = createPlayer();
+    const player = createPlayer(root);
 
     // cria a UI (barra de vida + estamina)
     const ui = createUI(player);
@@ -18,27 +39,14 @@ k.scene("playscene", () => {
     // cria o controle de volume  
     const volumeControl = createVolumeControl();
 
-    // RESTAURAR ESTADO SE VOLTOU DA PAUSA 
-    // verifica se tem dados salvos (significa que voltou da pausa)
-    if (window.gameState && window.gameState.fromPause) {
-        // restaura a saude do player
-        player.health = window.gameState.playerHealth;
-        
-        // restaura a stamina do player
-        player.stamina = window.gameState.playerStamina;
-        
-        // restaura a posicao do player (volta pro lugar onde estava)
-        player.pos = window.gameState.playerPos;
-        
-        // restaura a posicao do inimigo (volta pro lugar onde estava)
-        enemy.pos = window.gameState.enemyPos;
-        
-        // restaura o volume do jogo (volta pro volume que tava)
-        k.setVolume(window.gameState.volume);
-        
-        // limpa a flag (marca que nao precisa restaurar mais)
-        delete window.gameState.fromPause;
-    }
+    const pauseMenu = createPauseMenu();
+    pauseMenu.hidden = true
 
-    
+    // Esc pra pausar
+    // quando o usuario aperta ESC, pausa o jogo
+    k.onKeyPress("escape", () => {
+        pauseMenu.enabled = true;
+        pauseMenu.hidden = false;
+        root.paused = true;
+    });
 });
