@@ -1,9 +1,9 @@
 import k from "../../Engine";
+
 //esse codigo basicamente existe da mesma forma no menuScene
 // funcao que cria o controle de volume (botao + barra)
 export default function createVolumeControl() {
     // variaveis de controle
-    let volumeAtual = k.volume(); // pega o volume atual do jogo
     let barraMostrando = false; // controla se a barra tá visivel
     
     // posicoes da barra de volume
@@ -11,7 +11,7 @@ export default function createVolumeControl() {
     const barraY = 30; // posicao Y (topo)
     const barraLargura = 150; // largura da barra
     
-    // variaveis pra armazenar os elementos da barra
+    // variaveis pra armazenar os elementos da barra (criadas uma unica vez)
     let volumeBarBg = null;
     let volumeBarFill = null;
     let volumeText = null;
@@ -33,13 +33,8 @@ export default function createVolumeControl() {
         k.anchor("center"),
     ]);
 
-    // ===== FUNCAO PARA CRIAR/RECRIAR A BARRA =====
+    // ===== FUNCAO PARA CRIAR A BARRA (APENAS UMA VEZ) =====
     function criarBarraVolume() {
-        // remove elementos antigos se existirem
-        if (volumeBarBg) k.destroy(volumeBarBg);
-        if (volumeBarFill) k.destroy(volumeBarFill);
-        if (volumeText) k.destroy(volumeText);
-
         // fundo da barra (preto)
         volumeBarBg = k.add([
             k.rect(barraLargura, 20),
@@ -48,27 +43,27 @@ export default function createVolumeControl() {
             k.area(),
             k.anchor("center"),
             k.fixed(),
-            k.opacity(barraMostrando ? 1 : 0), // aparece/desaparece conforme necessario
+            k.opacity(0), // comeca invisivel
         ]);
 
         // barra preenchida (verde, mostra o volume atual)
         volumeBarFill = k.add([
-            k.rect(barraLargura * volumeAtual, 20),
+            k.rect(barraLargura * k.getVolume(), 20),
             k.pos(barraX, barraY),
             k.color(k.Color.fromHex("#22c55e")),
             k.anchor("center"),
             k.fixed(),
-            k.opacity(barraMostrando ? 1 : 0),
+            k.opacity(0), // comeca invisivel
         ]);
 
         // texto mostrando o percentual
         volumeText = k.add([
-            k.text(Math.round(volumeAtual * 100) + "%", { size: 14 }),
+            k.text(Math.round(k.getVolume() * 100) + "%", { size: 14 }),
             k.pos(barraX + 100, barraY),
             k.anchor("center"),
             k.color(k.WHITE),
             k.fixed(),
-            k.opacity(barraMostrando ? 1 : 0),
+            k.opacity(0), // comeca invisivel
         ]);
 
         // hover na barra (fica mais clara ao passar mouse)
@@ -81,10 +76,18 @@ export default function createVolumeControl() {
         });
     }
 
-    // cria a barra pela primeira vez
+    // Atualização da barra
+    function atualizarBarraVisual() {
+        // atualiza a largura da barra baseado no volume real
+        volumeBarFill.width = barraLargura * k.getVolume();
+        // atualiza o texto
+        volumeText.text = Math.round(k.getVolume() * 100) + "%";
+    }
+
+    // cria a barra pela primeira vez (e so uma vez)
     criarBarraVolume();
 
-   //clique no botao de som
+    //clique no botao de som
     // quando clica, mostra/esconde a barra
     settingsBtn.onClick(() => {
         barraMostrando = !barraMostrando; // inverte o estado
@@ -94,6 +97,8 @@ export default function createVolumeControl() {
             volumeBarBg.opacity = 1;
             volumeBarFill.opacity = 1;
             volumeText.opacity = 1;
+            // atualiza os valores ao mostrar
+            atualizarBarraVisual();
         } else {
             volumeBarBg.opacity = 0;
             volumeBarFill.opacity = 0;
@@ -101,7 +106,7 @@ export default function createVolumeControl() {
         }
     });
 
-   //clique na barra
+    //clique na barra
     // quando clica na barra, atualiza o volume
     volumeBarBg.onMousePress(() => {
         if (barraMostrando) {
@@ -109,7 +114,7 @@ export default function createVolumeControl() {
         }
     });
 
-//arrastar pela barra
+    //arrastar pela barra
     // tambem atualiza enquanto arrasta
     k.onMouseMove(() => {
         if (barraMostrando && k.isMousePressed()) {
@@ -117,11 +122,11 @@ export default function createVolumeControl() {
         }
     });
 
-  //atualizar volume
+    //atualizar volume
     function atualizarVolume() {
         // pega a posicao atual do mouse
         const mousePos = k.mousePos();
-        // comeco e fim da barra
+        // comeco da barra
         const esquerda = barraX - (barraLargura / 2);
         const clicX = mousePos.x;
         
@@ -130,12 +135,10 @@ export default function createVolumeControl() {
         novoVolume = Math.max(0, Math.min(1, novoVolume)); // garante que fica entre 0 e 1
         
         // atualiza o volume
-        volumeAtual = novoVolume;
-        k.setVolume(volumeAtual); // aplica o volume no jogo
+        k.setVolume(novoVolume); // aplica o volume no jogo
         
-        // atualiza a barra visual
-        volumeBarFill.width = barraLargura * volumeAtual;
-        volumeText.text = Math.round(volumeAtual * 100) + "%"; // mostra percentual
+        // atualiza a visual da barra
+        atualizarBarraVisual();
     }
 
     //hover
