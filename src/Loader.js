@@ -5,6 +5,14 @@ k.loadRoot("./");
 
 k.loadSprite("nd", "sprites/nd.jpg");
 
+Object.keys(assets).forEach((key) => {
+    const asset = assets[key];
+    if (asset.kind == "Sprite") {
+        k.loadSprite(`@${key.toLowerCase()}`, asset.sprite);
+        k.loadSprite(`@${key.toLowerCase()}-o`, asset.outlined);
+    }
+});
+
 //k.loadAseprite("tomaicon", "sprites/tomaicon.png", "sprites/tomaicon.json");
 
 k.loadSprite("tomaicon", "sprites/tomaicon.png", {
@@ -37,7 +45,9 @@ k.loadSprite("tomaicon", "sprites/tomaicon.png", {
             loop: false,
         },
     }
-})
+});
+
+k.loadSprite("pulver", "sprites/borrifador.png");
 
 k.loadMusic("menuMusic", "sounds/blossom.wav");
 

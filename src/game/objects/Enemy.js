@@ -25,7 +25,9 @@ export default function createEnemy(target, player) {
             maxAttackSpeed: 1.2,
             attacked: false,
             damage: 14,
-        }
+        },
+
+        "enemy",
     ]);
 
     const tomatoSprite = tomato.add([

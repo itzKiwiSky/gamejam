@@ -1,4 +1,5 @@
 import k from "../../Engine";
+import createPulver from "./Pulver";
 
 export default function createPlayer() {
     let dir = k.vec2(0, 0);
@@ -21,8 +22,12 @@ export default function createPlayer() {
             staminaRecover: 14.2,   // quando o jogador estiver sem shift apertado, recarregar a stamina
 
             isRunning: false,
-        }
+        },
+
+        "player"
     ]);
+
+    const gun = createPulver(player);
 
     player.onUpdate(() => {
         let dt = k.dt();
@@ -49,6 +54,21 @@ export default function createPlayer() {
         if (dir.len() > 0) {
             dir = dir.unit();
             player.move(dir.scale(player.speed * speedMultiplier));
+        }
+
+        //input de gameplay//
+        if (k.isMousePressed("left")) {
+            if (gun.cooldown > 0)
+                return;
+
+            gun.shoot();
+        }
+
+        if (k.isMousePressed("right")) {
+            if (gun.cooldown > 0)
+                return;
+
+            gun.shootSpread();
         }
     });
 

@@ -10,6 +10,8 @@ export default function createBigTomate(params) {
         k.area(),
         k.body({ isStatic: true }),
         k.anchor("center"),
+
+        "objective",
     ]);
 
     return big;
