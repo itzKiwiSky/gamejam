@@ -46,4 +46,5 @@ export default function createEnemy(target, player) {
         tomato.flipX = dir.x > 0;
         tomato.move(dir.scale(tomato.speed));
     });
+     return tomato;
 }
