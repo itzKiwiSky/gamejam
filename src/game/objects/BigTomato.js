@@ -1,7 +1,7 @@
 import k from "../../Engine";
 
 
-export default function createBigTomate(params) {
+export default function createBigTomate() {
     const root = k.get("root_game")[0];;
     const big = root.add([
         k.pos(k.center()),

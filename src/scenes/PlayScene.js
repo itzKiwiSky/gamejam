@@ -4,6 +4,7 @@ import createUI from "../game/objects/UI";
 import createEnemy from "../game/objects/Enemy";
 import createVolumeControl from "../game/objects/VolumeControl";
 import createPauseMenu from "../game/interface/PauseMenu";
+import createBigTomate from "../game/objects/BigTomato";
 
 k.setLayers([
     "background",
@@ -34,7 +35,9 @@ k.scene("playscene", () => {
     const ui = createUI(player);
 
     // cria o inimigo e guarda em uma variável (pra poder acessar depois)
-    let enemy = createEnemy(player, player);
+    const enemy = createEnemy(player, player);
+
+    const bigTomate = createBigTomate();
 
     // cria o controle de volume  
     const volumeControl = createVolumeControl();

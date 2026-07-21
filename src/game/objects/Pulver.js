@@ -47,6 +47,7 @@ export default function createPulver(player) {
     });
 
     gun.shoot = () => {
+
         gun.cooldown = gun.fireRate;
 
         gun.bulletCount -= 1;
