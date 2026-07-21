@@ -4,6 +4,8 @@ import createUI from "../game/objects/UI";
 import createEnemy from "../game/objects/Enemy";
 import createVolumeControl from "../game/objects/VolumeControl";
 import createPauseMenu from "../game/interface/PauseMenu";
+import createBigTomate from "../game/objects/BigTomato";
+import createCasa from "../game/objects/Casa";
 
 k.setLayers([
     "background",
@@ -16,6 +18,9 @@ k.setLayers([
 
 // cena principal do jogo
 k.scene("playscene", () => {
+
+    let cameraScroll = k.getCamPos();
+
     const root = k.add([
         k.layer("game"),
         "root_game",
@@ -27,14 +32,19 @@ k.scene("playscene", () => {
     ]);
 
 
+    // cria a casa 
+    const casa = createCasa();
+
     // cria o player
-    const player = createPlayer(root);
+    const player = createPlayer();
 
     // cria a UI (barra de vida + estamina)
     const ui = createUI(player);
 
+    const bigTomate = createBigTomate();
+
     // cria o inimigo e guarda em uma variável (pra poder acessar depois)
-    let enemy = createEnemy(player, player);
+    const enemy = createEnemy(bigTomate, player);
 
     // cria o controle de volume  
     const volumeControl = createVolumeControl();
@@ -48,5 +58,12 @@ k.scene("playscene", () => {
         pauseMenu.enabled = true;
         pauseMenu.hidden = false;
         root.paused = true;
+    });
+
+    k.onUpdate(() => {
+        cameraScroll.x -= (cameraScroll.x - player.pos.x) * 0.03;
+        cameraScroll.y -= (cameraScroll.y - player.pos.y) * 0.03;
+
+        k.setCamPos(cameraScroll);
     });
 });

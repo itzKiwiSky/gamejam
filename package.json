@@ -9,11 +9,15 @@
 		"create-scene": "node scripts/NewStage.js"
 	},
 	"dependencies": {
+		"@kaplayjs/crew": "^2.0.0",
 		"kaplay": "^3001.0.19",
-		"@kaplayjs/crew": "^2.0.0"
+		"kaplay-plugin-tiled": "^1.1.2"
 	},
 	"devDependencies": {
 		"@types/node": "^26.1.1",
 		"vite": "^6.2.4"
+	},
+	"allowScripts": {
+		"esbuild@0.25.12": true
 	}
 }
