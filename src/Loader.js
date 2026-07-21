@@ -55,13 +55,13 @@ k.loadSprite("player", "sprites/player.png", {
         "idle": {
             from: 0,
             to: 3,
-            speed: 3,
+            speed: 8,
             loop: true,
         },
         "walk": {
             from: 4,
             to: 11,
-            speed: 3,
+            speed: 8,
             loop: true,
         },
         "idle_carry": {

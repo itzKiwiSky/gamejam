@@ -9,7 +9,7 @@ export default function createPlayer() {
     const player = root.add([
         k.pos(k.center()),
         k.rect(32, 32),
-        k.color(k.BLUE),
+        k.opacity(0),
         k.anchor("center"),
 
         k.area(),
@@ -35,7 +35,9 @@ export default function createPlayer() {
 
     const playerSprite = player.add([
         //k.pos(16, 8),
-        k.sprite("player"),
+        k.sprite("player", {
+            anim: "idle",
+        }),
         k.scale(3),
         k.anchor("center"),
         k.z(10),
@@ -56,6 +58,8 @@ export default function createPlayer() {
 
         player.isRunning = k.isKeyDown("shift") && player.stamina > 0 && dir.len() > 0;
 
+        playerSprite.flipX = dir.x < 0;
+
         // a stamina so e perdida quando o jogador estiver se movendo de fato //
         if (player.isRunning) {
             speedMultiplier = player.speedMulti;
@@ -68,7 +72,12 @@ export default function createPlayer() {
         if (dir.len() > 0) {
             dir = dir.unit();
             player.move(dir.scale(player.speed * speedMultiplier));
+            if (playerSprite.getCurAnim().name !== "walk")
+                playerSprite.play("walk");
         }
+        else
+            if (playerSprite.getCurAnim().name !== "idle")
+                playerSprite.play("idle");
 
         //input de gameplay//
         if (k.isMousePressed("left")) {
