@@ -52,6 +52,9 @@ export default function createPlayer() {
         dir.y = 0;
         let speedMultiplier = 1;
 
+        const worldMousePos = k.toWorld(k.mousePos());
+        const mouseDir = worldMousePos.sub(player.pos).unit();
+
         if (k.isKeyDown("a") || k.isKeyDown("left")) dir.x -= 1;
         if (k.isKeyDown("d") || k.isKeyDown("right")) dir.x += 1;
         if (k.isKeyDown("w") || k.isKeyDown("up")) dir.y -= 1;
@@ -59,7 +62,7 @@ export default function createPlayer() {
 
         player.isRunning = k.isKeyDown("shift") && player.stamina > 0 && dir.len() > 0;
 
-        playerSprite.flipX = dir.x < 0;
+        playerSprite.flipX = mouseDir.x < 0;
 
         // a stamina so e perdida quando o jogador estiver se movendo de fato //
         if (player.isRunning) {

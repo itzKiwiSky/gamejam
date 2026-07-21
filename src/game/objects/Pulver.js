@@ -10,6 +10,7 @@ export default function createPulver(player) {
         k.scale(1.8),
         k.rotate(0), // se você quiser que a arma tb rotacione visualmente
         k.outline(3, k.WHITE, 1, "round"),
+        k.z(10),
 
         {
             orbitRadius: 32,
