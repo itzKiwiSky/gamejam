@@ -15,6 +15,8 @@ export default function createPlayer() {
         k.area(),
         k.body(),
 
+        k.z(10),
+
 
         {
             speed: 250,
@@ -36,6 +38,7 @@ export default function createPlayer() {
         k.sprite("player"),
         k.scale(3),
         k.anchor("center"),
+        k.z(10),
     ])
 
     const gun = createPulver(player);

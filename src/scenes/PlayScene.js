@@ -5,6 +5,7 @@ import createEnemy from "../game/objects/Enemy";
 import createVolumeControl from "../game/objects/VolumeControl";
 import createPauseMenu from "../game/interface/PauseMenu";
 import createBigTomate from "../game/objects/BigTomato";
+import createCasa from "../game/objects/Casa";
 
 k.setLayers([
     "background",
@@ -28,8 +29,11 @@ k.scene("playscene", () => {
     ]);
 
 
+    // cria a casa 
+    const casa = createCasa();
+
     // cria o player
-    const player = createPlayer(root);
+    const player = createPlayer();
 
     // cria a UI (barra de vida + estamina)
     const ui = createUI(player);

@@ -83,6 +83,8 @@ k.loadSprite("pulver", "sprites/borrifador.png");
 
 k.loadSprite("smokeFX", "sprites/smokes.png", { sliceX: 3, sliceY: 1 });
 
+k.loadSprite("casa", "sprites/casa.png");
+
 k.loadMusic("menuMusic", "sounds/blossom.wav");
 
 k.loadBitmapFont("happy-o", happyData.outlined, happyData.width_o, happyData.height_o);

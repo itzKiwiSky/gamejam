@@ -1,7 +1,7 @@
 import k from "../../Engine";
 
 export default function createEnemy(target, player) {
-    const root = k.get("root_game")[0];;
+    const root = k.get("root_game")[0];
     const tomato = root.add([
         k.pos(),
         k.rect(16, 16),
