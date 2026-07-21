@@ -41,10 +41,10 @@ k.scene("playscene", () => {
     // cria a UI (barra de vida + estamina)
     const ui = createUI(player);
 
-    // cria o inimigo e guarda em uma variável (pra poder acessar depois)
-    const enemy = createEnemy(player, player);
-
     const bigTomate = createBigTomate();
+
+    // cria o inimigo e guarda em uma variável (pra poder acessar depois)
+    const enemy = createEnemy(bigTomate, player);
 
     // cria o controle de volume  
     const volumeControl = createVolumeControl();

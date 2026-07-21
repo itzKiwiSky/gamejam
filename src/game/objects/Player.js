@@ -15,6 +15,8 @@ export default function createPlayer() {
         k.area(),
         k.body(),
 
+        k.health(100),
+
         k.z(10),
 
 
@@ -25,9 +27,8 @@ export default function createPlayer() {
             staminaPenalty: 14.4,   // aqui indica quanto vai perder de stamina
             staminaRecover: 14.2,   // quando o jogador estiver sem shift apertado, recarregar a stamina
 
-            health: 100,
-
             isRunning: false,
+
         },
 
         "player"

@@ -11,6 +11,8 @@ export default function createBigTomate() {
         k.body({ isStatic: true }),
         k.anchor("center"),
 
+        k.health(100),
+
         "objective",
     ]);
 
