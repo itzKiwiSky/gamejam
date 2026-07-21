@@ -18,6 +18,9 @@ k.setLayers([
 
 // cena principal do jogo
 k.scene("playscene", () => {
+
+    let cameraScroll = k.getCamPos();
+
     const root = k.add([
         k.layer("game"),
         "root_game",
@@ -55,5 +58,12 @@ k.scene("playscene", () => {
         pauseMenu.enabled = true;
         pauseMenu.hidden = false;
         root.paused = true;
+    });
+
+    k.onUpdate(() => {
+        cameraScroll.x -= (cameraScroll.x - player.pos.x) * 0.03;
+        cameraScroll.y -= (cameraScroll.y - player.pos.y) * 0.03;
+
+        k.setCamPos(cameraScroll);
     });
 });

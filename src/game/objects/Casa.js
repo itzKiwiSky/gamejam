@@ -10,6 +10,7 @@ export default function createCasa(player) {
         k.opacity(0),
         k.anchor("center"),
         k.area(),
+        k.scale(1.5),
         k.body({ isStatic: true }),
         k.z(3),
     ]);

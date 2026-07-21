@@ -33,7 +33,9 @@ export default function createPulver(player) {
     ]);
 
     gun.onUpdate(() => {
-        const dir = k.mousePos().sub(player.pos).unit();
+        const worldMousePos = k.toWorld(k.mousePos());
+        const dir = worldMousePos.sub(player.pos).unit();
+
         gun.pos = player.pos.add(dir.scale(gun.orbitRadius));
         gun.aimDir = dir;
 
