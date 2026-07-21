@@ -7,9 +7,9 @@ export default function createPulver(player) {
         k.pos(),
         k.anchor("center"),
         k.sprite("pulver"),
-        k.scale(1.5),
-        k.outline(k.WHITE),
+        k.scale(1.8),
         k.rotate(0), // se você quiser que a arma tb rotacione visualmente
+        k.outline(3, k.WHITE, 1, "round"),
 
         {
             orbitRadius: 32,
@@ -21,12 +21,13 @@ export default function createPulver(player) {
 
             bulletCount: 200,
             bulletPenaltySpread: 3,
-            spreadCount: 3,
-            spreadAngle: 32,
+            spreadCount: 8,
+            spreadAngle: 50,
 
             shoot() { },
             shootSpread() { },
         },
+
 
         "gun",
     ]);
@@ -79,18 +80,31 @@ export default function createPulver(player) {
         const bullet = root.add([
             k.pos(startPos),
             k.anchor("center"),
-            k.rect(4, 4),
-            k.color(k.YELLOW),
+            k.rect(8, 8),
+            k.opacity(0),
             k.rotate(dir.angle()), // usa o ângulo do dir real, não gun.angle
             k.area(),
             k.offscreen({ destroy: true }),
             {
                 dir: dir,
                 speed: gun.bulletSpeed,
-                lifetime: 2.3,
+                lifetime: 0.465,
             },
             "bullet",
         ]);
+
+        const bulletSprite = bullet.add([
+            k.sprite("smokeFX", {
+                frame: k.randi(0, 2),
+            }),
+            k.anchor("center"),
+            k.scale(0.078),
+            k.opacity(1)
+        ]);
+
+        bulletSprite.onUpdate(() => {
+            bulletSprite.opacity = k.map(bullet.lifetime, 0, 0.25, 0, 1);
+        });
 
         bullet.onUpdate(() => {
             bullet.pos = bullet.pos.add(bullet.dir.scale(bullet.speed * k.dt()));
