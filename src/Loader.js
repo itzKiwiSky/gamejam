@@ -47,6 +47,38 @@ k.loadSprite("tomaicon", "sprites/tomaicon.png", {
     }
 });
 
+k.loadSprite("player", "sprites/player.png", {
+    sliceX: 12,
+    sliceY: 2,
+
+    anims: {
+        "idle": {
+            from: 0,
+            to: 3,
+            speed: 3,
+            loop: true,
+        },
+        "walk": {
+            from: 4,
+            to: 11,
+            speed: 3,
+            loop: true,
+        },
+        "idle_carry": {
+            from: 12,
+            to: 15,
+            speed: 3,
+            loop: true,
+        },
+        "walk_carry": {
+            from: 16,
+            to: 23,
+            speed: 3,
+            loop: true,
+        },
+    }
+});
+
 k.loadSprite("pulver", "sprites/borrifador.png");
 
 k.loadMusic("menuMusic", "sounds/blossom.wav");

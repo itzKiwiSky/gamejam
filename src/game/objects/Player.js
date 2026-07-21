@@ -10,9 +10,11 @@ export default function createPlayer() {
         k.pos(k.center()),
         k.rect(32, 32),
         k.color(k.BLUE),
+        k.anchor("center"),
 
         k.area(),
         k.body(),
+
 
         {
             speed: 250,
@@ -21,11 +23,20 @@ export default function createPlayer() {
             staminaPenalty: 14.4,   // aqui indica quanto vai perder de stamina
             staminaRecover: 14.2,   // quando o jogador estiver sem shift apertado, recarregar a stamina
 
+            health: 100,
+
             isRunning: false,
         },
 
         "player"
     ]);
+
+    const playerSprite = player.add([
+        //k.pos(16, 8),
+        k.sprite("player"),
+        k.scale(3),
+        k.anchor("center"),
+    ])
 
     const gun = createPulver(player);
 

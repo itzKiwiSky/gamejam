@@ -6,13 +6,13 @@ export default function createPulver(player) {
     const gun = root.add([
         k.pos(),
         k.anchor("center"),
-        k.sprite("@gun-o"),
+        k.sprite("pulver"),
+        k.scale(1.5),
+        k.outline(k.WHITE),
         k.rotate(0), // se você quiser que a arma tb rotacione visualmente
 
         {
-            orbitAngle: 0,
-            orbitRadius: 60,
-            orbitSpeed: 180, // graus por segundo
+            orbitRadius: 32,
 
             cooldown: 0,
             fireRate: 0.3, // segundos entre tiros
@@ -32,36 +32,35 @@ export default function createPulver(player) {
     ]);
 
     gun.onUpdate(() => {
-        // direção do player até o mouse
-        const dir = mousePos().sub(player.pos).unit();
-
-        // posiciona a arma nessa direção, a uma distância fixa do player
+        const dir = k.mousePos().sub(player.pos).unit();
         gun.pos = player.pos.add(dir.scale(gun.orbitRadius));
+        gun.aimDir = dir;
 
-        // rotaciona a arma pra apontar pro mouse
-        gun.angle = dir.angle();
+        if (dir.x < 0) {
+            gun.flipX = true;
+            gun.angle = dir.angle() - 180;
+        } else {
+            gun.flipX = false;
+            gun.angle = dir.angle();
+        }
 
-        if (gun.cooldown > 0)
-            gun.cooldown -= k.dt();
-
+        if (gun.cooldown > 0) gun.cooldown -= k.dt();
     });
 
     gun.shoot = () => {
-
         gun.cooldown = gun.fireRate;
-
         gun.bulletCount -= 1;
 
-        const dir = Vec2.fromAngle(gun.angle);
-        createBullet(gun.pos, dir);
+        // usa aimDir, não gun.angle
+        createBullet(gun.pos, gun.aimDir);
     }
 
     gun.shootSpread = () => {
         gun.cooldown = gun.fireRate;
         gun.bulletCount -= gun.bulletPenaltySpread;
 
-        const dir = Vec2.fromAngle(gun.angle);
-        shootSpread(gun.pos, dir);
+        // usa aimDir aqui também
+        shootSpread(gun.pos, gun.aimDir);
     };
 
     function shootSpread(startPos, baseDir) {
@@ -82,25 +81,23 @@ export default function createPulver(player) {
             k.anchor("center"),
             k.rect(4, 4),
             k.color(k.YELLOW),
-            k.rotate(gun.angle), // já rotaciona visualmente na direção do tiro
+            k.rotate(dir.angle()), // usa o ângulo do dir real, não gun.angle
             k.area(),
-            k.offscreen({ destroy: true }), // destroi quando sair da tela
+            k.offscreen({ destroy: true }),
             {
                 dir: dir,
                 speed: gun.bulletSpeed,
-                lifetime: 3,
+                lifetime: 2.3,
             },
             "bullet",
         ]);
 
         bullet.onUpdate(() => {
-            bullet.pos = bullet.pos.add(bullet.dir.scale(bullet.speed * dt()));
-
+            bullet.pos = bullet.pos.add(bullet.dir.scale(bullet.speed * k.dt()));
             bullet.lifetime -= k.dt();
 
-            // se auto destroy quando a vida ficar menor que zero //
             if (bullet.lifetime <= 0)
-                bullet.destroy();
+                k.destroy(bullet);
         });
     }
 
