@@ -1,14 +1,24 @@
 import k from "../../Engine";
+import createPulver from "./Pulver";
 
 export default function createPlayer() {
     let dir = k.vec2(0, 0);
-    const player = k.add([
+
+    const root = k.get("root_game")[0];
+
+    const player = root.add([
         k.pos(k.center()),
         k.rect(32, 32),
-        k.color(k.BLUE),
+        k.opacity(0),
+        k.anchor("center"),
 
         k.area(),
         k.body(),
+
+        k.health(100),
+
+        k.z(10),
+
 
         {
             speed: 250,
@@ -18,14 +28,32 @@ export default function createPlayer() {
             staminaRecover: 14.2,   // quando o jogador estiver sem shift apertado, recarregar a stamina
 
             isRunning: false,
-        }
+
+        },
+
+        "player"
     ]);
+
+    const playerSprite = player.add([
+        //k.pos(16, 8),
+        k.sprite("player", {
+            anim: "idle",
+        }),
+        k.scale(3),
+        k.anchor("center"),
+        k.z(10),
+    ])
+
+    const gun = createPulver(player);
 
     player.onUpdate(() => {
         let dt = k.dt();
         dir.x = 0;
         dir.y = 0;
         let speedMultiplier = 1;
+
+        const worldMousePos = k.toWorld(k.mousePos());
+        const mouseDir = worldMousePos.sub(player.pos).unit();
 
         if (k.isKeyDown("a") || k.isKeyDown("left")) dir.x -= 1;
         if (k.isKeyDown("d") || k.isKeyDown("right")) dir.x += 1;
@@ -34,10 +62,13 @@ export default function createPlayer() {
 
         player.isRunning = k.isKeyDown("shift") && player.stamina > 0 && dir.len() > 0;
 
+        playerSprite.flipX = mouseDir.x < 0;
+
+        // a stamina so e perdida quando o jogador estiver se movendo de fato //
         if (player.isRunning) {
             speedMultiplier = player.speedMulti;
             player.stamina = player.stamina - player.staminaPenalty * dt;
-        }
+        } //caso contrario a stamina se estiver abaixo do valor maximo, começa a regerenar
         else if (player.stamina < 100)
             player.stamina = player.stamina + player.staminaRecover * dt;
 
@@ -45,6 +76,26 @@ export default function createPlayer() {
         if (dir.len() > 0) {
             dir = dir.unit();
             player.move(dir.scale(player.speed * speedMultiplier));
+            if (playerSprite.getCurAnim().name !== "walk")
+                playerSprite.play("walk");
+        }
+        else
+            if (playerSprite.getCurAnim().name !== "idle")
+                playerSprite.play("idle");
+
+        //input de gameplay//
+        if (k.isMousePressed("left")) {
+            if (gun.cooldown > 0)
+                return;
+
+            gun.shoot();
+        }
+
+        if (k.isMousePressed("right")) {
+            if (gun.cooldown > 0)
+                return;
+
+            gun.shootSpread();
         }
     });
 

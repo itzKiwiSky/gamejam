@@ -1,19 +1,34 @@
 import k from "../Engine";
-import createBigTomate from "../game/objects/BigTomato";
-import createEnemy from "../game/objects/Enemy";
 import createPlayer from "../game/objects/Player";
+import createUI from "../game/objects/UI";
+import createEnemy from "../game/objects/Enemy";
+import createVolumeControl from "../game/objects/VolumeControl";
+import createPauseMenu from "../game/interface/PauseMenu";
+import createBigTomate from "../game/objects/BigTomato";
+import createCasa from "../game/objects/Casa";
 
+k.setLayers([
+    "background",
+    "game",
+    "ui",
+    "pause",
+], "game");
+
+
+
+// cena principal do jogo
 k.scene("playscene", () => {
-    const player = createPlayer();
 
-    const bigTomate = createBigTomate();
+    let cameraScroll = k.getCamPos();
 
-    createEnemy(bigTomate, player);
+    const root = k.add([
+        k.layer("game"),
+        "root_game",
+    ]);
 
-    const text = k.add([
-        k.pos(20, 20),
-        k.text("Stamina: "),
-        k.fixed(),
+    const uiObjects = k.add([
+        k.layer("ui"),
+        "root_ui", // strings na lista de componentes sao tratados como tags, essas tags pode ser usada para busca de objetos //
     ]);
 
 
