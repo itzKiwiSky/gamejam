@@ -15,7 +15,7 @@ export default function createPlayer() {
         k.area(),
         k.body(),
 
-        k.health(100),
+        
 
         k.z(10),
 
@@ -28,6 +28,10 @@ export default function createPlayer() {
             staminaRecover: 14.2,   // quando o jogador estiver sem shift apertado, recarregar a stamina
 
             isRunning: false,
+
+            //propriedada vida
+            hp:100,
+            maxHp:100, //vida maxima
 
         },
 
@@ -97,6 +101,7 @@ export default function createPlayer() {
 
             gun.shootSpread();
         }
+        
     });
 
     return player;
