@@ -62,6 +62,7 @@ export default function createEnemy(target, player) {
     ]);
 
     tomato.onDeath(() => {
+        tomato.isDead = true;
         if (tomatoSprite.getCurAnim().name !== "death")
             tomatoSprite.play("death");
     });
