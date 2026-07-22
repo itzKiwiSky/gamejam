@@ -26,27 +26,22 @@ k.scene("playscene", () => {
 
     let cameraScroll = k.getCamPos();
 
-    k.onLoad(() => {
-        k.addTiledMap(level, {
-            sprite: "tileset",
-            tiles: [
-                {
-                    comps: (tile) => [
-                        k.scale(2),
-                    ],
-                    match: {
-                        properties: {}
-                    }
-                }
-            ]
-        });
-    });
-
-
+    const root = k.add([
+        k.layer("game"),
+        "root_game",
+    ]);
 
     const uiObjects = k.add([
         k.layer("ui"),
         "root_ui", // strings na lista de componentes sao tratados como tags, essas tags pode ser usada para busca de objetos //
+    ]);
+
+    const map = k.add([
+        k.pos(0, 0),
+        k.sprite("mapa"),
+        k.layer("background"),
+        k.scale(3),
+        k.anchor("center")
     ]);
 
     // um objeto invisivel, vai servir somente para guardar dados sobre o jogo e dirigir como o loop funciona //
@@ -55,6 +50,8 @@ k.scene("playscene", () => {
             daysLeft: 3,
             state: DIA,
             killedTotal: 0,
+
+            currency: 0,
         }
     ]);
 
@@ -77,7 +74,7 @@ k.scene("playscene", () => {
     const volumeControl = createVolumeControl();
 
     const pauseMenu = createPauseMenu();
-    pauseMenu.hidden = true
+    pauseMenu.hidden = true;
 
     // Esc pra pausar
     // quando o usuario aperta ESC, pausa o jogo

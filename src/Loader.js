@@ -86,6 +86,8 @@ k.loadSprite("botao", "sprites/botao.png", {
 
 k.loadSprite("tileset", "sprites/tilemap_packed.png");
 
+k.loadSprite("mapa", "sprites/mapa.png");
+
 k.loadSprite("logo", "sprites/logo.png");
 
 k.loadSprite("pulver", "sprites/borrifador.png");
