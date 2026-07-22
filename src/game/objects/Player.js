@@ -5,6 +5,7 @@ export default function createPlayer() {
     let dir = k.vec2(0, 0);
 
     const root = k.get("root_game")[0];
+    const director = root.get("director")[0];
 
     const player = root.add([
         k.pos(k.center()),
@@ -51,6 +52,12 @@ export default function createPlayer() {
     const gun = createPulver(player);
 
     player.onUpdate(() => {
+
+        if (director.anyUIActive)
+            return;
+
+        gun.paused = director.anyUIActive;
+
         let dt = k.dt();
         dir.x = 0;
         dir.y = 0;

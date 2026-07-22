@@ -6,6 +6,7 @@ import createVolumeControl from "../game/objects/VolumeControl";
 import createPauseMenu from "../game/interface/PauseMenu";
 import createBigTomate from "../game/objects/BigTomato";
 import createCasa from "../game/objects/Casa";
+import createConfirmChangeUI from "../game/interface/ConfirmChange";
 
 k.setLayers([
     "background",
@@ -16,8 +17,8 @@ k.setLayers([
 
 
 // para melhor visualizacao //
-const DIA = 0;
-const NOITE = 1;
+export const DIA = 0;
+export const NOITE = 1;
 
 // Aqui a gente define a posicao dos objetos no mapa, isso foi previamente calculado no editor tiled e exportado //
 const objects = {
@@ -60,14 +61,18 @@ k.scene("playscene", () => {
     ]);
 
     // um objeto invisivel, vai servir somente para guardar dados sobre o jogo e dirigir como o loop funciona //
-    const gameManager = k.add([
+    const director = root.add([
         {
-            daysLeft: 3,
+            diasJogados: 0,
             state: DIA,
             killedTotal: 0,
 
             currency: 0,
-        }
+
+            anyUIActive: false
+        },
+
+        "director"
     ]);
 
 
@@ -82,18 +87,38 @@ k.scene("playscene", () => {
     // cria a UI (barra de vida + estamina)
     const ui = createUI(player);
 
+    const confirmUI = createConfirmChangeUI();
+
     const bigTomate = createBigTomate();
     bigTomate.pos = k.vec2(objects["tomate"].x, objects["tomate"].y);
 
     // cria o inimigo e guarda em uma variável (pra poder acessar depois)
     //const enemy = createEnemy(bigTomate, player);
 
-    // cria o controle de volume  
-    const volumeControl = createVolumeControl();
+    // logica do loop //
+    director.onUpdate(() => {
+        if (director.state === DIA) {
 
+        }
+        else if (director.state === NOITE) {
+
+        }
+    });
+
+    // inicia o menu como escondido //
     const pauseMenu = createPauseMenu();
     pauseMenu.hidden = true;
 
+    // Esc pra pausar
+    // quando o usuario aperta ESC, pausa o jogo
+    k.onKeyPress("escape", () => {
+        pauseMenu.enabled = true;
+        pauseMenu.hidden = false;
+        root.paused = true;
+    });
+
+
+    // mapa e camera bounds //
     const map = root.add([
         k.pos(bigTomate.pos.x + 16, bigTomate.pos.y + 16),
         k.sprite("mapa"),
@@ -114,15 +139,6 @@ k.scene("playscene", () => {
     map.add([k.pos(bounds.bottom), k.rect(map.width, 4), k.area(), k.body({ isStatic: true })]);
     map.add([k.pos(bounds.left), k.rect(4, map.height), k.area(), k.body({ isStatic: true })]);
     map.add([k.pos(bounds.right), k.rect(4, map.height), k.area(), k.body({ isStatic: true })]);
-
-
-    // Esc pra pausar
-    // quando o usuario aperta ESC, pausa o jogo
-    k.onKeyPress("escape", () => {
-        pauseMenu.enabled = true;
-        pauseMenu.hidden = false;
-        root.paused = true;
-    });
 
     function toWorldBound(localVec) {
         return map.pos.add(k.vec2(
