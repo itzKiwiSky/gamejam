@@ -1,6 +1,5 @@
 import k from "../../Engine";
 
-
 export default function createPulver(player) {
     const root = k.get("root_game")[0];
     const gun = root.add([
@@ -21,20 +20,26 @@ export default function createPulver(player) {
             bulletSpeed: 500,
 
             bulletCount: 200,
-            bulletPenaltySpread: 3,
+            maxBulletCount: 200,
+
+            reloadTime: 2,
+            maxReloadTimer: 2,
+
+            bulletPenaltySpread: 4,
             spreadCount: 8,
             spreadAngle: 50,
 
-
+            isReloading: false,
 
             //Dano das balas
-            bulletDamage: 10,
+            bulletDamage: 12,
             shoot() { },
             shootSpread() { },
         },
 
 
         "gun",
+        "pulver"
     ]);
 
     gun.onUpdate(() => {
@@ -56,6 +61,12 @@ export default function createPulver(player) {
     });
 
     gun.shoot = () => {
+        if (gun.bulletCount <= 0)
+            return;
+
+        if (gun.isReloading)
+            return;
+
         gun.cooldown = gun.fireRate;
         gun.bulletCount -= 1;
 
@@ -64,6 +75,12 @@ export default function createPulver(player) {
     }
 
     gun.shootSpread = () => {
+        if (gun.bulletCount <= 0)
+            return;
+
+        if (gun.isReloading)
+            return;
+
         gun.cooldown = gun.spreadFireRate;
         gun.bulletCount -= gun.bulletPenaltySpread;
 

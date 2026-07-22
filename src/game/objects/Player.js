@@ -94,7 +94,7 @@ export default function createPlayer() {
                 playerSprite.play("idle");
 
         //input de gameplay//
-        if (k.isMousePressed("left")) {
+        if (k.isMouseDown("left")) {
             if (gun.cooldown > 0)
                 return;
 
