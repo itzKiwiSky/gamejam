@@ -8,10 +8,11 @@ export default function createUI(player) {
     const barWidth = 200; //largura das barras
     const barHeight = 20; //altura das barras
     const spacing = 10; // espaçamento entre as barras
-    const root = k.get("root_game")[0];;
+    const root = k.get("root_game")[0];
+    const uiLayer = k.get("root_ui")[0];
 
     // contrainer que agrupa todos elementos da UI 
-    const uiContainer = root.add([
+    const uiContainer = uiLayer.add([
         k.pos(uiX, uiY), //posiciona no topo esquerdo
         k.fixed(), // fica fixo na câmera
         k.layer("ui"), // fica na frente dos outros elementos (ainda não ta funcionando)
@@ -71,15 +72,15 @@ export default function createUI(player) {
     uiContainer.onUpdate(() => {
         // Atualizar a barra de vida 
         //verifica se o player tem a propriedade de vida primeiro
-        if (player.health !== undefined && player.maxHealth !== undefined) {
+        if (player.hp !== undefined && player.maxHp !== undefined) {
             // Calcula a porcentagem de vida (entre 0 a 1)
-            const healthPercent = Math.max(0, player.health / player.maxHealth);
+            const healthPercent = Math.max(0, player.hp / player.maxHp);
 
             // Atualiza a largura da barra (quanto mais vida, mais larga)
             healthBar.width = barWidth * healthPercent;
 
             // Atualiza o texto mostrando os valores
-            healthText.text = `HP: ${Math.round(player.health)}/${player.maxHealth}`;
+            healthText.text = `HP: ${Math.round(player.hp)}/${player.maxHp}`;
 
             // Muda cor baseado na vida  
             if (healthPercent > 0.5) {
