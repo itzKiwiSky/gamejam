@@ -27,6 +27,7 @@ export default function createEnemy(target, player) {
         k.state("idle", ["idle", "change_target", "move", "attack", "die"]),
         k.anchor("center"),
         k.health(100),
+        k.z(50),
 
         {
             speed: 40,
@@ -44,14 +45,15 @@ export default function createEnemy(target, player) {
 
             visionRadius: 100,
             attackRadius: 18,
+
+            isDead: false,
         },
 
         "enemy",
     ]);
 
-    tomato.onDeath(() => {
-        if (tomatoSprite.getAnim().name !== "death")
-            tomatoSprite.play("death");
+    tomato.onUpdate(() => {
+        tomato.z = tomato.pos.y;
     });
 
     const tomatoSprite = tomato.add([
@@ -61,7 +63,13 @@ export default function createEnemy(target, player) {
             animSpeed: 3,
         }),
         k.anchor("center"),
-    ])
+    ]);
+
+    tomato.onDeath(() => {
+        tomato.isDead = true;
+        if (tomatoSprite.getCurAnim().name !== "death")
+            tomatoSprite.play("death");
+    });
 
     const attackArea = tomato.add([
         k.pos(),
@@ -79,7 +87,14 @@ export default function createEnemy(target, player) {
         k.area({ isSensor: true, shape: circlePolygon(tomato.visionRadius, 25) }),
     ]);
 
+    tomatoSprite.onAnimEnd((anim) => {
+        if (anim === "death")
+            tomato.destroy();
+    })
+
     tomato.onStateEnter("idle", () => {
+        if (tomato.isDead) return;
+
         tomatoSprite.play("idle");
         k.wait(1, () => {
             tomatoSprite.play("walk");
@@ -88,6 +103,8 @@ export default function createEnemy(target, player) {
     });
 
     tomato.onStateUpdate("move", () => {
+        if (tomato.isDead) return;
+
         const dir = tomato.currentTarget.pos.sub(tomato.pos).unit();
         tomatoSprite.flipX = dir.x > 0;
         tomato.move(dir.scale(tomato.speed));
@@ -118,6 +135,8 @@ export default function createEnemy(target, player) {
     });
 
     tomato.onStateEnter("change_target", () => {
+        if (tomato.isDead) return;
+
         tomato.currentTarget = player;
         tomato.patienceTimer = tomato.chasingPlayerPatience; // reseta a paciência
 
@@ -127,6 +146,8 @@ export default function createEnemy(target, player) {
     });
 
     tomato.onStateUpdate("attack", () => {
+        if (tomato.isDead) return;
+
         if (!tomato.attacked) {
             tomatoSprite.play("attack");
             tomato.attacked = true;

@@ -86,16 +86,10 @@ export default function createPauseMenu() {
         k.go("menuscene");
     });
 
-    // Hover do botao de menu
-    // quando passa mouse por cima, botao fica mais claro
-    btnMenu.onHover(() => {
-        btnMenu.color = k.Color.fromHex("#f87171"); // vermelho mais claro
+    btnMenu.onUpdate(() => {
+        btnMenu.color = btnMenu.isHovering() ? k.Color.fromHex("#f87171") : k.Color.fromHex("#a80202");
     });
 
-    // quando tira mouse, volta ao normal
-    btnMenu.onHoverEnd(() => {
-        btnMenu.color = k.Color.fromHex("#a80202"); // volta ao vermelho original
-    });
 
     return menuPauseContainer;
 }

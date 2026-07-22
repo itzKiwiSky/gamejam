@@ -1,6 +1,5 @@
 import k from "../../Engine";
 
-
 export default function createPulver(player) {
     const root = k.get("root_game")[0];
     const gun = root.add([
@@ -10,31 +9,37 @@ export default function createPulver(player) {
         k.scale(1.8),
         k.rotate(0), // se você quiser que a arma tb rotacione visualmente
         k.outline(3, k.WHITE, 1, "round"),
-        k.z(10),
+        k.z(60),
 
         {
             orbitRadius: 32,
 
             cooldown: 0,
             fireRate: 0.3, // segundos entre tiros
-            spreadFireRate: 0.6,
+            spreadFireRate: 0.76,
             bulletSpeed: 500,
 
-            bulletCount: 200,
-            bulletPenaltySpread: 3,
+            bulletCount: 100,
+            maxBulletCount: 100,
+
+            reloadTime: 2,
+            maxReloadTimer: 2,
+
+            bulletPenaltySpread: 4,
             spreadCount: 8,
             spreadAngle: 50,
 
+            isReloading: false,
 
-
-                //Dano das balas
-                bulletDamage:10, 
+            //Dano das balas
+            bulletDamage: 7,
             shoot() { },
             shootSpread() { },
         },
 
 
         "gun",
+        "pulver"
     ]);
 
     gun.onUpdate(() => {
@@ -56,6 +61,12 @@ export default function createPulver(player) {
     });
 
     gun.shoot = () => {
+        if (gun.bulletCount <= 0)
+            return;
+
+        if (gun.isReloading)
+            return;
+
         gun.cooldown = gun.fireRate;
         gun.bulletCount -= 1;
 
@@ -64,7 +75,13 @@ export default function createPulver(player) {
     }
 
     gun.shootSpread = () => {
-        gun.cooldown = gun.fireRate;
+        if (gun.bulletCount <= 0)
+            return;
+
+        if (gun.isReloading)
+            return;
+
+        gun.cooldown = gun.spreadFireRate;
         gun.bulletCount -= gun.bulletPenaltySpread;
 
         // usa aimDir aqui também
@@ -113,15 +130,15 @@ export default function createPulver(player) {
         bulletSprite.onUpdate(() => {
             bulletSprite.opacity = k.map(bullet.lifetime, 0, 0.25, 0, 1);
         });
-        
+
         //detectar colisão com o inimigo e aplicar o dano
 
-        bullet.onCollide("enemy", (enemy) =>{
+        bullet.onCollide("enemy", (enemy) => {
             //verifica se o inimigo tem a função hurt
-            if (enemy.hurt){
+            if (enemy.hurt) {
                 //aplica o dano no innimigo
                 enemy.hurt(bullet.damage);
-                        console.log(`Bala atingiu inimigo! Dano: ${bullet.damage}, Vida restante: ${enemy.hp()}`);
+                console.log(`Bala atingiu inimigo! Dano: ${bullet.damage}, Vida restante: ${enemy.hp()}`);
             }
             //destroi a bala após atingir o inimigo
             k.destroy(bullet);

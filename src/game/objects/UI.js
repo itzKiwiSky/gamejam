@@ -133,6 +133,52 @@ export default function createUI(player) {
         }
     });
 
+    //ui de balas //
+    const length = 320;
+    const sharpness = 64;
+    const height = 64;
+    const balasUI = uiLayer.add([
+        k.pos(0, k.height() - height),
+        k.polygon([
+            k.vec2(0, 0),
+            k.vec2(length - sharpness, 0),
+            k.vec2(length, height),
+            k.vec2(0, height),
+        ]),
+        k.color(k.Color.fromHex("#562f17")),
+        k.outline(6, k.BLACK, 1),
+        k.z(10),
+        k.layer("ui"),
+        k.fixed(),
+    ]);
+
+    const uiSprite = balasUI.add([
+        k.pos(28, 28),
+        k.sprite("pulver"),
+        k.scale(2.25),
+        k.rotate(0),
+        k.anchor("center")
+    ]);
+
+    uiSprite.flipX = true;
+
+    uiSprite.onUpdate(() => {
+        uiSprite.angle = k.wave(-10, 10, k.time());
+    })
+
+    const balasText = balasUI.add([
+        k.pos(64, 12),
+        k.text("100%"),
+    ]);
+
+    balasUI.onUpdate(() => {
+        const pulver = root.get("gun")[0];
+
+        let count = pulver.bulletCount / pulver.maxBulletCount;
+
+        balasText.text = Math.floor(count * 100) + "%";
+    });
+
     // Retorna o container pra poder destruir depois se necessario
     return uiContainer;
 }
