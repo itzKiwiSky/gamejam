@@ -52,6 +52,10 @@ export default function createEnemy(target, player) {
         "enemy",
     ]);
 
+    tomato.onUpdate(() => {
+        tomato.z = tomato.pos.y;
+    });
+
     const tomatoSprite = tomato.add([
         k.pos(0, -6),
         k.sprite("tomaicon", {

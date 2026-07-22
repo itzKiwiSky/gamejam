@@ -19,8 +19,8 @@ export default function createPulver(player) {
             spreadFireRate: 0.76,
             bulletSpeed: 500,
 
-            bulletCount: 200,
-            maxBulletCount: 200,
+            bulletCount: 100,
+            maxBulletCount: 100,
 
             reloadTime: 2,
             maxReloadTimer: 2,
@@ -32,7 +32,7 @@ export default function createPulver(player) {
             isReloading: false,
 
             //Dano das balas
-            bulletDamage: 12,
+            bulletDamage: 7,
             shoot() { },
             shootSpread() { },
         },

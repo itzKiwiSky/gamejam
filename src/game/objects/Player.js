@@ -56,6 +56,8 @@ export default function createPlayer() {
         dir.y = 0;
         let speedMultiplier = 1;
 
+        player.z = player.pos.y;
+
         const worldMousePos = k.toWorld(k.mousePos());
         const mouseDir = worldMousePos.sub(player.pos).unit();
 

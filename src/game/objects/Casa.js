@@ -13,7 +13,17 @@ export default function createCasa(player) {
         k.scale(1.5),
         k.body({ isStatic: true }),
         k.z(50),
+
+        {
+            baseOffset: 50,
+        }
     ]);
+
+    casa.onUpdate(() => {
+        const p = root.get(player)[0];
+
+        casa.z = casa.pos.y + casa.baseOffset;
+    })
 
     const casaSprite = casa.add([
         k.sprite("casa"),
