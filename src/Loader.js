@@ -80,12 +80,8 @@ k.loadSprite("player", "sprites/player.png", {
 });
 
 k.loadSprite("botao", "sprites/botao.png", {
-    slice9: {
-        top: 12,
-        bottom: 12,
-        left: 12,
-        right: 12,
-    }
+    sliceX: 3,
+    sliceY: 3,
 });
 
 k.loadSprite("logo", "sprites/logo.png");
