@@ -86,7 +86,7 @@ k.scene("playscene", () => {
     bigTomate.pos = k.vec2(objects["tomate"].x, objects["tomate"].y);
 
     // cria o inimigo e guarda em uma variável (pra poder acessar depois)
-    const enemy = createEnemy(bigTomate, player);
+    //const enemy = createEnemy(bigTomate, player);
 
     // cria o controle de volume  
     const volumeControl = createVolumeControl();
@@ -95,12 +95,26 @@ k.scene("playscene", () => {
     pauseMenu.hidden = true;
 
     const map = root.add([
-        k.pos(bigTomate.pos.x + 270, bigTomate.pos.y - 16),
+        k.pos(bigTomate.pos.x + 16, bigTomate.pos.y + 16),
         k.sprite("mapa"),
         k.layer("background"),
         k.scale(2.25),
         k.anchor("center")
     ]);
+
+    const bounds = {
+        top: k.vec2(-map.width * 0.5, -map.height * 0.5),
+        bottom: k.vec2(-map.width * 0.5, map.height * 0.5),
+        left: k.vec2(-map.width * 0.5, -map.height * 0.5),
+        right: k.vec2(map.width * 0.5, -map.height * 0.5),
+    };
+
+    // bounds // (paredes físicas, sem alteração)
+    map.add([k.pos(bounds.top), k.rect(map.width, 4), k.area(), k.body({ isStatic: true })]);
+    map.add([k.pos(bounds.bottom), k.rect(map.width, 4), k.area(), k.body({ isStatic: true })]);
+    map.add([k.pos(bounds.left), k.rect(4, map.height), k.area(), k.body({ isStatic: true })]);
+    map.add([k.pos(bounds.right), k.rect(4, map.height), k.area(), k.body({ isStatic: true })]);
+
 
     // Esc pra pausar
     // quando o usuario aperta ESC, pausa o jogo
@@ -110,11 +124,46 @@ k.scene("playscene", () => {
         root.paused = true;
     });
 
+    function toWorldBound(localVec) {
+        return map.pos.add(k.vec2(
+            localVec.x * map.scale.x,
+            localVec.y * map.scale.y
+        ));
+    }
+
+    const rawCamBounds = {
+        left: toWorldBound(bounds.left).x,
+        right: toWorldBound(bounds.right).x,
+        top: toWorldBound(bounds.top).y,
+        bottom: toWorldBound(bounds.bottom).y,
+    };
+
+    const halfViewW = k.width() * 0.5;
+    const halfViewH = k.height() * 0.5;
+
     // scrolling da camera //
+    function clampCam(val, min, max) {
+        // se o mapa for menor que a tela, os bounds invertem (min > max) — sem isso o clamp quebra
+        if (min > max) return (min + max) / 2;
+        return k.clamp(val, min, max);
+    }
+
     k.onUpdate(() => {
         cameraScroll.x -= (cameraScroll.x - player.pos.x) * 0.03;
         cameraScroll.y -= (cameraScroll.y - player.pos.y) * 0.03;
 
-        k.setCamPos(cameraScroll);
+        const cameraBounds = {
+            left: rawCamBounds.left + halfViewW,
+            right: rawCamBounds.right - halfViewW,
+            top: rawCamBounds.top + halfViewH,
+            bottom: rawCamBounds.bottom - halfViewH,
+        };
+
+        const clampedPos = k.vec2(
+            clampCam(cameraScroll.x, cameraBounds.left, cameraBounds.right),
+            clampCam(cameraScroll.y, cameraBounds.top, cameraBounds.bottom)
+        );
+
+        k.setCamPos(clampedPos);
     });
 });
