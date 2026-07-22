@@ -1,6 +1,7 @@
 import kaplay from "kaplay";
 import { crew } from "@kaplayjs/crew";
 import ErrorListenerPlugin from "./plugins/ErrorTrigger";
+import { tiledPlugin } from "kaplay-plugin-tiled";
 
 const k = kaplay({
     width: 1280,
@@ -9,7 +10,7 @@ const k = kaplay({
     stretch: false,
     debug: true,
     crisp: true,
-    plugins: [crew, ErrorListenerPlugin],
+    plugins: [crew, ErrorListenerPlugin, tiledPlugin],
     font: "happy-o"
 });
 

@@ -27,6 +27,7 @@ export default function createEnemy(target, player) {
         k.state("idle", ["idle", "change_target", "move", "attack", "die"]),
         k.anchor("center"),
         k.health(100),
+        k.z(50),
 
         {
             speed: 40,

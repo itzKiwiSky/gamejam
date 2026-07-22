@@ -12,7 +12,7 @@ export default function createCasa(player) {
         k.area(),
         k.scale(1.5),
         k.body({ isStatic: true }),
-        k.z(3),
+        k.z(50),
     ]);
 
     const casaSprite = casa.add([

@@ -15,9 +15,7 @@ export default function createPlayer() {
         k.area(),
         k.body(),
 
-
-
-        k.z(10),
+        k.z(50),
 
 
         {
