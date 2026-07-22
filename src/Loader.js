@@ -79,6 +79,17 @@ k.loadSprite("player", "sprites/player.png", {
     }
 });
 
+k.loadSprite("botao", "sprites/botao.png", {
+    slice9: {
+        top: 12,
+        bottom: 12,
+        left: 12,
+        right: 12,
+    }
+});
+
+k.loadSprite("logo", "sprites/logo.png");
+
 k.loadSprite("pulver", "sprites/borrifador.png");
 
 k.loadSprite("smokeFX", "sprites/smokes.png", { sliceX: 3, sliceY: 1 });

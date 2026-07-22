@@ -133,6 +133,9 @@ export default function createUI(player) {
         }
     });
 
+    //ui de balas //
+
+
     // Retorna o container pra poder destruir depois se necessario
     return uiContainer;
 }
