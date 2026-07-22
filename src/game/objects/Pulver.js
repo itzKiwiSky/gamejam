@@ -25,6 +25,10 @@ export default function createPulver(player) {
             spreadCount: 8,
             spreadAngle: 50,
 
+
+
+                //Dano das balas
+                bulletDamage:10, 
             shoot() { },
             shootSpread() { },
         },
@@ -92,6 +96,7 @@ export default function createPulver(player) {
                 dir: dir,
                 speed: gun.bulletSpeed,
                 lifetime: 0.465,
+                damage: gun.bulletDamage, //cada bala recebe o dano do pulverizador
             },
             "bullet",
         ]);
@@ -108,6 +113,19 @@ export default function createPulver(player) {
         bulletSprite.onUpdate(() => {
             bulletSprite.opacity = k.map(bullet.lifetime, 0, 0.25, 0, 1);
         });
+        
+        //detectar colisão com o inimigo e aplicar o dano
+
+        bullet.onCollide("enemy", (enemy) =>{
+            //verifica se o inimigo tem a função hurt
+            if (enemy.hurt){
+                //aplica o dano no innimigo
+                enemy.hurt(bullet.damage);
+                        console.log(`Bala atingiu inimigo! Dano: ${bullet.damage}, Vida restante: ${enemy.hp()}`);
+            }
+            //destroi a bala após atingir o inimigo
+            k.destroy(bullet);
+        })
 
         bullet.onUpdate(() => {
             bullet.pos = bullet.pos.add(bullet.dir.scale(bullet.speed * k.dt()));
