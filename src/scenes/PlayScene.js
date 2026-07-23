@@ -104,21 +104,27 @@ k.scene("playscene", () => {
 
     // Abre o menu de cartas ao apertar C
     k.onKeyPress("c", () => {
-        if (!cardMenuActive && !director.anyUIActive) {
+       
+        if (!cardMenuActive && !director.anyUIActive && !root.paused) {
             cardMenuActive = true;
             director.anyUIActive = true;
+            root.paused = true; // 
 
-            const drawnCards = cardSystem.drawThreeCards(); //  Sorteia 3 cartas
+            const drawnCards = cardSystem.drawThreeCards(); // Sorteia 3 cartas
 
             cardUI.showCards(drawnCards, (chosenCard) => { // Mostra as cartas
-                cardSystem.applyCardUpgrade(chosenCard); //  Aplica o upgrade
-                console.log(`🎴 Carta escolhida: ${chosenCard.nome}`);
+                cardSystem.applyCardUpgrade(chosenCard); // Aplica o upgrade
+                console.log(` Carta escolhida: ${chosenCard.nome}`);
+                
                 cardMenuActive = false;
                 director.anyUIActive = false;
-            });
-
-        }
+                root.paused = false; // 
     });
+}
+});
+
+        
+    
 
     // logica do loop //
     director.onUpdate(() => {
