@@ -1,4 +1,4 @@
-    'import k from "../Engine";
+    import k from "../Engine";
 import createPlayer from "../game/objects/Player";
 import createUI from "../game/objects/UI";
 import createEnemy from "../game/objects/Enemy";
