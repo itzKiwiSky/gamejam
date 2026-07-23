@@ -61,7 +61,7 @@ export default function createPulver(player) {
     });
 
     gun.shoot = () => {
-        if (gun.bulletCount <= 0)
+        if (gun.bulletCount <= 0) 
             return;
 
         if (gun.isReloading)
