@@ -33,7 +33,7 @@ export default function createVolumeControl() {
         k.anchor("center"),
     ]);
 
-    // ===== FUNCAO PARA CRIAR A BARRA (APENAS UMA VEZ) =====
+    // FUNCAO PARA CRIAR A BARRA (APENAS UMA VEZ) 
     function criarBarraVolume() {
         // fundo da barra (preto)
         volumeBarBg = k.add([

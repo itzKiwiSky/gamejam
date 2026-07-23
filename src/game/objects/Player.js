@@ -107,14 +107,14 @@ export default function createPlayer() {
             if (gun.cooldown > 0)
                 return;
 
-            gun.shoot();
+            gun.shoot(mouseDir);
         }
 
         if (k.isMousePressed("right")) {
             if (gun.cooldown > 0)
                 return;
 
-            gun.shootSpread();
+            gun.shootSpread(mouseDir);
         }
 
     });

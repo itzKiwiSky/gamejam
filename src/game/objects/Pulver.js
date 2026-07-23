@@ -72,7 +72,7 @@ export default function createPulver(player) {
     });
 
     gun.shoot = () => {
-        if (gun.bulletCount <= 0)
+        if (gun.bulletCount <= 0) 
             return;
 
         if (gun.isReloading)
@@ -106,7 +106,7 @@ export default function createPulver(player) {
 
         for (let i = 0; i < gun.spreadCount; i++) {
             const angle = startAngle + step * i;
-            const dir = Vec2.fromAngle(angle);
+            const dir = k.Vec2.fromAngle(angle);
             createBullet(startPos, dir);
         }
     }
