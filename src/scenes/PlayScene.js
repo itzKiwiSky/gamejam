@@ -127,21 +127,6 @@ k.scene("playscene", () => {
 
                 root.paused = false; // 
             });
-
-            /*director.anyUIActive = true;
-            cardMenuActive = true;
-            root.paused = true;
-
-            const drawnCards = cardSystem.drawThreeCards(); // Sorteia 3 cartas
-
-            cardUI.showCards(drawnCards, (chosenCard) => { // Mostra as cartas
-                cardSystem.applyCardUpgrade(chosenCard); // Aplica o upgrade
-                console.log(` Carta escolhida: ${chosenCard.nome}`);
-
-                cardMenuActive = false;
-                director.anyUIActive = false;
-                root.paused = false; // 
-            });*/
         }
     });
 
@@ -167,9 +152,17 @@ k.scene("playscene", () => {
 
     });
 
-    director.on("night", () => {
+    director.on("noite", () => {
         console.log("noite");
         waveController.start(10);
+    });
+
+    root.get("player")[0].onDeath(() => {
+        k.go("gameoverscene");
+    });
+
+    root.get("objective")[0].onDeath(() => {
+        k.go("gameoverscene");
     });
 
     // inicia o menu como escondido //

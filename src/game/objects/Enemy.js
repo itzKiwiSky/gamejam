@@ -20,7 +20,9 @@ export default function createEnemy(target, player) {
     const root = k.get("root_game")[0];
     const tomato = root.add([
         k.pos(),
-        k.rect(16, 16),
+        k.rect(16, 16, {
+            fill: false,
+        }),
         k.area(),
         k.body(),
         k.scale(3),
@@ -31,7 +33,7 @@ export default function createEnemy(target, player) {
 
         {
             speed: 40,
-            damage: 14,
+            damage: 9,
 
             chasingPlayerPatience: 4, // segundos que ele "aguenta" sem ver o player antes de desistir
             patienceTimer: 4,          // contador atual (começa igual ao max)
@@ -66,30 +68,26 @@ export default function createEnemy(target, player) {
     ]);
 
     tomato.onDeath(() => {
+        if (tomato.isDead) return; // evita reprocessar se disparar mais de uma vez
         tomato.isDead = true;
-        if (tomatoSprite.getCurAnim().name !== "death")
+
+        if (tomatoSprite?.getCurAnim()?.name !== "death")
             tomatoSprite.play("death");
     });
 
     const attackArea = tomato.add([
-        k.pos(),
-        k.circle(tomato.attackRadius),
-        k.color(k.RED),
-        k.opacity(0.45),
         k.area({ isSensor: true, shape: circlePolygon(tomato.attackRadius, 25) }),
     ]);
 
     const tomatoVisionArea = tomato.add([
-        k.pos(),
-        k.circle(tomato.visionRadius),
-        k.color(k.GREEN),
-        k.opacity(0.45),
         k.area({ isSensor: true, shape: circlePolygon(tomato.visionRadius, 25) }),
     ]);
 
     tomatoSprite.onAnimEnd((anim) => {
-        if (anim === "death")
-            tomato.destroy();
+        tomatoSprite.onAnimEnd((anim) => {
+            if (anim === "death")
+                k.destroy(tomato);
+        })
     })
 
     tomato.onStateEnter("idle", () => {

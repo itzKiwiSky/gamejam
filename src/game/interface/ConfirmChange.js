@@ -76,9 +76,9 @@ export default function createConfirmChangeUI() {
 
     // quando clica no botao continuar
     confirmBtn.onClick(() => {
-        container.trigger("popupClose");
         director.state = NOITE;
         director.trigger("noite");
+        container.trigger("popupClose");
     });
 
     confirmBtn.onUpdate(() => {

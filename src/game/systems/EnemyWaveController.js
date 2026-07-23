@@ -62,8 +62,8 @@ export default function createEnemyWaveSystem({
             director.enemiesRemainingTotal -= 1;
 
             enemy.on("death", () => {
-                aliveInBatch -= 1;
-                if (aliveInBatch <= 0 && isRunning)
+                director.aliveInBatch -= 1;
+                if (director.aliveInBatch <= 0 && isRunning)
                     spawnNextBatch();
             });
         }

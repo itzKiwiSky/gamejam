@@ -18,12 +18,12 @@ export default function createPulver(player) {
             orbitRadius: 32,
 
             cooldown: 0,
-            fireRate: 0.3, // segundos entre tiros
+            fireRate: 0.26, // segundos entre tiros
             spreadFireRate: 0.76,
             bulletSpeed: 500,
 
-            bulletCount: 100,
-            maxBulletCount: 100,
+            bulletCount: 120,
+            maxBulletCount: 120,
 
             reloadTime: 2,
             maxReloadTimer: 2,
