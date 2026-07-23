@@ -1,34 +1,34 @@
-import { CARDS_ARRAY } from "./CardData.js";
+import { CARDS_ARRAY } from "./CardData";
 
 
 export default function createCardSystem(player, gun) {
- 
+
     let chosenCards = {};
-    
-     
+
+
     let availableCards = [...CARDS_ARRAY];
 
     return {
-      
+
         drawThreeCards() {
-            const drawn = [];                      
-            const tempAvailable = [...availableCards]; 
+            const drawn = [];
+            const tempAvailable = [...availableCards];
 
             // Loopa 3 vezes pra sortear 3 cartas
             for (let i = 0; i < 3; i++) {
-                
+
                 // Se acabou as cartas disponíveis, reseta o pool
                 // Agora pode pegar a mesma carta em draws diferentes
                 if (tempAvailable.length === 0) {
                     tempAvailable.push(...CARDS_ARRAY);
                 }
-                
+
                 // Escolhe um índice aleatório do array
                 const randomIndex = Math.floor(Math.random() * tempAvailable.length);
-                
+
                 // Coloca a carta sorteada na lista de "draw"
                 drawn.push(tempAvailable[randomIndex]);
-                
+
                 // Remove essa carta do pool temporário
                 // (pra não sortear de novo nesse draw)
                 tempAvailable.splice(randomIndex, 1);
@@ -37,17 +37,17 @@ export default function createCardSystem(player, gun) {
             return drawn;
         },
 
-   
+
         applyCardUpgrade(card) {
-            
+
             // Incrementa quantas vezes pegou essa carta
             chosenCards[card.id] = (chosenCards[card.id] || 0) + 1;
 
-            
+
             switch (card.tipo) {
-                
+
                 //  STAMINA 
-                
+
                 case "stamina_recover":
                     // Aumenta a velocidade de recuperação de stamina
                     // staminaRecover multiplica por 1.25, 1.5, 1.75, etc
@@ -60,9 +60,9 @@ export default function createCardSystem(player, gun) {
                     player.staminaPenalty *= card.valor;
                     break;
 
-                
+
                 //  MOVIMENTO 
-                
+
                 case "movement_speed":
                     // Aumenta a velocidade base de movimento
                     player.speed *= card.valor;
@@ -73,9 +73,9 @@ export default function createCardSystem(player, gun) {
                     player.speedMulti *= card.valor;
                     break;
 
-                
+
                 //  VIDA 
-                
+
                 case "max_hp":
                     // Aumenta vida máxima E cura o player
                     const hpGain = card.valor;
@@ -104,9 +104,9 @@ export default function createCardSystem(player, gun) {
                     player.healthRegenPerSecond += card.valor;
                     break;
 
-                
+
                 // TIRO 
-                
+
                 case "fire_rate":
                     // Aumenta cadência de tiro (reduz cooldown)
                     // Se gun.cooldown existe, multiplica por este valor
@@ -126,9 +126,9 @@ export default function createCardSystem(player, gun) {
                     }
                     break;
 
-                
+
                 // COLETA 
-                
+
                 case "collection_range":
                     // Aumenta o alcance de coleta de adubo/moeda
                     // Armazena em uma propriedade nova do player
@@ -147,9 +147,9 @@ export default function createCardSystem(player, gun) {
                     player.manureDropMultiplier *= card.valor;
                     break;
 
-                
+
                 // CRÍTICO 
-                
+
                 case "critical_boost":
                     // Aumenta dano de ataque crítico
                     // Armazena em uma propriedade nova
@@ -161,7 +161,7 @@ export default function createCardSystem(player, gun) {
                     }
                     break;
 
-                
+
                 // Se nenhum case bater, exibe erro
                 default:
                     console.warn(" Tipo de carta desconhecido:", card.tipo);

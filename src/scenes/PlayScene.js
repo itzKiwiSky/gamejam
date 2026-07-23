@@ -7,8 +7,8 @@ import createPauseMenu from "../game/interface/PauseMenu";
 import createBigTomate from "../game/objects/BigTomato";
 import createCasa from "../game/objects/Casa";
 import createConfirmChangeUI from "../game/interface/ConfirmChange";
-import createCardSystem from "../game/objects/CardSystem";
-import createCardUI from "../game/objects/CardUI";
+import createCardSystem from "../game/systems/CardSystem";
+import createCardUI from "../game/interface/CardUI";
 
 k.setLayers([
     "background",
@@ -98,18 +98,18 @@ k.scene("playscene", () => {
     //const enemy = createEnemy(bigTomate, player);
 
     // Sistema de Cartas
-    const cardSystem = createCardSystem(player, player.gun || null); 
-    const cardUI = createCardUI(); 
-    let cardMenuActive = false; 
- 
+    const cardSystem = createCardSystem(player, player.gun || null);
+    const cardUI = createCardUI();
+    let cardMenuActive = false;
+
     // Abre o menu de cartas ao apertar C
     k.onKeyPress("c", () => {
         if (!cardMenuActive && !director.anyUIActive) {
             cardMenuActive = true;
             director.anyUIActive = true;
- 
+
             const drawnCards = cardSystem.drawThreeCards(); //  Sorteia 3 cartas
- 
+
             cardUI.showCards(drawnCards, (chosenCard) => { // Mostra as cartas
                 cardSystem.applyCardUpgrade(chosenCard); //  Aplica o upgrade
                 console.log(`🎴 Carta escolhida: ${chosenCard.nome}`);
@@ -118,7 +118,7 @@ k.scene("playscene", () => {
             });
 
         }
-         });
+    });
 
     // logica do loop //
     director.onUpdate(() => {

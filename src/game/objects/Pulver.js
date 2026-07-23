@@ -1,6 +1,7 @@
 import k from "../../Engine";
 
 export default function createPulver(player) {
+    console.log("VERSAO DO ARQUIVO: TESTE123");
     const root = k.get("root_game")[0];
     const gun = root.add([
         k.pos(),
@@ -12,6 +13,8 @@ export default function createPulver(player) {
         k.z(60),
 
         {
+            aimDir: k.vec2(1, 0),
+
             orbitRadius: 32,
 
             cooldown: 0,
@@ -72,7 +75,9 @@ export default function createPulver(player) {
     });
 
     gun.shoot = () => {
-        if (gun.bulletCount <= 0) 
+        console.log("aimDir no shoot:", gun.aimDir);
+
+        if (gun.bulletCount <= 0)
             return;
 
         if (gun.isReloading)

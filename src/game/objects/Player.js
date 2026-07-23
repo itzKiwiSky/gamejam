@@ -50,6 +50,7 @@ export default function createPlayer() {
     ])
 
     const gun = createPulver(player);
+    console.log("gun logo após criar:", gun.aimDir);
 
     player.onUpdate(() => {
 
