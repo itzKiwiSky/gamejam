@@ -1,4 +1,5 @@
 import k from "../../Engine";
+import { DIA } from "../../scenes/PlayScene";
 
 // funcao que cria a UI (barra de vida + barra de estamina)
 export default function createUI(player) {
@@ -10,6 +11,7 @@ export default function createUI(player) {
     const spacing = 10; // espacamento entre as barras
     const root = k.get("root_game")[0];
     const uiLayer = k.get("root_ui")[0];
+    const director = root.get("director")[0];
 
     // contrainer que agrupa todos elementos da UI 
     const uiContainer = uiLayer.add([
@@ -183,8 +185,30 @@ export default function createUI(player) {
     // dias //
 
     const diaCounter = uiLayer.add([
-
+        k.pos(k.center().x, 90),
+        k.text("Dia 1", {
+            size: 35,
+        }),
+        k.anchor("center"),
+        k.fixed(),
     ]);
+
+    diaCounter.onUpdate(() => {
+        diaCounter.text = "Dia " + director.diasJogados;
+    });
+
+    const estado = uiLayer.add([
+        k.pos(k.center().x, 128),
+        k.text("", {
+            size: 26,
+        }),
+        k.anchor("center"),
+        k.fixed(),
+    ]);
+
+    estado.onUpdate(() => {
+        estado.text = director.state === DIA ? "Dia" : "Noite";
+    });
 
     // Retorna o container pra poder destruir depois se necessario
     return uiContainer;
