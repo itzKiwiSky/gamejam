@@ -1,73 +1,71 @@
-//Sistema visual das cartas
-
 import k from "../../Engine";
+
 export default function createCardUI() {
-
-
-    //Container Principal
     const root = k.get("root_ui")[0];
     const gameRoot = k.get("root_game")[0];
+    const director = gameRoot.get("director")[0];
 
-    const cardMenuContainer = gameRoot.add([
+    //console.log(director);
+
+    const cardMenuContainer = root.add([
         k.layer("pause"),
+        k.pos(48, 48),
+        k.rect(k.width() - 48 * 2, k.height() - 48 * 2, {
+            radius: 15
+        }),      // Retângulo do tamanho da tela
+        k.color(k.BLACK),              // Preto com 60% transparência
+        k.opacity(0.6),
+        k.scale(1),
         k.fixed(),
-        "card_menu",                         // Tag 
+
         {
-            visible: false,                  // Começa escondido
             selectedCard: null,              // Nenhuma carta selecionada ainda
             onCardSelected: null,            // Callback  
+            menuActive: false,
         },
+
+        "card_menu",                         // Tag 
     ]);
 
+    cardMenuContainer.on("popupOpen", () => {
 
-    //Background     
-    // 0.6 = 60% opacidade
+        cardMenuContainer.hidden = false;
+        cardMenuContainer.menuActive = true;
+        director.anyUIActive = true;
+        k.tween(0, 1, 0.876, (v) => cardMenuContainer.scaleTo(v), k.easings.easeOutBounce);
+    });
+
+    cardMenuContainer.on("popupClose", () => {
+
+        k.tween(1, 0, 0.876, (v) => cardMenuContainer.scaleTo(v), k.easings.easeOutBounce).onEnd(() => {
+            cardMenuContainer.menuActive = false;
+            director.anyUIActive = false;
+            cardMenuContainer.hidden = true;
+        });
+    });
+
     cardMenuContainer.add([
-        k.rect(k.width(), k.height()),      // Retângulo do tamanho da tela
-        k.color(0, 0, 0, 0.6),              // Preto com 60% transparência
-        k.layer("pause"),
-    ]);
-
-    /**
-     //Painel Principal
-       900 pixels de largura
-       400 pixels de altura
-       Centralizado: (width/2 - 450) pra x, (height/2 - 200) pra y
-     */
-    const cardPanel = cardMenuContainer.add([
-        k.rect(900, 400),                   // Retângulo 900x400
-        k.pos(
-            k.width() / 2 - 450,             // Centraliza em X
-            k.height() / 2 - 200             // Centraliza em Y
-        ),
-        k.color(20, 20, 20),                // Fundo cinza
-        k.anchor("topleft"),                // Âncora 
-        "card_panel",                       // Tag
-    ]);
-
-    //Titulo do Menu
-    cardPanel.add([
-        k.text("Escolha seu upgrade", {
-            size: 28,
-            font: "monospace",
-            width: 900,
+        k.rect(cardMenuContainer.width, cardMenuContainer.height, {
+            radius: 15,
+            fill: false,
         }),
-        k.pos(450, 20),                      // Posição: meio horizontal, 20px do topo
-        k.anchor("top"),
-        k.color(255, 200, 100),              // Amarelo 
+        k.outline(6, new k.Color(255, 200, 100))
     ]);
 
+    cardMenuContainer.add([
+        k.text("Escolha seu upgrade", {
+            size: 35,
+        }),
+        k.pos(cardMenuContainer.width * 0.5, 32),                      // Posição: meio horizontal, 20px do topo
+        k.color(255, 200, 100),              // Amarelo 
+        k.anchor("center"),
+    ]);
 
-
-    //Container
-
-    const cardsContainer = cardPanel.add([
+    const cardsContainer = cardMenuContainer.add([
         k.pos(30, 80),                       // Começa 30px da esquerda, 80px do topo
         "cards_container",                   // Tag
     ]);
 
-
-    //Renderizar carta
 
     function renderCard(card, index) {
         // Dimensões de cada carta
@@ -81,10 +79,10 @@ export default function createCardUI() {
             k.rect(cardWidth, cardHeight),
             k.pos(xPos, 0),
             k.color(40, 40, 50),             // Fundo cinza-azulado  
+            k.area({ isSensor: true }),
             k.anchor("topleft"),
             {
                 cardData: card,              // Guarda referência pra carta
-                isHovered: false,            // Controla estado de hover
             }
         ]);
 
@@ -156,21 +154,20 @@ export default function createCardUI() {
         ]);
 
         //hover
-
-        cardObj.onHover(() => {
-            cardObj.color = k.color(60, 60, 80); // Fica mais clara (ilumina)
-            cardObj.isHovered = true;
+        cardObj.onUpdate(() => {
+            if (cardObj.isHovering())
+                cardObj.color = k.color(60, 60, 80);
+            else
+                cardObj.color = k.color(40, 40, 50);
         });
 
-        //final do hover
-        cardObj.onHoverEnd(() => {
-            cardObj.color = k.color(40, 40, 50); // Volta pro cinza original
-            cardObj.isHovered = false;
-        });
+
 
         //click
-
         cardObj.onClick(() => {
+            if (!cardMenuContainer.menuActive)
+                return;
+
             cardMenuContainer.selectedCard = card;
 
             // Chama o callback se existir
@@ -178,14 +175,17 @@ export default function createCardUI() {
                 cardMenuContainer.onCardSelected(card);
             }
 
-            // Fecha o menu
-            cardMenuContainer.visible = false;
+            cardMenuContainer.trigger("popupClose");
         });
 
         return cardObj; // Retorna a carta (por enquanto não usa)
     }
 
     return {
+
+        hide() {
+            cardMenuContainer.hidden = true;
+        },
 
         showCards(cardsArray, onCardSelectedCallback) {
             // Remove todas as cartas antigas (se houver)
@@ -200,12 +200,7 @@ export default function createCardUI() {
             cardMenuContainer.onCardSelected = onCardSelectedCallback;
 
             // Mostra o menu na tela
-            cardMenuContainer.visible = true;
-        },
-
-
-        hide() {
-            cardMenuContainer.visible = false;
+            cardMenuContainer.hidden = false;
         },
 
         getContainer() {

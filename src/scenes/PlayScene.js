@@ -9,6 +9,7 @@ import createCasa from "../game/objects/Casa";
 import createConfirmChangeUI from "../game/interface/ConfirmChange";
 import createCardSystem from "../game/systems/CardSystem";
 import createCardUI from "../game/interface/CardUI";
+import createLoja from "../game/objects/Loja";
 
 k.setLayers([
     "background",
@@ -31,8 +32,8 @@ const objects = {
     },
     "loja": {
         "name": "loja",
-        "x": 322.6,
-        "y": 218
+        "x": 70,
+        "y": 200,
     },
     "tomate": {
         "name": "tomate",
@@ -94,37 +95,54 @@ k.scene("playscene", () => {
     const bigTomate = createBigTomate();
     bigTomate.pos = k.vec2(objects["tomate"].x, objects["tomate"].y);
 
+    const loja = createLoja();
+    loja.pos = k.vec2(objects["loja"].x, objects["loja"].y);
+
     // cria o inimigo e guarda em uma variável (pra poder acessar depois)
     //const enemy = createEnemy(bigTomate, player);
 
     // Sistema de Cartas
     const cardSystem = createCardSystem(player, player.gun || null);
     const cardUI = createCardUI();
-    let cardMenuActive = false;
+    cardUI.hide();
 
     // Abre o menu de cartas ao apertar C
     k.onKeyPress("c", () => {
-       
-        if (!cardMenuActive && !director.anyUIActive && !root.paused) {
-            cardMenuActive = true;
-            director.anyUIActive = true;
-            root.paused = true; // 
+
+        if (!cardUI.getContainer().menuActive && !director.anyUIActive) {
+            cardUI.getContainer().trigger("popupOpen");
+            root.paused = true;
 
             const drawnCards = cardSystem.drawThreeCards(); // Sorteia 3 cartas
 
             cardUI.showCards(drawnCards, (chosenCard) => { // Mostra as cartas
                 cardSystem.applyCardUpgrade(chosenCard); // Aplica o upgrade
                 console.log(` Carta escolhida: ${chosenCard.nome}`);
-                
+
+                cardUI.getContainer().trigger("closePopup");
+
+                root.paused = false; // 
+            });
+
+            /*director.anyUIActive = true;
+            cardMenuActive = true;
+            root.paused = true;
+
+            const drawnCards = cardSystem.drawThreeCards(); // Sorteia 3 cartas
+
+            cardUI.showCards(drawnCards, (chosenCard) => { // Mostra as cartas
+                cardSystem.applyCardUpgrade(chosenCard); // Aplica o upgrade
+                console.log(` Carta escolhida: ${chosenCard.nome}`);
+
                 cardMenuActive = false;
                 director.anyUIActive = false;
                 root.paused = false; // 
+            });*/
+        }
     });
-}
-});
 
-        
-    
+
+
 
     // logica do loop //
     director.onUpdate(() => {
