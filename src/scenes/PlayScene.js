@@ -104,7 +104,6 @@ k.scene("playscene", () => {
 
     // Abre o menu de cartas ao apertar C
     k.onKeyPress("c", () => {
-       
         if (!cardMenuActive && !director.anyUIActive && !root.paused) {
             cardMenuActive = true;
             director.anyUIActive = true;
