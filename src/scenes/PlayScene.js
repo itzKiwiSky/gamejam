@@ -63,7 +63,7 @@ k.scene("playscene", () => {
     // um objeto invisivel, vai servir somente para guardar dados sobre o jogo e dirigir como o loop funciona //
     const director = root.add([
         {
-            diasJogados: 0,
+            diasJogados: 1,
             state: DIA,
             killedTotal: 0,
 

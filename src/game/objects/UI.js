@@ -179,6 +179,13 @@ export default function createUI(player) {
         balasText.text = Math.floor(count * 100) + "%";
     });
 
+
+    // dias //
+
+    const diaCounter = uiLayer.add([
+
+    ]);
+
     // Retorna o container pra poder destruir depois se necessario
     return uiContainer;
 }

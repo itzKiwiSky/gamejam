@@ -1,5 +1,6 @@
 
 import k from "../../Engine";
+import { DIA, NOITE } from "../../scenes/PlayScene";
 
 
 export default function createCasa(player) {
@@ -45,8 +46,13 @@ export default function createCasa(player) {
         for (const obj of areaAcao.getCollisions()) {
             if (!obj.target.is("player")) //evita que ataque objetos que tenha id de inimigo
                 if (k.isKeyDown("e")) {
-                    const UI = rootUI.get("confirmUIChange")[0];
-                    UI.trigger("popupOpen");
+                    if (director.state === DIA) {
+                        const UI = rootUI.get("confirmUIChange")[0];
+                        UI.trigger("popupOpen");
+                    }
+                    else if (director.state === NOITE) {
+                        root.get("gun")[0].isReloading = true;
+                    }
                 }
 
         }

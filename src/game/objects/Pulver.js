@@ -57,7 +57,18 @@ export default function createPulver(player) {
             gun.angle = dir.angle();
         }
 
+        gun.bulletCount = k.clamp(gun.bulletCount, 0, gun.maxBulletCount);
+
         if (gun.cooldown > 0) gun.cooldown -= k.dt();
+
+        if (gun.isReloading) {
+            gun.reloadTime -= k.dt();
+
+            if (gun.reloadTime <= 0) {
+                gun.bulletCount = gun.maxBulletCount;
+                gun.isReloading = false;
+            }
+        }
     });
 
     gun.shoot = () => {
