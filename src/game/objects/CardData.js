@@ -16,29 +16,19 @@ export const CARDS = {
         icon: "",
     },
 
-    // Carta 2: Passo rápido
-    // Você se move mais rápido pelo mapa
-    MOVEMENT_SPEED: {
-        id: "movement_speed",
-        nome: "Passos Rápidos",
-        descricao: "Velocidade de movimento +20%",
-        tipo: "movement_speed",
-        valor: 1.2,                     // 1.2x = 20% mais rápido
-        icon: "",
-    },
 
-    // Carta 3: Corrida Turbo
+    // Carta 2: Passo Rápido
     // Aumenta o multiplicador de velocidade ao correr
     RUN_MULTIPLIER: {
         id: "run_multiplier",
-        nome: "Corrida Turbo",
+        nome: "Passo Rápido",
         descricao: "Velocidade ao correr +15%",
         tipo: "run_multiplier",
         valor: 1.15,                    // 1.15x = 15% mais rápido correndo
         icon: "",
     },
 
-    // Carta 4: Mais Fôlego
+    // Carta 3: Mais Fôlego
     // Você gasta menos stamina ao correr
     STAMINA_EFFICIENCY: {
         id: "stamina_efficiency",
@@ -49,7 +39,7 @@ export const CARDS = {
         icon: "",
     },
 
-    // Carta 5: Resistência de lavrador
+    // Carta 4: Resistência de lavrador
     // Aumenta sua vida máxima
     MAX_HP: {
         id: "max_hp",
@@ -60,7 +50,7 @@ export const CARDS = {
         icon: "",
     },
 
-    // Carta 6: Escudo Natural
+    // Carta 5: Escudo Natural
     // Reduz dano recebido (subtrai um valor fixo do dano)
     DAMAGE_REDUCTION: {
         id: "damage_reduction",
@@ -71,7 +61,7 @@ export const CARDS = {
         icon: "",
     },
 
-    // Carta 7: Saúde Regenerativa
+    // Carta 6: Saúde Regenerativa
     // Regenera HP lentamente (será aplicado no onUpdate)
     HEALTH_REGEN: {
         id: "health_regen",
@@ -82,7 +72,7 @@ export const CARDS = {
         icon: "",
     },
 
-    // Carta 8: Tiro Concentrado
+    // Carta 7: Tiro Concentrado
     // Aumenta a cadência de tiro (afeta o cooldown do gun)
     FIRE_RATE: {
         id: "fire_rate",
@@ -93,7 +83,7 @@ export const CARDS = {
         icon: "",
     },
 
-    // Carta 9: Spray Devastador
+    // Carta 8: Spray Devastador
     // Aumenta a área de efeito do spray
     SPRAY_SPREAD: {
         id: "spray_spread",
@@ -104,7 +94,7 @@ export const CARDS = {
         icon: "",
     },
 
-    // Carta 10: Coleta Rápida
+    // Carta 9: Coleta Rápida
     // Você coleta o adubo (moeda) com maior alcance
     COLLECTION_RANGE: {
         id: "collection_range",
@@ -115,7 +105,7 @@ export const CARDS = {
         icon: "",
     },
 
-    // Carta 11: Bônus de Colheita
+    // Carta 10: Bônus de Colheita
     // Inimigos soltam mais adubo quando morrem
     MANURE_MULTIPLIER: {
         id: "manure_multiplier",
@@ -126,7 +116,7 @@ export const CARDS = {
         icon: "",
     },
 
-    // Carta 12: Golpe Crítico
+    // Carta 11: Golpe Crítico
     // Chance de atirar mais forte (é um multiplicador de dano ativado aleatoriamente)
     CRITICAL_BOOST: {
         id: "critical_boost",

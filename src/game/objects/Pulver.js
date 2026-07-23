@@ -95,7 +95,7 @@ export default function createPulver(player) {
 
         for (let i = 0; i < gun.spreadCount; i++) {
             const angle = startAngle + step * i;
-            const dir = Vec2.fromAngle(angle);
+            const dir = k.Vec2.fromAngle(angle);
             createBullet(startPos, dir);
         }
     }

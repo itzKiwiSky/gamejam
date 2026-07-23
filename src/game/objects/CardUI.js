@@ -1,19 +1,13 @@
 //Sistema visual das cartas
 
-import k from "../Engine";
-
+import k from "../../Engine";
 export default function createCardUI() {
     
   
      //Container Principal
-      
-      // Inicialmente invisible, aparece quando o sistema de cartas é acionado.
-      // visible: mostra/esconde todo o menu
-      // selectedCard: qual carta foi escolhida
-      // onCardSelected: função que é chamada quando player escolhe uma
 
     const cardMenuContainer = k.add([
-        k.layer("pause"),                    // Coloca na camada pause
+        k.layer("pause"),                     
         "card_menu",                         // Tag 
         {
             visible: false,                  // Começa escondido
@@ -53,7 +47,7 @@ export default function createCardUI() {
         k.text("Escolha seu upgrade", {
             size: 28,                         
             font: "monospace",                
-            width: 900,                      // Adapta pra largura do painel
+            width: 900,                       
         }),
         k.pos(450, 20),                      // Posição: meio horizontal, 20px do topo
         k.anchor("top"),                      
@@ -188,23 +182,8 @@ export default function createCardUI() {
         return cardObj; // Retorna a carta (por enquanto não usa)
     }
 
-    /**
- 
-       Essa parte é mais importante, funções públicas que o resto do jogo vai usar.
-     */
     return {
-        /**
-          showCards(cardsArray, callback)  Mostra o menu com 3 cartas.
-           Parâmetros:
-           cardsArray: array com 3 cartas (vem do CardSystem.drawThreeCards())
-           onCardSelectedCallback: função que será chamada quando player clicar
-          
-           Exemplo de uso:
-           cardUI.showCards(
-               [card1, card2, card3],
-               (chosenCard) => cardSystem.applyCardUpgrade(chosenCard)
-           );
-         */
+       
         showCards(cardsArray, onCardSelectedCallback) {
             // Remove todas as cartas antigas (se houver)
             cardsContainer.removeAll();

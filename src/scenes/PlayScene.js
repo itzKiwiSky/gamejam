@@ -7,8 +7,8 @@ import createPauseMenu from "../game/interface/PauseMenu";
 import createBigTomate from "../game/objects/BigTomato";
 import createCasa from "../game/objects/Casa";
 import createConfirmChangeUI from "../game/interface/ConfirmChange";
-import createCardSystem from "../game/CardSystem";
-//import createCardUI from "../game/CardUI";
+import createCardSystem from "../game/objects/CardSystem";
+import createCardUI from "../game/objects/CardUI";
 
 k.setLayers([
     "background",

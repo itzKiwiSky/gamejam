@@ -2,26 +2,14 @@ import { CARDS_ARRAY } from "./CardData.js";
 
 
 export default function createCardSystem(player, gun) {
-    
-    /**
-      chosenCards: rastreia quais cartas o player já pegou e quantas vezes
-      { "damage_reduction": 2, "movement_speed": 1, "max_hp": 1 }
-        pegou damage_reduction 2x, movement_speed 1x, max_hp 1x
-     */
+ 
     let chosenCards = {};
     
-    /**
-       availableCards: lista das cartas que ainda não foram sorteadas
-       Sem isso era possível a carta ser vista 2 vezes, remove cada carta após sortear pra evitar repetição
-     */
+     
     let availableCards = [...CARDS_ARRAY];
 
     return {
-        /**
-         drawThreeCards()
-         Sorteia 3 cartas aleatórias diferentes. 
-         Garante que não repete a mesma carta no mesmo draw.
-         */
+      
         drawThreeCards() {
             const drawn = [];                      
             const tempAvailable = [...availableCards]; 
@@ -49,25 +37,12 @@ export default function createCardSystem(player, gun) {
             return drawn;
         },
 
-        /**
-         applyCardUpgrade(card)
-         
-         Quando o player escolhe uma carta, essa função:
-         1. Registra que ele pegou essa carta
-         2. Modifica os stats do player/gun baseado no tipo da carta
-         
-         Cada tipo de carta afeta uma propriedade diferente
-         */
+   
         applyCardUpgrade(card) {
             
             // Incrementa quantas vezes pegou essa carta
             chosenCards[card.id] = (chosenCards[card.id] || 0) + 1;
 
-            /**
-             TIPOS DE UPGRADE:
-             - Aditivos (+): somam valor direto (ex: +10 HP)
-             - Multiplicativos (*): multiplicam o valor (ex: 1.2x velocidade)
-             */
             
             switch (card.tipo) {
                 
