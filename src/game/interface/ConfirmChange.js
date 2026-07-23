@@ -78,6 +78,7 @@ export default function createConfirmChangeUI() {
     confirmBtn.onClick(() => {
         container.trigger("popupClose");
         director.state = NOITE;
+        director.trigger("noite");
     });
 
     confirmBtn.onUpdate(() => {

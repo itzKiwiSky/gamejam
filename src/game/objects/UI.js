@@ -185,7 +185,7 @@ export default function createUI(player) {
     // dias //
 
     const diaCounter = uiLayer.add([
-        k.pos(k.center().x, 90),
+        k.pos(k.center().x, 67),
         k.text("Dia 1", {
             size: 35,
         }),
@@ -198,7 +198,7 @@ export default function createUI(player) {
     });
 
     const estado = uiLayer.add([
-        k.pos(k.center().x, 128),
+        k.pos(k.center().x, 95),
         k.text("", {
             size: 26,
         }),
