@@ -9,7 +9,7 @@ export const CARDS = {
     // Aumenta a velocidade de recuperação de stamina
     STAMINA_RECOVER: {
         id: "stamina_recover",
-        nome: "Recuperação Rápida",
+        nome: "Recuperacao Rapida",
         descricao: "Estamina regenera 25% mais rápido",
         tipo: "stamina_recover",
         valor: 1.25,                    // 1.25x = 25% mais rápido
@@ -21,7 +21,7 @@ export const CARDS = {
     // Aumenta o multiplicador de velocidade ao correr
     RUN_MULTIPLIER: {
         id: "run_multiplier",
-        nome: "Passo Rápido",
+        nome: "Passo Rapido",
         descricao: "Velocidade ao correr +15%",
         tipo: "run_multiplier",
         valor: 1.15,                    // 1.15x = 15% mais rápido correndo
@@ -32,7 +32,7 @@ export const CARDS = {
     // Você gasta menos stamina ao correr
     STAMINA_EFFICIENCY: {
         id: "stamina_efficiency",
-        nome: "Fôlego Longo",
+        nome: "Folego Longo",
         descricao: "Gasta 20% menos stamina ao correr",
         tipo: "stamina_efficiency",
         valor: 0.8,                     // 0.8x = gasta 20% menos
@@ -43,7 +43,7 @@ export const CARDS = {
     // Aumenta sua vida máxima
     MAX_HP: {
         id: "max_hp",
-        nome: "Resistência de Lavrador",
+        nome: "Resistencia de Lavrador",
         descricao: "Aumenta vida máxima em +10",
         tipo: "max_hp",
         valor: 10,                      // +10 de HP máximo
@@ -65,7 +65,7 @@ export const CARDS = {
     // Regenera HP lentamente (será aplicado no onUpdate)
     HEALTH_REGEN: {
         id: "health_regen",
-        nome: "Saúde Regenerativa",
+        nome: "Saude Regenerativa",
         descricao: "Regenera 5 HP por segundo",
         tipo: "health_regen",
         valor: 5,                       // +5 HP por segundo
@@ -76,9 +76,9 @@ export const CARDS = {
     // Aumenta a cadência de tiro (afeta o cooldown do gun)
     FIRE_RATE: {
         id: "fire_rate",
-        nome: "Gatilho Rápido",
+        nome: "Gatilho Rapido",
         descricao: "Atira 20% mais rápido",
-        tipo: "fire_rate",
+        tipo: "velocidade do spray",
         valor: 0.8,                     // 0.8x = 20% mais rápido (cooldown reduz)
         icon: "",
     },
@@ -89,7 +89,7 @@ export const CARDS = {
         id: "spray_spread",
         nome: "Spray Devastador",
         descricao: "Aumenta o alcance do spray em +30%",
-        tipo: "spray_spread",
+        tipo: "alcance de tiro",
         valor: 1.3,                     // 1.3x = 30% mais espalhado
         icon: "",
     },
@@ -98,9 +98,9 @@ export const CARDS = {
     // Você coleta o adubo (moeda) com maior alcance
     COLLECTION_RANGE: {
         id: "collection_range",
-        nome: "Mãos Rápidas",
+        nome: "Maos Rapidas",
         descricao: "Coleta adubo com maior alcance",
-        tipo: "collection_range",
+        tipo: "aumento de range",
         valor: 1.5,                     // 1.5x = 50% mais alcance
         icon: "",
     },
@@ -109,9 +109,9 @@ export const CARDS = {
     // Inimigos soltam mais adubo quando morrem
     MANURE_MULTIPLIER: {
         id: "manure_multiplier",
-        nome: "Bônus de Colheita",
+        nome: "Bonus de Colheita",
         descricao: "Inimigos soltam +50% mais adubo",
-        tipo: "manure_multiplier",
+        tipo: "bonus de loot",
         valor: 1.5,                     // 1.5x = 50% a mais
         icon: "",
     },
@@ -120,9 +120,9 @@ export const CARDS = {
     // Chance de atirar mais forte (é um multiplicador de dano ativado aleatoriamente)
     CRITICAL_BOOST: {
         id: "critical_boost",
-        nome: "Golpe Crítico",
+        nome: "Golpe Critico",
         descricao: "+2 de dano a cada 10 ataques",
-        tipo: "critical_boost",
+        tipo: "bonus de critico",
         valor: 2,                       // +2 de dano crítico
         icon: "",
     },

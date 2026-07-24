@@ -4,6 +4,7 @@ import { assets, happyData } from "@kaplayjs/crew";
 k.loadRoot("./");
 
 k.loadSprite("nd", "sprites/nd.jpg");
+k.loadSprite("carddd", "sprites/carddd.png");
 
 Object.keys(assets).forEach((key) => {
     const asset = assets[key];
