@@ -12,6 +12,7 @@ import createCardUI from "../game/interface/CardUI";
 import createLoja from "../game/objects/Loja";
 import getEndingType from "../scenes/EndingScene";
 import createEnemyWaveSystem from "../game/systems/EnemyWaveController";
+import createMessagePopup from "../game/interface/MessagePopup";
 
 k.setLayers([
     "background",
@@ -159,6 +160,13 @@ k.scene("playscene", () => {
             director.state = DIA;
             director.diasJogados++;
         },
+    });
+
+    const messagePopup = createMessagePopup();
+    //messagePopup.getContainer().hidden = true;
+
+    messagePopup.abrirMensagem("Ola mundo", "Salve salve meu consagra dboas ksksks", () => {
+
     });
 
     // logica do loop //

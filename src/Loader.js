@@ -82,8 +82,12 @@ k.loadSprite("player", "sprites/player.png", {
 });
 
 k.loadSprite("botao", "sprites/botao.png", {
-    sliceX: 3,
-    sliceY: 3,
+    slice9: {
+        left: 12,
+        right: 12,
+        top: 12,
+        bottom: 12,
+    },
 });
 
 k.loadSprite("tileset", "sprites/tilemap_packed.png");
@@ -98,7 +102,7 @@ k.loadSprite("smokeFX", "sprites/spray.png", { sliceX: 3, sliceY: 1 });
 
 k.loadSprite("tomate", "sprites/tomate.png", { sliceX: 8, sliceY: 1 });
 
-k.loadSprite("time_badge", "sprites/time_badge.png", { sliceX: 2, sliceY: 1 });
+k.loadSprite("time_badge", "sprites/time_badges.png", { sliceX: 2, sliceY: 1 });
 
 k.loadSprite("casa", "sprites/casa.png");
 
