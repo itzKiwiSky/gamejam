@@ -10,6 +10,7 @@ import createConfirmChangeUI from "../game/interface/ConfirmChange";
 import createCardSystem from "../game/systems/CardSystem";
 import createCardUI from "../game/interface/CardUI";
 import createLoja from "../game/objects/Loja";
+import getEndingType from "../scenes/EndingScene";
 
 k.setLayers([
     "background",
@@ -94,6 +95,22 @@ k.scene("playscene", () => {
 
     const bigTomate = createBigTomate();
     bigTomate.pos = k.vec2(objects["tomate"].x, objects["tomate"].y);
+
+    //Função pro fim do jogo (Script Endingscene)
+    function finishGame() {
+    const currentHealth = bigTomate.hp();
+    const maxHealth = 100; // A vida máxima do tomate (conforme criado em BigTomato.js)
+    
+    const endingType = getEndingType(currentHealth, maxHealth);
+    
+    k.go("ending", {
+        endingType: endingType,
+        tomatoHealth: currentHealth,
+    });
+}
+ k.onKeyPress("r", () => {
+        finishGame();
+    });
 
     const loja = createLoja();
     loja.pos = k.vec2(objects["loja"].x, objects["loja"].y);
