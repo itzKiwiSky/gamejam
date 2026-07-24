@@ -165,9 +165,7 @@ k.scene("playscene", () => {
     const messagePopup = createMessagePopup();
     //messagePopup.getContainer().hidden = true;
 
-    messagePopup.abrirMensagem("Ola mundo", "Salve salve meu consagra dboas ksksks", () => {
-
-    });
+    messagePopup.abrirMensagem("Ola mundo", "Salve salve meu consagra dboas ksksks");
 
     // logica do loop //
     director.on("dia", () => {

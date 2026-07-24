@@ -47,13 +47,13 @@ export default function createBigTomate() {
     healthBarBg.onUpdate(() => {
         if (big.hp !== undefined && big.maxHP !== undefined) {
             // Calcula a porcentagem de vida (entre 0 a 1)
-            const healthPercent = Math.max(0, big.hp() / big.maxHP());
+            const healthPercent = Math.max(0, big.hp / big.maxHP);
 
             // Atualiza a largura da barra (quanto mais vida, mais larga)
             healthBar.width = barWidth * healthPercent;
 
             // Atualiza o texto mostrando os valores
-            healthText.text = `${Math.round(big.hp())} / ${big.maxHP()}`;
+            healthText.text = `${Math.round(big.hp)} / ${big.maxHP}`;
 
             // Muda cor baseado na vida  
             if (healthPercent > 0.5) {

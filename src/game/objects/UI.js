@@ -88,13 +88,13 @@ export default function createUI(player) {
         // verifica se o player tem a propriedade de vida primeiro
         if (player.hp !== undefined && player.maxHP !== undefined) {
             // Calcula a porcentagem de vida (entre 0 a 1)
-            const healthPercent = Math.max(0, player.hp() / player.maxHP());
+            const healthPercent = Math.max(0, player.hp / player.maxHP);
 
             // Atualiza a largura da barra (quanto mais vida, mais larga)
             healthBar.width = barWidth * healthPercent;
 
             // Atualiza o texto mostrando os valores
-            healthText.text = `${Math.round(player.hp())} / ${player.maxHP()}`;
+            healthText.text = `${Math.round(player.hp)} / ${player.maxHP}`;
 
             // Muda cor baseado na vida  
             if (healthPercent > 0.5) {
@@ -159,7 +159,8 @@ export default function createUI(player) {
         k.sprite("pulver"),
         k.scale(2.25),
         k.rotate(0),
-        k.anchor("center")
+        k.anchor("center"),
+        k.z(10),
     ]);
 
     uiSprite.flipX = true;
@@ -171,6 +172,7 @@ export default function createUI(player) {
     const balasText = balasUI.add([
         k.pos(64, 12),
         k.text("100%"),
+        k.z(10),
     ]);
 
     balasUI.onUpdate(() => {
