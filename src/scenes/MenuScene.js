@@ -39,12 +39,11 @@ k.scene("menuscene", () => {
     })
 
     // Hover do Play
-    playBtn.onHover(() => {
-        playBtn.color = k.Color.fromHex("#4ade80") // converte codigo de cor hexadecimal em RGB
-    })
-
-    playBtn.onHoverEnd(() => {
-        playBtn.color = k.Color.fromHex("#22c55e")
+    playBtn.onUpdate(() => {
+        if (playBtn.isHovering())
+            playBtn.color = k.Color.fromHex("#4ade80") // converte codigo de cor hexadecimal em RGB
+        else
+            playBtn.color = k.Color.fromHex("#22c55e")
     })
 
     // Botao sair
@@ -67,12 +66,11 @@ k.scene("menuscene", () => {
     })
 
     // Hover do Sair
-    exitBtn.onHover(() => {
-        exitBtn.color = k.Color.fromHex("#f87171")
-    })
-
-    exitBtn.onHoverEnd(() => {
-        exitBtn.color = k.Color.fromHex("#dc2626")
+    exitBtn.onUpdate(() => {
+        if (exitBtn.isHovering())
+            exitBtn.color = k.Color.fromHex("#f87171")
+        else
+            exitBtn.color = k.Color.fromHex("#dc2626")
     })
 
     // Botao de configuracoes (som)

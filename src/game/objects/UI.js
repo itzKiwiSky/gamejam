@@ -86,15 +86,15 @@ export default function createUI(player) {
     uiContainer.onUpdate(() => {
         // Atualizar a barra de vida 
         // verifica se o player tem a propriedade de vida primeiro
-        if (player.hp !== undefined && player.maxHp !== undefined) {
+        if (player.hp !== undefined && player.maxHP !== undefined) {
             // Calcula a porcentagem de vida (entre 0 a 1)
-            const healthPercent = Math.max(0, player.hp / player.maxHp);
+            const healthPercent = Math.max(0, player.hp() / player.maxHP());
 
             // Atualiza a largura da barra (quanto mais vida, mais larga)
             healthBar.width = barWidth * healthPercent;
 
             // Atualiza o texto mostrando os valores
-            healthText.text = `${Math.round(player.hp)}/${player.maxHp}`;
+            healthText.text = `${Math.round(player.hp())} / ${player.maxHP()}`;
 
             // Muda cor baseado na vida  
             if (healthPercent > 0.5) {
@@ -185,7 +185,7 @@ export default function createUI(player) {
     // dias //
 
     const diaCounter = uiLayer.add([
-        k.pos(k.center().x, 90),
+        k.pos(k.center().x, 67),
         k.text("Dia 1", {
             size: 35,
         }),
@@ -198,7 +198,7 @@ export default function createUI(player) {
     });
 
     const estado = uiLayer.add([
-        k.pos(k.center().x, 128),
+        k.pos(k.center().x, 95),
         k.text("", {
             size: 26,
         }),

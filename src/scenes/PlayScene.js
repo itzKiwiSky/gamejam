@@ -11,6 +11,7 @@ import createCardSystem from "../game/systems/CardSystem";
 import createCardUI from "../game/interface/CardUI";
 import createLoja from "../game/objects/Loja";
 import getEndingType from "../scenes/EndingScene";
+import createEnemyWaveSystem from "../game/systems/EnemyWaveController";
 
 k.setLayers([
     "background",
@@ -73,7 +74,10 @@ k.scene("playscene", () => {
 
             currency: 0,
 
-            anyUIActive: false
+            anyUIActive: false,
+
+            aliveInBatch: 0,
+            enemiesRemainingTotal: 0
         },
 
         "director"
@@ -140,35 +144,42 @@ k.scene("playscene", () => {
 
                 root.paused = false; // 
             });
-
-            /*director.anyUIActive = true;
-            cardMenuActive = true;
-            root.paused = true;
-
-            const drawnCards = cardSystem.drawThreeCards(); // Sorteia 3 cartas
-
-            cardUI.showCards(drawnCards, (chosenCard) => { // Mostra as cartas
-                cardSystem.applyCardUpgrade(chosenCard); // Aplica o upgrade
-                console.log(` Carta escolhida: ${chosenCard.nome}`);
-
-                cardMenuActive = false;
-                director.anyUIActive = false;
-                root.paused = false; // 
-            });*/
         }
     });
 
-
-
+    const waveController = createEnemyWaveSystem({
+        batchSize: 6,
+        batchSizeMax: 7,
+        player: player,
+        spawnFn: (pos) => {
+            const enemy = createEnemy(bigTomate, player);
+            enemy.pos = pos;
+            return enemy;
+        },
+        onAllDefeated: () => {
+            console.log("Wave atual concluída!");
+            // ex: gameManager.state = DIA; ou mostra tela de "próximo dia"
+            director.state = DIA;
+            director.diasJogados++;
+        },
+    });
 
     // logica do loop //
-    director.onUpdate(() => {
-        if (director.state === DIA) {
+    director.on("dia", () => {
 
-        }
-        else if (director.state === NOITE) {
+    });
 
-        }
+    director.on("noite", () => {
+        console.log("noite");
+        waveController.start(10);
+    });
+
+    root.get("player")[0].onDeath(() => {
+        k.go("gameoverscene");
+    });
+
+    root.get("objective")[0].onDeath(() => {
+        k.go("gameoverscene");
     });
 
     // inicia o menu como escondido //
@@ -201,10 +212,10 @@ k.scene("playscene", () => {
     };
 
     // bounds // (paredes físicas, sem alteração)
-    map.add([k.pos(bounds.top), k.rect(map.width, 4), k.area(), k.body({ isStatic: true })]);
-    map.add([k.pos(bounds.bottom), k.rect(map.width, 4), k.area(), k.body({ isStatic: true })]);
-    map.add([k.pos(bounds.left), k.rect(4, map.height), k.area(), k.body({ isStatic: true })]);
-    map.add([k.pos(bounds.right), k.rect(4, map.height), k.area(), k.body({ isStatic: true })]);
+    map.add([k.pos(bounds.top), k.rect(map.width, 4), k.area({ collisionIgnore: ["enemy"] }), k.body({ isStatic: true })]);
+    map.add([k.pos(bounds.bottom), k.rect(map.width, 4), k.area({ collisionIgnore: ["enemy"] }), k.body({ isStatic: true })]);
+    map.add([k.pos(bounds.left), k.rect(4, map.height), k.area({ collisionIgnore: ["enemy"] }), k.body({ isStatic: true })]);
+    map.add([k.pos(bounds.right), k.rect(4, map.height), k.area({ collisionIgnore: ["enemy"] }), k.body({ isStatic: true })]);
 
     function toWorldBound(localVec) {
         return map.pos.add(k.vec2(
