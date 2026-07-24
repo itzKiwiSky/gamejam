@@ -119,9 +119,6 @@ k.scene("playscene", () => {
     const loja = createLoja();
     loja.pos = k.vec2(objects["loja"].x, objects["loja"].y);
 
-    // cria o inimigo e guarda em uma variável (pra poder acessar depois)
-    //const enemy = createEnemy(bigTomate, player);
-
     // Sistema de Cartas
     const cardSystem = createCardSystem(player, player.gun || null);
     const cardUI = createCardUI();

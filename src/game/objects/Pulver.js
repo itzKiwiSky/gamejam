@@ -139,7 +139,7 @@ export default function createPulver(player) {
                 frame: k.randi(0, 2),
             }),
             k.anchor("center"),
-            k.scale(0.078),
+            k.scale(k.randi(2, 5) / 5),
             k.opacity(1)
         ]);
 

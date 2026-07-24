@@ -20,7 +20,6 @@ export default function createPlayer() {
 
         k.z(50),
 
-
         {
             speed: 250,
             speedMulti: 2.5,        // velocidade do jogador quando o shift estiver apertado

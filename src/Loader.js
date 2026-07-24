@@ -93,9 +93,15 @@ k.loadSprite("logo", "sprites/logo.png");
 
 k.loadSprite("pulver", "sprites/borrifador.png");
 
-k.loadSprite("smokeFX", "sprites/smokes.png", { sliceX: 3, sliceY: 1 });
+k.loadSprite("smokeFX", "sprites/spray.png", { sliceX: 3, sliceY: 1 });
+
+k.loadSprite("tomate", "sprites/tomate.png", { sliceX: 8, sliceY: 1 });
+
+k.loadSprite("time_badge", "sprites/time_badge.png", { sliceX: 2, sliceY: 1 });
 
 k.loadSprite("casa", "sprites/casa.png");
+
+k.loadSprite("loja", "sprites/loja.png");
 
 k.loadMusic("menuMusic", "sounds/blossom.wav");
 
