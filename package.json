@@ -10,7 +10,7 @@
 	},
 	"dependencies": {
 		"@kaplayjs/crew": "^2.0.0",
-		"kaplay": "^3001.0.19",
+		"kaplay": "^4000.0.0-alpha.27.1",
 		"kaplay-plugin-tiled": "^1.1.2"
 	},
 	"devDependencies": {
