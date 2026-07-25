@@ -1,8 +1,8 @@
 import k from "../../Engine";
 
-
 export default function createLoja() {
     const root = k.get("root_game")[0];
+    
     const loja = root.add([
         k.pos(k.center()),
         k.rect(96, 48),
@@ -20,6 +20,8 @@ export default function createLoja() {
         k.color(k.BLUE),
         k.anchor("center"),
         k.area({ isSensor: true }),
+        
+        "areaAcao", 
     ]);
 
     return loja;
