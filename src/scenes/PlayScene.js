@@ -14,6 +14,7 @@ import getEndingType from "../scenes/EndingScene";
 import createEnemyWaveSystem from "../game/systems/EnemyWaveController";
 import createMessagePopup from "../game/interface/MessagePopup";
 
+
 k.setLayers([
     "background",
     "game",
@@ -103,7 +104,7 @@ k.scene("playscene", () => {
 
     //Função pro fim do jogo (Script Endingscene)
     function finishGame() {
-        const currentHealth = bigTomate.hp();
+        const currentHealth = bigTomate.hp;
         const maxHealth = 100; // A vida máxima do tomate (conforme criado em BigTomato.js)
 
         const endingType = getEndingType(currentHealth, maxHealth);

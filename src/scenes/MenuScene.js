@@ -34,8 +34,8 @@ k.scene("menuscene", () => {
     ])
 
     playBtn.onClick(() => {
-        // vai pra cena "playscene" (a musica para automaticamente)
-        k.go("playscene")
+        // vai pra cena "intro"
+        k.go("intro")
     })
 
     // Hover do Play
