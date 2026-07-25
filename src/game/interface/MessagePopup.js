@@ -23,12 +23,14 @@ export default function createMessagePopup() {
 
         popupContainer.hidden = false;
         director.anyUIActive = true;
+        root.paused = true;
         k.tween(0, 1, 0.876, (v) => popupContainer.scaleTo(v), k.easings.easeOutBounce);
     });
 
     popupContainer.on("popupClose", () => {
         k.tween(1, 0, 0.876, (v) => popupContainer.scaleTo(v), k.easings.easeOutBounce).onEnd(() => {
             director.anyUIActive = false;
+            root.paused = true;
             popupContainer.hidden = true;
         });
     });
@@ -42,7 +44,7 @@ export default function createMessagePopup() {
         k.pos(0, 0),
         k.text("", {
             width: popupContainer.w,
-            size: 38
+            size: 38,
         }),
         k.z(10),
         k.color("gold"),
@@ -52,16 +54,19 @@ export default function createMessagePopup() {
     const textMain = popupContainer.add([
         k.pos(0, 0),
         k.text("", {
-            width: popupContainer.w,
-            size: 24
+            width: 200,
+            size: 24,
+            align: "center"
         }),
         k.z(10),
         k.color("white"),
-        k.anchor("center"),
+        k.anchor("topleft"),
     ]);
 
     const buttonContainer = popupContainer.add([
-        k.rect(0, 64),
+        k.rect(0, 64, {
+            fill: false,
+        }),
         k.pos(0, 0),
         k.z(12),
         k.anchor("center"),
@@ -116,27 +121,24 @@ export default function createMessagePopup() {
             height: 400,
             buttons: [
                 createButton("OK", undefined, () => {
-                    director.anyUIActive = false;
-                    root.paused = false;
                     popupContainer.trigger("popupClose");
                 })
             ],
         }) {
-            director.anyUIActive = true;
-            root.paused = true;
-
             popupSprite.width = options.width;
             popupSprite.height = options.height;
 
             textTitle.text = titulo;
-            textTitle.width = popupSprite.width;
+            textTitle.width = popupSprite.width * 0.5;
             textTitle.pos.y = -popupSprite.height * 0.5 + 32;
 
             textMain.text = msg;
-            textMain.width = popupSprite.width;
+            textMain.width = popupSprite.width - 32;
+            textMain.pos.x = -popupSprite.width * 0.5;
             textMain.pos.y = -popupSprite.height * 0.5 + 96;
 
             buttonContainer.width = popupSprite.width - 72;
+            buttonContainer.pos.y = popupSprite.height * 0.5 - buttonContainer.height * 0.5;
 
             popupContainer.trigger("popupOpen");
         },

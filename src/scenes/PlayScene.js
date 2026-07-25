@@ -164,13 +164,13 @@ k.scene("playscene", () => {
     });
 
     const messagePopup = createMessagePopup();
-    //messagePopup.getContainer().hidden = true;
-
-    messagePopup.abrirMensagem("Ola mundo", "Salve salve meu consagra dboas ksksks");
+    messagePopup.getContainer().hidden = true;
 
     // logica do loop //
     director.on("dia", () => {
-
+        k.wait(2, () => {
+            messagePopup.abrirMensagem("Bem vindo (a)", "Imagine que aqui esta um tutorial muito bem escrito ta eu to com muita preguiça de escrever algo concreto ksksksksks!!!");
+        })
     });
 
     director.on("noite", () => {
@@ -263,4 +263,7 @@ k.scene("playscene", () => {
 
         k.setCamPos(clampedPos);
     });
+
+    // inicia o jogo de fato //
+    director.trigger("dia");
 });
