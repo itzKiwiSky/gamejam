@@ -65,7 +65,8 @@ export default function createConfirmChangeUI() {
         k.color(k.Color.fromHex("#22c55e")), // cor verde
         k.area(), // permite detectar cliques
         k.anchor("center"), // ponto de referencia eh o centro
-        k.outline(4, k.Color.fromHex("#4cf357"), 1, "bevel")
+        k.outline(4, k.Color.fromHex("#4cf357"), 1, "bevel"),
+        k.fixed(),
     ]);
 
     // texto "Continuar" dentro do botao
@@ -92,7 +93,8 @@ export default function createConfirmChangeUI() {
         k.color(k.Color.fromHex("#a80202")), // cor verde
         k.area(), // permite detectar cliques
         k.anchor("center"), // ponto de referencia eh o centro
-        k.outline(4, k.Color.fromHex("#f24b3f"), 1, "bevel")
+        k.outline(4, k.Color.fromHex("#f24b3f"), 1, "bevel"),
+        k.fixed(),
     ]);
 
     cancelBtn.add([

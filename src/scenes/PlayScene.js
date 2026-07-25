@@ -42,7 +42,7 @@ const objects = {
     "tomate": {
         "name": "tomate",
         "x": 509.9,
-        "y": 399.9
+        "y": 450,
     },
     "player": {
         "name": "player",
@@ -125,6 +125,10 @@ k.scene("playscene", () => {
     const cardSystem = createCardSystem(player, player.gun || null);
     const cardUI = createCardUI();
     cardUI.hide();
+
+    k.onKeyPress("e", () => {
+        bigTomate.trigger("grow");
+    });
 
     // Abre o menu de cartas ao apertar C
     k.onKeyPress("c", () => {

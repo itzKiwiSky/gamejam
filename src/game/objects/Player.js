@@ -9,8 +9,9 @@ export default function createPlayer() {
 
     const player = root.add([
         k.pos(k.center()),
-        k.rect(32, 32),
-        k.opacity(0),
+        k.rect(32, 32, {
+            fill: false,
+        }),
         k.anchor("center"),
 
         k.area(),
@@ -29,10 +30,16 @@ export default function createPlayer() {
 
             isRunning: false,
             isResting: false,
+
+            hurt() { },
         },
 
         "player"
     ]);
+
+    player.hurt = (dmg) => {
+        player.hp -= dmg;
+    }
 
     const playerSprite = player.add([
         //k.pos(16, 8),
@@ -41,7 +48,6 @@ export default function createPlayer() {
         }),
         k.scale(3),
         k.anchor("center"),
-        k.z(10),
     ])
 
     const gun = createPulver(player);
@@ -59,7 +65,7 @@ export default function createPlayer() {
         dir.y = 0;
         let speedMultiplier = 1;
 
-        player.z = player.pos.y;
+        playerSprite.z = player.pos.y;
 
         const worldMousePos = k.toWorld(k.mousePos());
         const mouseDir = worldMousePos.sub(player.pos).unit();
