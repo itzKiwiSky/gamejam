@@ -30,7 +30,7 @@ export default function createMessagePopup() {
     popupContainer.on("popupClose", () => {
         k.tween(1, 0, 0.876, (v) => popupContainer.scaleTo(v), k.easings.easeOutBounce).onEnd(() => {
             director.anyUIActive = false;
-            root.paused = true;
+            root.paused = false;
             popupContainer.hidden = true;
         });
     });
