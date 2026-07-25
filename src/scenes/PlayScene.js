@@ -13,7 +13,7 @@ import createLoja from "../game/objects/Loja";
 import getEndingType from "../scenes/EndingScene";
 import createEnemyWaveSystem from "../game/systems/EnemyWaveController";
 import createMessagePopup from "../game/interface/MessagePopup";
-import createLojaUI from "../game/interface/LojaUI";
+
 
 k.setLayers([
     "background",
@@ -22,20 +22,39 @@ k.setLayers([
     "pause",
 ], "game");
 
+
 // para melhor visualizacao //
 export const DIA = 0;
 export const NOITE = 1;
 
 // Aqui a gente define a posicao dos objetos no mapa, isso foi previamente calculado no editor tiled e exportado //
 const objects = {
-    "casa": { "name": "casa", "x": 514.6, "y": 32 },
-    "loja": { "name": "loja", "x": 70, "y": 200 },
-    "tomate": { "name": "tomate", "x": 509.9, "y": 399.9 },
-    "player": { "name": "player", "x": 512, "y": 279.3 }
+    "casa": {
+        "name": "casa",
+        "x": 514.6,
+        "y": 32
+    },
+    "loja": {
+        "name": "loja",
+        "x": 70,
+        "y": 200,
+    },
+    "tomate": {
+        "name": "tomate",
+        "x": 509.9,
+        "y": 450,
+    },
+    "player": {
+        "name": "player",
+        "x": 512,
+        "y": 279.3
+    }
 };
+
 
 // cena principal do jogo
 k.scene("playscene", () => {
+
     let cameraScroll = k.getCamPos();
 
     const root = k.add([
@@ -45,40 +64,48 @@ k.scene("playscene", () => {
 
     const uiObjects = k.add([
         k.layer("ui"),
-        "root_ui", 
+        "root_ui", // strings na lista de componentes sao tratados como tags, essas tags pode ser usada para busca de objetos //
     ]);
 
+    // um objeto invisivel, vai servir somente para guardar dados sobre o jogo e dirigir como o loop funciona //
     const director = root.add([
         {
             diasJogados: 1,
             state: DIA,
             killedTotal: 0,
+
             currency: 0,
+
             anyUIActive: false,
+
             aliveInBatch: 0,
             enemiesRemainingTotal: 0
         },
+
         "director"
     ]);
 
+
+    // cria a casa 
     const casa = createCasa();
     casa.pos = k.vec2(objects["casa"].x, objects["casa"].y);
 
+    // cria o player
     const player = createPlayer();
     player.pos = k.vec2(objects["player"].x, objects["player"].y);
-    
-    // 
-    player.manure = 0;
 
+    // cria a UI (barra de vida + estamina)
     const ui = createUI(player);
+
     const confirmUI = createConfirmChangeUI();
 
     const bigTomate = createBigTomate();
     bigTomate.pos = k.vec2(objects["tomate"].x, objects["tomate"].y);
 
+    //Função pro fim do jogo (Script Endingscene)
     function finishGame() {
         const currentHealth = bigTomate.hp;
-        const maxHealth = 100; 
+        const maxHealth = 100; // A vida máxima do tomate (conforme criado em BigTomato.js)
 
         const endingType = getEndingType(currentHealth, maxHealth);
 
@@ -87,7 +114,6 @@ k.scene("playscene", () => {
             tomatoHealth: currentHealth,
         });
     }
-    
     k.onKeyPress("r", () => {
         finishGame();
     });
@@ -100,86 +126,30 @@ k.scene("playscene", () => {
     const cardUI = createCardUI();
     cardUI.hide();
 
+    k.onKeyPress("e", () => {
+        bigTomate.trigger("grow");
+    });
+
+    // Abre o menu de cartas ao apertar C
     k.onKeyPress("c", () => {
+
         if (!cardUI.getContainer().menuActive && !director.anyUIActive) {
             cardUI.getContainer().trigger("popupOpen");
             root.paused = true;
 
-            const drawnCards = cardSystem.drawThreeCards(); 
+            const drawnCards = cardSystem.drawThreeCards(); // Sorteia 3 cartas
 
-            cardUI.showCards(drawnCards, (chosenCard) => { 
-                cardSystem.applyCardUpgrade(chosenCard); 
+            cardUI.showCards(drawnCards, (chosenCard) => { // Mostra as cartas
+                cardSystem.applyCardUpgrade(chosenCard); // Aplica o upgrade
                 console.log(` Carta escolhida: ${chosenCard.nome}`);
 
                 cardUI.getContainer().trigger("closePopup");
-                root.paused = false; 
+
+                root.paused = false; // 
             });
         }
     });
 
-    //sistema de loja
-    const lojaUI = createLojaUI();
-    let cartasDisponiveisHoje = 0;
-    
-   // Busca a área de colisão da loja (caixa azul)
-    const areaAcao = loja.get("areaAcao")[0];
-
-    if (areaAcao) {
-        // onCollideUpdate dispara todo frame que o player estiver ENCIMA da areaAcao
-        areaAcao.onCollideUpdate("player", () => {
-            // Se já tiver um menu aberto, ignora
-            if (director.anyUIActive) return;
-
-            // Se apertar E enquanto está na área...
-            if (k.isKeyPressed("e")) {
-                lojaUI.show(player.manure, (acao) => {
-                    
-                    if (acao === "vender_carta") {
-                        if (player.manure >= 4) {
-                            player.manure -= 4;
-                            cartasDisponiveisHoje++;
-
-                            if (cartasDisponiveisHoje <= 2) {
-                                const drawnCards = cardSystem.drawThreeCards();
-                                
-                                cardUI.getContainer().trigger("popupOpen");
-                                root.paused = true;
-
-                                cardUI.showCards(drawnCards, (chosenCard) => {
-                                    cardSystem.applyCardUpgrade(chosenCard);
-                                    console.log(`Carta obtida: ${chosenCard.nome}`);
-                                    
-                                    cardUI.getContainer().trigger("closePopup");
-                                    root.paused = false;
-                                    lojaUI.hide();
-                                });
-                            } else {
-                                console.log("Você já pegou o máximo de cartas hoje!");
-                                lojaUI.hide();
-                            }
-                        }
-                    } else if (acao === "curar_tomate") {
-                        if (player.manure >= 2) {
-                            player.manure -= 2;
-                            
-                            if (typeof bigTomate.heal === "function") {
-                                const curaAmount = bigTomate.maxHp() * 0.25;
-                                bigTomate.heal(curaAmount);
-                                console.log(`Tomate curado! Vida atual: ${bigTomate.hp()}`);
-                            } else {
-                                bigTomate.hp += 25;
-                                if (bigTomate.hp > 100) bigTomate.hp = 100;
-                                console.log(`Tomate curado manualmente! Vida atual: ${bigTomate.hp}`);
-                            }
-                            
-                            lojaUI.hide();
-                        }
-                    }
-                });
-            }
-        });
-    }
-    // Controle de Ondas
     const waveController = createEnemyWaveSystem({
         batchSize: 6,
         batchSizeMax: 7,
@@ -191,17 +161,16 @@ k.scene("playscene", () => {
         },
         onAllDefeated: () => {
             console.log("Wave atual concluída!");
+            // ex: gameManager.state = DIA; ou mostra tela de "próximo dia"
             director.state = DIA;
             director.diasJogados++;
-            
-            // Reseta as cartas da loja pro próximo dia
-            cartasDisponiveisHoje = 0; 
         },
     });
 
     const messagePopup = createMessagePopup();
     messagePopup.getContainer().hidden = true;
 
+    // logica do loop //
     director.on("dia", () => {
         k.wait(2, () => {
             messagePopup.abrirMensagem("Bem vindo (a)", "Imagine que aqui esta um tutorial muito bem escrito ta eu to com muita preguiça de escrever algo concreto ksksksksks!!!");
@@ -217,23 +186,24 @@ k.scene("playscene", () => {
         k.go("gameoverscene");
     });
 
-    // Proteção marota aqui pro objetivo não quebrar se morrer
-    const objectiveList = root.get("objective");
-    if (objectiveList.length > 0) {
-        objectiveList[0].onDeath(() => {
-            k.go("gameoverscene");
-        });
-    }
+    root.get("objective")[0].onDeath(() => {
+        k.go("gameoverscene");
+    });
 
+    // inicia o menu como escondido //
     const pauseMenu = createPauseMenu();
     pauseMenu.hidden = true;
 
+    // Esc pra pausar
+    // quando o usuario aperta ESC, pausa o jogo
     k.onKeyPress("escape", () => {
         pauseMenu.enabled = true;
         pauseMenu.hidden = false;
         root.paused = true;
     });
 
+
+    // mapa e camera bounds //
     const map = root.add([
         k.pos(bigTomate.pos.x + 16, bigTomate.pos.y + 16),
         k.sprite("mapa"),
@@ -249,6 +219,7 @@ k.scene("playscene", () => {
         right: k.vec2(map.width * 0.5, -map.height * 0.5),
     };
 
+    // bounds // (paredes físicas, sem alteração)
     map.add([k.pos(bounds.top), k.rect(map.width, 4), k.area({ collisionIgnore: ["enemy"] }), k.body({ isStatic: true })]);
     map.add([k.pos(bounds.bottom), k.rect(map.width, 4), k.area({ collisionIgnore: ["enemy"] }), k.body({ isStatic: true })]);
     map.add([k.pos(bounds.left), k.rect(4, map.height), k.area({ collisionIgnore: ["enemy"] }), k.body({ isStatic: true })]);
@@ -271,7 +242,9 @@ k.scene("playscene", () => {
     const halfViewW = k.width() * 0.5;
     const halfViewH = k.height() * 0.5;
 
+    // scrolling da camera //
     function clampCam(val, min, max) {
+        // se o mapa for menor que a tela, os bounds invertem (min > max) — sem isso o clamp quebra
         if (min > max) return (min + max) / 2;
         return k.clamp(val, min, max);
     }
@@ -295,5 +268,6 @@ k.scene("playscene", () => {
         k.setCamPos(clampedPos);
     });
 
+    // inicia o jogo de fato //
     director.trigger("dia");
 });

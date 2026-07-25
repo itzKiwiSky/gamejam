@@ -8,16 +8,48 @@ export default function createBigTomate() {
 
     const big = root.add([
         k.pos(k.center()),
-        k.rect(128, 128),
+        k.rect(32, 32),
         k.color(k.RED),
         k.area(),
         k.body({ isStatic: true }),
         k.anchor("center"),
 
-        k.health(500, 500),
+        k.health(100, 100),
+
+        {
+            baseOffset: 50,
+            stage: 0,
+
+            hurt() { }
+        },
 
         "objective",
     ]);
+
+    big.hurt = (dmg) => {
+        big.hp -= dmg;
+    }
+
+    const sprite = big.add([
+        k.sprite("tomate"),
+        k.z(10),
+        k.scale(1),
+        k.anchor("center"),
+    ])
+
+    big.onUpdate(() => {
+        const p = root.get("player")[0];
+
+        sprite.z = big.pos.y + big.baseOffset;
+        sprite.frame = big.stage;
+
+    });
+
+    big.on("grow", () => {
+        big.stage++
+
+    });
+
 
     const healthBarBg = big.add([
         k.rect(barWidth, barHeight, { radius: 5 }), // retangulo 200x20 com cantos arredondados

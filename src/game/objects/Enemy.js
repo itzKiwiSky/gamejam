@@ -49,6 +49,8 @@ export default function createEnemy(target, player) {
             attackRadius: 18,
 
             isDead: false,
+
+            hurt() { }
         },
 
         "enemy",
@@ -66,6 +68,10 @@ export default function createEnemy(target, player) {
         }),
         k.anchor("center"),
     ]);
+
+    tomato.hurt = (dmg) => {
+        tomato.hp -= dmg;
+    }
 
     tomato.onDeath(() => {
         if (tomato.isDead) return; // evita reprocessar se disparar mais de uma vez
@@ -153,7 +159,7 @@ export default function createEnemy(target, player) {
             // no momento que o ataque dispara, dá dano em tudo que tiver na área
             for (const obj of attackArea.getCollisions()) {
                 if (!obj.target.is("enemy")) //evita que ataque objetos que tenha id de inimigo
-                    obj.target.hurt?.(tomato.damage);
+                    obj.target.hp -= tomato.damage;
 
             }
         }

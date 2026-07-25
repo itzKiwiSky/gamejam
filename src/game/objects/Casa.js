@@ -22,10 +22,17 @@ export default function createCasa(player) {
         }
     ]);
 
+    const casaSprite = casa.add([
+        k.sprite("casa"),
+        k.anchor("center"),
+        k.scale(1.2),
+        k.z(3),
+    ]);
+
     casa.onUpdate(() => {
         const p = root.get(player)[0];
 
-        casa.z = casa.pos.y + casa.baseOffset;
+        casaSprite.z = casa.pos.y + casa.baseOffset;
     });
 
     const areaAcao = casa.add([
@@ -44,8 +51,8 @@ export default function createCasa(player) {
             return;
 
         for (const obj of areaAcao.getCollisions()) {
-            if (!obj.target.is("player")) //evita que ataque objetos que tenha id de inimigo
-                if (k.isKeyDown("e")) {
+            if (obj.target.is("player")) //evita que ataque objetos que tenha id de inimigo
+                if (k.isKeyPressed("e")) {
                     if (director.state === DIA) {
                         const UI = rootUI.get("confirmUIChange")[0];
                         UI.trigger("popupOpen");
@@ -57,13 +64,6 @@ export default function createCasa(player) {
 
         }
     });
-
-    const casaSprite = casa.add([
-        k.sprite("casa"),
-        k.anchor("center"),
-        k.scale(1.2),
-        k.z(3),
-    ]);
 
     return casa;
 }

@@ -123,7 +123,7 @@ export default function createPulver(player) {
             k.rect(8, 8),
             k.opacity(0),
             k.rotate(dir.angle()), // usa o ângulo do dir real, não gun.angle
-            k.area(),
+            k.area({ isSensor: true }),
             k.offscreen({ destroy: true }),
             {
                 dir: dir,
@@ -151,11 +151,10 @@ export default function createPulver(player) {
 
         bullet.onCollide("enemy", (enemy) => {
             //verifica se o inimigo tem a função hurt
-            if (enemy.hurt) {
-                //aplica o dano no innimigo
-                enemy.hurt(bullet.damage);
-                console.log(`Bala atingiu inimigo! Dano: ${bullet.damage}, Vida restante: ${enemy.hp()}`);
-            }
+            //aplica o dano no innimigo
+            enemy.hp -= bullet.damage;
+            console.log(`Bala atingiu inimigo! Dano: ${bullet.damage}, Vida restante: ${enemy.hp}`);
+
             //destroi a bala após atingir o inimigo
             k.destroy(bullet);
         })
