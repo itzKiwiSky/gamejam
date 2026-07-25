@@ -10,7 +10,7 @@ export const ENDING_TYPES = {
 
 function getEndingType(tomatoHealth, maxHealth) {
     const healthPercentage = (tomatoHealth / maxHealth) * 100;
-    
+
     if (healthPercentage >= 75) {
         return ENDING_TYPES.FIRST_PLACE;      // Muito bom  75% ou mais
     } else if (healthPercentage >= 40) {
@@ -25,30 +25,22 @@ k.scene("ending", (data) => {
     const endingType = data.endingType;
     const tomatoHealth = data.tomatoHealth;
 
-    
+
     const root = k.add([
         k.layer("ui"),
     ]);
 
-    // Fundo preto padrão
-    root.add([
-        k.rect(k.width(), k.height()),
-        k.color(0, 0, 0),
-    ]);
-
-   
     if (endingType === ENDING_TYPES.FIRST_PLACE) {
-        
-       
         root.add([
+            k.pos(k.center()),
             k.sprite("teste"),          //isso não ta funcionando por algum motivo
-            k.pos(k.width() / 2, k.height() / 2),
             k.anchor("center"),
-            k.scale(2.0),                
+            k.scale(1),
             k.layer("background"),       // Fica no fundo
+            k.z(10),
         ]);
 
-      
+
         /*
         root.add([
             k.rect(k.width(), k.height()),
@@ -57,7 +49,7 @@ k.scene("ending", (data) => {
         ]);
         */
 
-       
+
         // Fundo do título
         root.add([
             k.rect(500, 80),
@@ -78,7 +70,7 @@ k.scene("ending", (data) => {
             k.layer("ui"),
         ]);
 
-       
+
         // Fundo do texto
         root.add([
             k.rect(450, 120),
@@ -101,7 +93,7 @@ k.scene("ending", (data) => {
             k.layer("ui"),
         ]);
 
-      
+
         // Fundo da saúde
         root.add([
             k.rect(450, 80),
@@ -122,7 +114,7 @@ k.scene("ending", (data) => {
             k.layer("ui"),
         ]);
 
-        
+
         // Fundo da mensagem
         root.add([
             k.rect(600, 60),
@@ -143,7 +135,7 @@ k.scene("ending", (data) => {
             k.layer("ui"),
         ]);
 
-       
+
         root.add([
             k.text("Aperte ESPACO para voltar ao menu", {
                 size: 16,
@@ -153,11 +145,11 @@ k.scene("ending", (data) => {
             k.color(150, 150, 150),
             k.layer("ui"),
         ]);
-    } 
-    
-    
+    }
+
+
     else if (endingType === ENDING_TYPES.SECOND_PLACE) {
-        
+
         root.add([
             k.text(" SEGUNDO LUGAR ", {
                 size: 48,
@@ -195,11 +187,11 @@ k.scene("ending", (data) => {
             k.anchor("center"),
             k.color(200, 200, 200),
         ]);
-    } 
-    
-    
+    }
+
+
     else if (endingType === ENDING_TYPES.THIRD_PLACE) {
-        
+
         root.add([
             k.text(" TERCEIRO LUGAR ", {
                 size: 48,
@@ -239,7 +231,7 @@ k.scene("ending", (data) => {
         ]);
     }
 
-   
+
     if (endingType !== ENDING_TYPES.FIRST_PLACE) {
         root.add([
             k.text("Aperte ESPACO para voltar ao menu", {
@@ -251,7 +243,7 @@ k.scene("ending", (data) => {
         ]);
     }
 
-   
+
     k.onKeyPress("space", () => {
         k.go("menuscene");
     });
