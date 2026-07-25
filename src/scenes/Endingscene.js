@@ -6,9 +6,10 @@ export const ENDING_TYPES = {
     THIRD_PLACE: "third",
 };
 
-function getEndingType(tomatoHealth, maxHealth) {
+
+export function getEndingType(tomatoHealth, maxHealth) {
     const healthPercentage = (tomatoHealth / maxHealth) * 100;
-    
+
     if (healthPercentage >= 75) {
         return ENDING_TYPES.FIRST_PLACE;
     } else if (healthPercentage >= 40) {
@@ -81,7 +82,7 @@ k.scene("ending", (data) => {
             k.anchor("center"),
             k.color(200, 200, 200),
         ]);
-    } 
+    }
     else if (endingType === ENDING_TYPES.SECOND_PLACE) {
         // Título em cima
         root.add([
@@ -124,7 +125,7 @@ k.scene("ending", (data) => {
             k.anchor("center"),
             k.color(200, 200, 200),
         ]);
-    } 
+    }
     else if (endingType === ENDING_TYPES.THIRD_PLACE) {
         // Título em cima
         root.add([
