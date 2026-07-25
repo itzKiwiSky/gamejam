@@ -67,7 +67,6 @@ k.scene("playscene", () => {
     const player = createPlayer();
     player.pos = k.vec2(objects["player"].x, objects["player"].y);
     
-    // 
     player.manure = 0;
 
     const ui = createUI(player);
@@ -109,7 +108,7 @@ k.scene("playscene", () => {
 
             cardUI.showCards(drawnCards, (chosenCard) => { 
                 cardSystem.applyCardUpgrade(chosenCard); 
-                console.log(` Carta escolhida: ${chosenCard.nome}`);
+                console.log(`Carta escolhida: ${chosenCard.nome}`);
 
                 cardUI.getContainer().trigger("closePopup");
                 root.paused = false; 
@@ -117,45 +116,50 @@ k.scene("playscene", () => {
         }
     });
 
-    //sistema de loja
+    // Sistema de loja
     const lojaUI = createLojaUI();
     let cartasDisponiveisHoje = 0;
     
-   // Busca a área de colisão da loja (caixa azul)
+    // Busca a área de colisão da loja (caixa azul)
     const areaAcao = loja.get("areaAcao")[0];
-
+ 
     if (areaAcao) {
         // onCollideUpdate dispara todo frame que o player estiver ENCIMA da areaAcao
         areaAcao.onCollideUpdate("player", () => {
             // Se já tiver um menu aberto, ignora
             if (director.anyUIActive) return;
-
-            // Se apertar E enquanto está na área
+ 
+            // Se apertar E enquanto está na área da loja
             if (k.isKeyPressed("e")) {
+                //  
+                director.anyUIActive = true;
+                root.paused = true;
+ 
                 lojaUI.show(player.manure, (acao) => {
                     
                     if (acao === "vender_carta") {
                         if (player.manure >= 4) {
                             player.manure -= 4;
                             cartasDisponiveisHoje++;
-
+ 
                             if (cartasDisponiveisHoje <= 2) {
                                 const drawnCards = cardSystem.drawThreeCards();
                                 
                                 cardUI.getContainer().trigger("popupOpen");
-                                root.paused = true;
-
+ 
                                 cardUI.showCards(drawnCards, (chosenCard) => {
                                     cardSystem.applyCardUpgrade(chosenCard);
                                     console.log(`Carta obtida: ${chosenCard.nome}`);
                                     
                                     cardUI.getContainer().trigger("closePopup");
-                                    root.paused = false;
                                     lojaUI.hide();
+                                    root.paused = false;
                                 });
                             } else {
                                 console.log("Você já pegou o máximo de cartas hoje!");
                                 lojaUI.hide();
+                                director.anyUIActive = false;
+                                root.paused = false;
                             }
                         }
                     } else if (acao === "curar_tomate") {
@@ -173,12 +177,19 @@ k.scene("playscene", () => {
                             }
                             
                             lojaUI.hide();
+                            director.anyUIActive = false;
+                            root.paused = false;
                         }
+                    } else if (acao === "sair") {
+                        lojaUI.hide();
+                        director.anyUIActive = false;
+                        root.paused = false;
                     }
                 });
             }
         });
     }
+ 
    
     const waveController = createEnemyWaveSystem({
         batchSize: 6,

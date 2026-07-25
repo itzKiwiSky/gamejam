@@ -20,7 +20,6 @@ export default function createLojaUI() {
         "loja_menu",
     ]);
 
-     
     lojaMenuContainer.hidden = true;
 
     // Borda
@@ -55,22 +54,27 @@ export default function createLojaUI() {
         k.outline(2, k.color(100, 200, 255)),
         k.area({ isSensor: true }),
         k.anchor("center"),
-        { isHovered: false }
+        { 
+            isHovered: false,
+            textContent: null,
+            descContent: null
+        }
     ]);
 
-    btnVenderAdubo.add([
+    const btnVenderText = btnVenderAdubo.add([
         k.text("Vender 4 Adubo -> Pegar Carta de Upgrade", { size: 16 }),
         k.pos(0, -10),
-        k.color(100, 200, 255),
         k.anchor("center"),
     ]);
+    btnVenderAdubo.textContent = btnVenderText;
 
-    btnVenderAdubo.add([
+    const btnVenderDesc = btnVenderAdubo.add([
         k.text("(Ganha 1 chance de escolher upgrade)", { size: 12 }),
         k.pos(0, 15),
         k.color(150, 150, 200),
         k.anchor("center"),
     ]);
+    btnVenderAdubo.descContent = btnVenderDesc;
 
     btnVenderAdubo.onHover(() => {
         btnVenderAdubo.color = k.color(80, 80, 120);
@@ -96,22 +100,27 @@ export default function createLojaUI() {
         k.outline(2, k.color(100, 255, 100)),
         k.area({ isSensor: true }),
         k.anchor("center"),
-        { isHovered: false }
+        { 
+            isHovered: false,
+            textContent: null,
+            descContent: null
+        }
     ]);
 
-    btnCurar.add([
+    const btnCurarText = btnCurar.add([
         k.text("Usar 2 Adubo -> Curar Tomate (25%)", { size: 16 }),
         k.pos(0, -10),
-        k.color(100, 255, 100),
         k.anchor("center"),
     ]);
+    btnCurar.textContent = btnCurarText;
 
-    btnCurar.add([
+    const btnCurarDesc = btnCurar.add([
         k.text("(Restaura ate 25% da vida)", { size: 12 }),
         k.pos(0, 15),
         k.color(150, 200, 150),
         k.anchor("center"),
     ]);
+    btnCurar.descContent = btnCurarDesc;
 
     btnCurar.onHover(() => {
         btnCurar.color = k.color(80, 120, 80);
@@ -156,7 +165,7 @@ export default function createLojaUI() {
     });
 
     btnSair.onClick(() => {
-        lojaMenuContainer.hidden = true; // Esconde com hidden nativo
+        lojaMenuContainer.hidden = true;
         director.anyUIActive = false;
     });
 
@@ -165,30 +174,32 @@ export default function createLojaUI() {
             lojaMenuContainer.manureCount = manureCount;
             lojaMenuContainer.onAction = onAction;
             
-            lojaMenuContainer.hidden = false; // Mostra a UI
+            lojaMenuContainer.hidden = false;
             director.anyUIActive = true;
 
             manureDisplay.text = `Adubo disponível: ${manureCount}`;
 
+            // Atualizar estado do botão de vender adubo
             if (manureCount < 4) {
                 btnVenderAdubo.color = k.color(40, 40, 60);
-                btnVenderAdubo.children[0].color = k.color(100, 100, 150);
+                btnVenderAdubo.textContent.color = k.color(100, 100, 150);
             } else {
                 btnVenderAdubo.color = k.color(60, 60, 100);
-                btnVenderAdubo.children[0].color = k.color(100, 200, 255);
+                btnVenderAdubo.textContent.color = k.color(100, 200, 255);
             }
 
+            // Atualizar estado do botão de curar
             if (manureCount < 2) {
                 btnCurar.color = k.color(40, 60, 40);
-                btnCurar.children[0].color = k.color(100, 150, 100);
+                btnCurar.textContent.color = k.color(100, 150, 100);
             } else {
                 btnCurar.color = k.color(60, 100, 60);
-                btnCurar.children[0].color = k.color(100, 255, 100);
+                btnCurar.textContent.color = k.color(100, 255, 100);
             }
         },
 
         hide() {
-            lojaMenuContainer.hidden = true; // Esconde com hidden nativo
+            lojaMenuContainer.hidden = true;
             director.anyUIActive = false;
         },
     };
