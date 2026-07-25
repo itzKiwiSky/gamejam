@@ -1,248 +1,182 @@
 import k from "../Engine";
 
-
 export const ENDING_TYPES = {
     FIRST_PLACE: "first",
     SECOND_PLACE: "second",
     THIRD_PLACE: "third",
 };
 
-
 function getEndingType(tomatoHealth, maxHealth) {
     const healthPercentage = (tomatoHealth / maxHealth) * 100;
-
+    
     if (healthPercentage >= 75) {
-        return ENDING_TYPES.FIRST_PLACE;      // Muito bom  75% ou mais
+        return ENDING_TYPES.FIRST_PLACE;
     } else if (healthPercentage >= 40) {
-        return ENDING_TYPES.SECOND_PLACE;     // Bom. 40-75%
+        return ENDING_TYPES.SECOND_PLACE;
     } else {
-        return ENDING_TYPES.THIRD_PLACE;      // Ruim. Menos de 40%
+        return ENDING_TYPES.THIRD_PLACE;
     }
 }
-
 
 k.scene("ending", (data) => {
     const endingType = data.endingType;
     const tomatoHealth = data.tomatoHealth;
 
-
     const root = k.add([
         k.layer("ui"),
     ]);
 
+    root.add([
+        k.rect(k.width(), k.height()),
+        k.color(0, 0, 0),
+    ]);
+
     if (endingType === ENDING_TYPES.FIRST_PLACE) {
+        // Título em cima
         root.add([
-            k.pos(k.center()),
-            k.sprite("teste"),          //isso não ta funcionando por algum motivo
-            k.anchor("center"),
-            k.scale(1),
-            k.layer("background"),       // Fica no fundo
-            k.z(10),
-        ]);
-
-
-        /*
-        root.add([
-            k.rect(k.width(), k.height()),
-            k.color(0, 0, 0, 0.3),      // Preto com 30% opacidade
-            k.layer("ui"),              // Fica entre o background e o texto
-        ]);
-        */
-
-
-        // Fundo do título
-        root.add([
-            k.rect(500, 80),
-            k.pos(k.width() / 2 - 250, 20),
-            k.color(0, 0, 0, 0.7),      // Preto 70% opaco
-            k.anchor("topleft"),
-            k.layer("ui"),
-        ]);
-
-        // Texto do título
-        root.add([
-            k.text(" PRIMEIRO LUGAR ", {
+            k.text("PRIMEIRO LUGAR", {
                 size: 48,
             }),
-            k.pos(k.width() / 2, 60),
+            k.pos(k.center().x, 60),
             k.anchor("center"),
-            k.color(255, 215, 0),        // Ouro
-            k.layer("ui"),
+            k.color(255, 215, 0),
         ]);
 
-
-        // Fundo do texto
+        // Container imagem centralizado
         root.add([
-            k.rect(450, 120),
-            k.pos(40, k.height() / 2.5 - 60),
-            k.color(0, 0, 0, 0.7),
-            k.anchor("topleft"),
-            k.layer("ui"),
+            k.rect(400, 350),
+            k.pos(k.center().x, k.center().y),
+            k.anchor("center"),
+            k.color(60, 60, 60),
         ]);
 
-        // Texto em si
+        // Sprite do teste
         root.add([
-            k.text("Depois de tres dias e tres noites de trabalho arduo, seu esforco foi recompensado.", {
-                size: 20,
-                width: 430,
+            k.sprite("teste"),
+            k.pos(k.center().x, k.center().y),
+            k.anchor("center"),
+            k.scale(1.0),
+        ]);
+
+        // Texto verde - mais largo no meio
+        root.add([
+            k.text("Depois de tres dias e tres noites de trabalho arduo, seu esforco foi recompensado!", {
+                size: 18,
+                width: 700,
                 align: "center",
             }),
-            k.pos(265, k.height() / 2.5),
+            k.pos(k.center().x, k.center().y - 80),
             k.anchor("center"),
-            k.color(100, 255, 100),      // Verde
-            k.layer("ui"),
+            k.color(100, 255, 100),
         ]);
 
-
-        // Fundo da saúde
-        root.add([
-            k.rect(450, 80),
-            k.pos(k.width() - 490, k.height() / 2.5 - 40),
-            k.color(0, 0, 0, 0.7),
-            k.anchor("topleft"),
-            k.layer("ui"),
-        ]);
-
-        // Texto da saúde
-        root.add([
-            k.text(`Saude do tomate: ${tomatoHealth.toFixed(0)}/100`, {
-                size: 28,
-            }),
-            k.pos(k.width() - 265, k.height() / 2.5),
-            k.anchor("center"),
-            k.color(255, 255, 255),      // Branco
-            k.layer("ui"),
-        ]);
-
-
-        // Fundo da mensagem
-        root.add([
-            k.rect(600, 60),
-            k.pos(k.width() / 2 - 300, k.height() - 120),
-            k.color(0, 0, 0, 0.7),
-            k.anchor("topleft"),
-            k.layer("ui"),
-        ]);
-
-        // Texto da mensagem
+        // Descrição abaixo
         root.add([
             k.text("Voce conquistou o primeiro lugar na competicao!", {
-                size: 22,
+                size: 18,
+                width: 700,
+                align: "center",
             }),
-            k.pos(k.width() / 2, k.height() - 90),
+            k.pos(k.center().x, k.center().y + 120),
             k.anchor("center"),
             k.color(200, 200, 200),
-            k.layer("ui"),
         ]);
-
-
-        root.add([
-            k.text("Aperte ESPACO para voltar ao menu", {
-                size: 16,
-            }),
-            k.pos(k.width() / 2, k.height() - 30),
-            k.anchor("center"),
-            k.color(150, 150, 150),
-            k.layer("ui"),
-        ]);
-    }
-
-
+    } 
     else if (endingType === ENDING_TYPES.SECOND_PLACE) {
-
+        // Título em cima
         root.add([
-            k.text(" SEGUNDO LUGAR ", {
+            k.text("SEGUNDO LUGAR", {
                 size: 48,
             }),
-            k.pos(k.center().x, k.height() / 4),
+            k.pos(k.center().x, 60),
             k.anchor("center"),
             k.color(192, 192, 192),
         ]);
 
+        // Container imagem centralizado
         root.add([
-            k.text("O segundo lugar e bom, mas nao e o melhor... Pelo menos teve alguem pior do que voce", {
-                size: 32,
-                width: 900,
+            k.rect(400, 350),
+            k.pos(k.center().x, k.center().y),
+            k.anchor("center"),
+            k.color(60, 60, 60),
+        ]);
+
+        // Texto
+        root.add([
+            k.text("Seu tomate ficou bom, mas não foi o melhor. Mas dois ainda é melhor que três. ", {
+                size: 16,
+                width: 700,
                 align: "center",
             }),
-            k.pos(k.center().x, k.height() / 2.5),
+            k.pos(k.center().x, k.center().y - 80),
             k.anchor("center"),
             k.color(255, 200, 100),
         ]);
 
-        root.add([
-            k.text(`Saude do tomate: ${tomatoHealth.toFixed(0)}/100`, {
-                size: 24,
-            }),
-            k.pos(k.center().x, k.height() / 2),
-            k.anchor("center"),
-            k.color(255, 255, 255),
-        ]);
-
+        // Descrição abaixo
         root.add([
             k.text("Voce conquistou o segundo lugar na competicao.", {
-                size: 20,
+                size: 18,
+                width: 700,
+                align: "center",
             }),
-            k.pos(k.center().x, k.height() / 1.7),
+            k.pos(k.center().x, k.center().y + 120),
             k.anchor("center"),
             k.color(200, 200, 200),
         ]);
-    }
-
-
+    } 
     else if (endingType === ENDING_TYPES.THIRD_PLACE) {
-
+        // Título em cima
         root.add([
-            k.text(" TERCEIRO LUGAR ", {
+            k.text("TERCEIRO LUGAR", {
                 size: 48,
             }),
-            k.pos(k.center().x, k.height() / 4),
+            k.pos(k.center().x, 60),
             k.anchor("center"),
             k.color(205, 127, 50),
         ]);
 
+        // Container imagem centralizado
         root.add([
-            k.text("Alguns diriam que tres e demais... Quem sabe no ano que vem?", {
-                size: 32,
-                width: 900,
+            k.rect(400, 350),
+            k.pos(k.center().x, k.center().y),
+            k.anchor("center"),
+            k.color(60, 60, 60),
+        ]);
+
+        // Texto
+        root.add([
+            k.text("Seu tomate não sobreviveu bem ao processo... Talvez na próxima?", {
+                size: 16,
+                width: 700,
                 align: "center",
             }),
-            k.pos(k.center().x, k.height() / 2.5),
+            k.pos(k.center().x, k.center().y - 80),
             k.anchor("center"),
             k.color(255, 100, 100),
         ]);
 
+        // Descrição abaixo
         root.add([
-            k.text(`Saude do tomate: ${tomatoHealth.toFixed(0)}/100`, {
-                size: 24,
+            k.text("Voce ficou em ultimo lugar na competicao...", {
+                size: 18,
+                width: 700,
+                align: "center",
             }),
-            k.pos(k.center().x, k.height() / 2),
-            k.anchor("center"),
-            k.color(255, 255, 255),
-        ]);
-
-        root.add([
-            k.text("Voce ficou em ultimo lugar...", {
-                size: 20,
-            }),
-            k.pos(k.center().x, k.height() / 1.7),
+            k.pos(k.center().x, k.center().y + 120),
             k.anchor("center"),
             k.color(200, 200, 200),
         ]);
     }
 
-
-    if (endingType !== ENDING_TYPES.FIRST_PLACE) {
-        root.add([
-            k.text("Aperte ESPACO para voltar ao menu", {
-                size: 18,
-            }),
-            k.pos(k.center().x, k.height() - 50),
-            k.anchor("center"),
-            k.color(150, 150, 150),
-        ]);
-    }
-
+    root.add([
+        k.text("Aperte ESPACO para voltar ao menu", {
+            size: 18,
+        }),
+        k.pos(k.center().x, k.height() - 50),
+        k.anchor("center"),
+        k.color(150, 150, 150),
+    ]);
 
     k.onKeyPress("space", () => {
         k.go("menuscene");

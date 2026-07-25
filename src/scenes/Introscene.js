@@ -35,7 +35,7 @@ k.scene("intro", () => {
             fadeOutDuration: 1,
         },
         {
-            text: "Você só precisa defendê-lo mais um pouco, você tem três dias até a competição.",
+            text: "Você só precisa defendê-los mais um pouco, você tem três dias até a competição.",
             duration: 4,
             fadeInDuration: 0.8,
             fadeOutDuration: 0.8,
