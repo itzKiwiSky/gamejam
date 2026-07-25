@@ -4,7 +4,7 @@ import { assets, happyData } from "@kaplayjs/crew";
 k.loadRoot("./");
 
 k.loadSprite("nd", "sprites/nd.jpg");
-k.loadSprite("carddd", "sprites/carddd.png");
+k.loadSprite("card", "sprites/carddd.png");
 k.loadSprite("teste", "sprites/teste.png");
 
 Object.keys(assets).forEach((key) => {
@@ -82,6 +82,15 @@ k.loadSprite("player", "sprites/player.png", {
 });
 
 k.loadSprite("botao", "sprites/botao.png", {
+    slice9: {
+        left: 12,
+        right: 12,
+        top: 12,
+        bottom: 12,
+    },
+});
+
+k.loadSprite("btn_base", "sprites/botao_base.png", {
     slice9: {
         left: 12,
         right: 12,

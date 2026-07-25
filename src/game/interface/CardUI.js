@@ -64,7 +64,7 @@ export default function createCardUI() {
         const xPos = (index - 1) * (160 + spacing);
 
         const cardObj = cardsContainer.add([
-            k.sprite("carddd"),
+            k.sprite("card"),
             k.pos(xPos, 0),
             k.area({ isSensor: true }),
             k.anchor("center"),
