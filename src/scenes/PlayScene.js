@@ -55,6 +55,7 @@ k.scene("playscene", () => {
             state: DIA,
             killedTotal: 0,
             currency: 0,
+            manureCount: 0,
             anyUIActive: false,
             aliveInBatch: 0,
             enemiesRemainingTotal: 0,
