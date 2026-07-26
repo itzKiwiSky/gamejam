@@ -117,8 +117,16 @@ k.loadSprite("casa", "sprites/casa.png");
 
 k.loadSprite("loja", "sprites/loja.png");
 
-k.loadMusic("menuMusic", "sounds/blossom.wav");
+k.loadMusic("menuMusic", "sounds/Menu.mp3");
+
+k.loadMusic("dia", "sounds/Dia.mp3");
+
+k.loadMusic("noite", "sounds/Noite.mp3");
 
 k.loadShaderURL("night", null, "shaders/night.frag");
 
 k.loadBitmapFont("happy-o", happyData.outlined, happyData.width_o, happyData.height_o);
+
+for (let i = 1; i < 4; i++) {
+    k.loadSound("spray" + i, "sounds/spray_variant" + i + ".mp3");
+}

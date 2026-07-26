@@ -7,6 +7,8 @@ export default function createPlayer() {
     const root = k.get("root_game")[0];
     const director = root.get("director")[0];
 
+    const audioContext = k.play("spray" + k.randi(1, 4));
+
     const player = root.add([
         k.pos(k.center()),
         k.rect(32, 32, {
@@ -114,6 +116,10 @@ export default function createPlayer() {
             if (gun.cooldown > 0)
                 return;
 
+            k.play("spray" + k.randi(1, 4), {
+                detune: k.rand(0.5, 1),
+                volume: 0.45,
+            })
             gun.shoot(mouseDir);
         }
 
@@ -121,6 +127,10 @@ export default function createPlayer() {
             if (gun.cooldown > 0)
                 return;
 
+            k.play("spray" + k.randi(1, 4), {
+                detune: k.rand(0.5, 1),
+                volume: 0.45,
+            })
             gun.shootSpread(mouseDir);
         }
 

@@ -22,7 +22,7 @@ export default function createBigTomate() {
         {
             baseOffset: 50,
             stage: 0,
-            manureNeedToGrow: 10,
+            manureNeedToGrow: 3,
             count: 0,
             level: 1,
 

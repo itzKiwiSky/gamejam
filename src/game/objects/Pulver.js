@@ -73,6 +73,7 @@ export default function createPulver(player) {
 
             if (gun.reloadTime <= 0) {
                 gun.bulletCount = gun.maxBulletCount;
+                gun.cooldown = gun.maxReloadTimer;
                 gun.isReloading = false;
             }
         }
