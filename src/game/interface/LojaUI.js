@@ -79,19 +79,18 @@ export default function createLojaUI() {
     btnVenderAdubo.add([
         k.text("[4 Adubos] -> Pegar Carta de Upgrade", { size: 16 }),
         k.pos(0, -10),
+        k.color(100, 200, 255),
         k.anchor("center"),
         k.fixed(),
     ]);
-    btnVenderAdubo.textContent = btnVenderText;
 
-    const btnVenderDesc = btnVenderAdubo.add([
+    btnVenderAdubo.add([
         k.text("(Ganha 1 chance de escolher upgrade)", { size: 12 }),
         k.pos(0, 15),
         k.color(150, 150, 200),
         k.anchor("center"),
         k.fixed(),
     ]);
-    btnVenderAdubo.descContent = btnVenderDesc;
 
 
     btnVenderAdubo.onUpdate(() => {
@@ -123,17 +122,16 @@ export default function createLojaUI() {
     btnCurar.add([
         k.text("[2 Adubos] -> Curar Tomate (25%)", { size: 16 }),
         k.pos(0, -10),
+        k.color(100, 255, 100),
         k.anchor("center"),
     ]);
-    btnCurar.textContent = btnCurarText;
 
-    const btnCurarDesc = btnCurar.add([
+    btnCurar.add([
         k.text("(Restaura ate 25% da vida)", { size: 12 }),
         k.pos(0, 15),
         k.color(150, 200, 150),
         k.anchor("center"),
     ]);
-    btnCurar.descContent = btnCurarDesc;
 
     btnCurar.onUpdate(() => {
         if (btnCurar.isHovering())
