@@ -119,4 +119,6 @@ k.loadSprite("loja", "sprites/loja.png");
 
 k.loadMusic("menuMusic", "sounds/blossom.wav");
 
+k.loadShaderURL("night", null, "shaders/night.frag");
+
 k.loadBitmapFont("happy-o", happyData.outlined, happyData.width_o, happyData.height_o);

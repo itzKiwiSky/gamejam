@@ -38,14 +38,51 @@ const objects = {
 k.scene("playscene", () => {
     let cameraScroll = k.getCamPos();
 
+    const gameCanvas = k.makeCanvas(k.width(), k.height());
+    const uiCanvas = k.makeCanvas(k.width(), k.height());
+    let nightIntensity = 0;
+
+
+    // função pra transicionar suavemente
+    function setNightIntensity(target, duration = 2) {
+        k.tween(
+            nightIntensity,
+            target,
+            duration,
+            (val) => {
+                nightIntensity = val;
+            },
+            k.easings.linear
+        );
+    }
+
     const root = k.add([
         k.layer("game"),
+        k.drawon(gameCanvas.fb),
         "root_game",
     ]);
 
     const uiObjects = k.add([
         k.layer("ui"),
         "root_ui",
+    ]);
+
+    k.add([ //objeto renderer //
+        k.pos(0, 0),
+        k.fixed(),
+        k.z(-100),
+        {
+            draw() {
+                k.drawUVQuad({
+                    width: gameCanvas.width,
+                    height: gameCanvas.height,
+                    tex: gameCanvas.fb.tex,
+                    flipY: true,
+                    shader: "night",
+                    uniform: { u_intensity: nightIntensity },
+                });
+            },
+        },
     ]);
 
     const director = root.add([
@@ -74,9 +111,6 @@ k.scene("playscene", () => {
 
     const player = createPlayer();
     player.pos = k.vec2(objects["player"].x, objects["player"].y);
-
-    // 
-    player.manure = 0;
 
     const ui = createUI(player);
     const confirmUI = createConfirmChangeUI();
@@ -213,11 +247,13 @@ k.scene("playscene", () => {
     director.on("dia", () => {
         k.wait(2, () => {
             messagePopup.abrirMensagem("Bem vindo (a)", "Imagine que aqui esta um tutorial muito bem escrito ta eu to com muita preguiça de escrever algo concreto ksksksksks!!!");
-        })
+        });
+
+        setNightIntensity(0, 2);
     });
 
     director.on("noite", () => {
-        console.log("noite");
+        setNightIntensity(1, 2);
         waveController.start(director.waveList[director.diasSobrevividos]);
     });
 
