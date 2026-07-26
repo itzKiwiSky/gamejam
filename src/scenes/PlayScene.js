@@ -10,7 +10,7 @@ import createConfirmChangeUI from "../game/interface/ConfirmChange";
 import createCardSystem from "../game/systems/CardSystem";
 import createCardUI from "../game/interface/CardUI";
 import createLoja from "../game/objects/Loja";
-import { ENDING_TYPES } from "../scenes/EndingScene";
+import { ENDING_TYPES } from "./EndingScene";
 import createEnemyWaveSystem from "../game/systems/EnemyWaveController";
 import createMessagePopup from "../game/interface/MessagePopup";
 import createLojaUI from "../game/interface/LojaUI";

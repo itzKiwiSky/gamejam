@@ -8,6 +8,7 @@ k.loadSprite("card", "sprites/carddd.png");
 k.loadSprite("primeiro_lugar", "sprites/primeiro_lugar.png");
 k.loadSprite("segundo_lugar", "sprites/segundo_lugar.png");
 k.loadSprite("terceiro_lugar", "sprites/terceiro_lugar.png");
+k.loadSprite("gameover", "sprites/gameover.png");
 
 Object.keys(assets).forEach((key) => {
     const asset = assets[key];
