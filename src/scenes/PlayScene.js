@@ -111,11 +111,6 @@ k.scene("playscene", () => {
 
     const player = createPlayer();
     player.pos = k.vec2(objects["player"].x, objects["player"].y);
-<<<<<<< HEAD
-    
-    player.manure = 0;
-=======
->>>>>>> master
 
     const ui = createUI(player);
     const confirmUI = createConfirmChangeUI();
@@ -154,15 +149,9 @@ k.scene("playscene", () => {
 
             const drawnCards = cardSystem.drawThreeCards();
 
-<<<<<<< HEAD
-            cardUI.showCards(drawnCards, (chosenCard) => { 
-                cardSystem.applyCardUpgrade(chosenCard); 
-                console.log(`Carta escolhida: ${chosenCard.nome}`);
-=======
             cardUI.showCards(drawnCards, (chosenCard) => {
                 cardSystem.applyCardUpgrade(chosenCard);
                 console.log(` Carta escolhida: ${chosenCard.nome}`);
->>>>>>> master
 
                 cardUI.getContainer().trigger("closePopup");
                 root.paused = false;
@@ -173,11 +162,6 @@ k.scene("playscene", () => {
     // Sistema de loja
     const lojaUI = createLojaUI();
     let cartasDisponiveisHoje = 0;
-<<<<<<< HEAD
-    
-=======
-
->>>>>>> master
     // Busca a área de colisão da loja (caixa azul)
     const areaAcao = loja.get("areaAcao")[0];
  
@@ -247,12 +231,6 @@ k.scene("playscene", () => {
             }
         });
     }
-<<<<<<< HEAD
- 
-   
-=======
-
->>>>>>> master
     const waveController = createEnemyWaveSystem({
         batchSize: 6,
         batchSizeMax: 7,
