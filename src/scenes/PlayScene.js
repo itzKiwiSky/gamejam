@@ -25,6 +25,7 @@ k.setLayers([
 // para melhor visualizacao //
 export const DIA = 0;
 export const NOITE = 1;
+export let musicaContext;
 
 // Aqui a gente define a posicao dos objetos no mapa, isso foi previamente calculado no editor tiled e exportado //
 const objects = {
@@ -41,7 +42,7 @@ k.scene("playscene", () => {
     const gameCanvas = k.makeCanvas(k.width(), k.height());
     const uiCanvas = k.makeCanvas(k.width(), k.height());
     let nightIntensity = 0;
-    let musicaContext = k.play("dia", {
+    musicaContext = k.play("dia", {
         loop: true,
     });
     musicaContext.paused = true;
@@ -148,31 +149,31 @@ k.scene("playscene", () => {
     let cartasDisponiveisHoje = 0;
     // Busca a área de colisão da loja (caixa azul)
     const areaAcao = loja.get("areaAcao")[0];
- 
+
     if (areaAcao) {
         // onCollideUpdate dispara todo frame que o player estiver ENCIMA da areaAcao
         areaAcao.onCollideUpdate("player", () => {
             // Se já tiver um menu aberto, ignora
             if (director.anyUIActive) return;
- 
+
             // Se apertar E enquanto está na área da loja
             if (k.isKeyPressed("e")) {
                 //  
                 director.anyUIActive = true;
                 root.paused = true;
- 
+
                 lojaUI.show(player.manure, (acao) => {
 
                     if (acao === "vender_carta") {
                         if (player.manure >= 4) {
                             player.manure -= 4;
                             cartasDisponiveisHoje++;
- 
+
                             if (cartasDisponiveisHoje <= 2) {
                                 const drawnCards = cardSystem.drawThreeCards();
 
                                 cardUI.getContainer().trigger("popupOpen");
- 
+
                                 cardUI.showCards(drawnCards, (chosenCard) => {
                                     cardSystem.applyCardUpgrade(chosenCard);
                                     console.log(`Carta obtida: ${chosenCard.nome}`);

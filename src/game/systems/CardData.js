@@ -94,17 +94,6 @@ export const CARDS = {
         icon: "",
     },
 
-    // Carta 9: Coleta Rápida
-    // Você coleta o adubo (moeda) com maior alcance
-    COLLECTION_RANGE: {
-        id: "collection_range",
-        nome: "Maos Rapidas",
-        descricao: "Coleta adubo com maior alcance",
-        tipo: "aumento de range",
-        valor: 1.5,                     // 1.5x = 50% mais alcance
-        icon: "",
-    },
-
     // Carta 10: Bônus de Colheita
     // Inimigos soltam mais adubo quando morrem
     MANURE_MULTIPLIER: {

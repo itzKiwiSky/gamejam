@@ -10,11 +10,7 @@ k.scene("menuscene", () => {
     const barraLargura = 150 // largura da barra
     const barraY = 30
 
-    //forca a criação de um context de audio msm que nao seja ouvido para evitar bugs de undefined 
-    let musicaContext = k.play("menuMusic", {
-        volume: volumeAtual,
-        loop: true, // faz a musica repetir
-    })
+    let musicaContext
 
     // Fundo
     k.add([
@@ -34,33 +30,61 @@ k.scene("menuscene", () => {
         k.anchor("center"),
     ])
 
+    const playBtnSprite = playBtn.add([
+        k.sprite("btn_base"),
+        k.color(k.GREEN),
+        k.anchor("center"),
+    ])
+
+    playBtnSprite.width = playBtn.width
+    playBtnSprite.height = playBtn.height
+
     playBtn.add([
-        k.text("Play", { size: 40, weight: "bold" }),
+        k.text("Jogar", { size: 40, weight: "bold" }),
         k.anchor("center"),
     ])
 
     playBtn.onClick(() => {
         // vai pra cena "intro"
+        if (!musicaTocando)
+            return;
+        musicaContext.stop()
         k.go("intro")
-        musicaContext.stop();
     })
 
     // Hover do Play
     playBtn.onUpdate(() => {
         if (playBtn.isHovering())
-            playBtn.color = k.Color.fromHex("#4ade80") // converte codigo de cor hexadecimal em RGB
+            playBtnSprite.color = k.Color.fromHex("#4ade80") // converte codigo de cor hexadecimal em RGB
         else
-            playBtn.color = k.Color.fromHex("#22c55e")
+            playBtnSprite.color = k.Color.fromHex("#22c55e")
     })
 
     // Botao sair
     const exitBtn = k.add([
-        k.rect(300, 80, { radius: 10 }),
+        k.rect(300, 80, { fill: false }),
         k.pos(k.center().x, 470),
         k.color(k.Color.fromHex("#a80202")),
         k.area(),
         k.anchor("center"),
     ])
+
+    const exitBtnSprite = exitBtn.add([
+        k.sprite("btn_base"),
+        k.color(k.RED),
+        k.anchor("center"),
+    ])
+
+    exitBtnSprite.width = exitBtn.width
+    exitBtnSprite.height = exitBtn.height
+
+    // Hover do Play
+    exitBtn.onUpdate(() => {
+        if (exitBtn.isHovering())
+            exitBtnSprite.color = k.Color.fromHex("#de4a4a") // converte codigo de cor hexadecimal em RGB
+        else
+            exitBtnSprite.color = k.Color.fromHex("#c52222")
+    })
 
     exitBtn.add([
         k.text("Sair", { size: 40, weight: "bold" }),
@@ -69,6 +93,10 @@ k.scene("menuscene", () => {
     // quando clica em sair
 
     exitBtn.onClick(() => {
+        if (!musicaTocando)
+            return;
+
+        musicaContext.stop();
         k.quit() // fecha o jogo
     })
 

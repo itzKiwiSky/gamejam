@@ -129,18 +129,6 @@ export default function createCardSystem() {
                     }
                     break;
 
-
-                // COLETA 
-
-                case "collection_range":
-                    // Aumenta o alcance de coleta de adubo/moeda
-                    // Armazena em uma propriedade nova do player
-                    if (!player.collectionRange) {
-                        player.collectionRange = 1;
-                    }
-                    player.collectionRange *= card.valor;
-                    break;
-
                 case "manure_multiplier":
                     // Inimigos soltam mais adubo/moeda
                     // Armazena em uma propriedade nova do player

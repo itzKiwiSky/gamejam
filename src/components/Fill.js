@@ -1,4 +1,4 @@
-function componentFill(k) {
+export function componentFill(k) {
     const fill = (_color = null, _opacity = 1) => {
         let fillColor = null
         let shaderLoaded = false

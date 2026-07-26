@@ -28,14 +28,14 @@ export default function createLojaUI() {
     lojaMenuContainer.on("popupOpen", () => {
         lojaMenuContainer.hidden = false;
         director.anyUIActive = true;
-        root.paused = true;
+        gameRoot.paused = true;
         k.tween(0, 1, 0.876, (v) => lojaMenuContainer.scaleTo(v), k.easings.easeOutBounce);
     });
 
     lojaMenuContainer.on("popupClose", () => {
         k.tween(1, 0, 0.876, (v) => lojaMenuContainer.scaleTo(v), k.easings.easeOutBounce).onEnd(() => {
             director.anyUIActive = false;
-            root.paused = false;
+            gameRoot.paused = false;
             lojaMenuContainer.hidden = true;
         });
     });

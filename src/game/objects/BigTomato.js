@@ -64,6 +64,18 @@ export default function createBigTomate() {
         });
     });
 
+    const levelText = big.add([
+        k.text("Level", {
+            size: 15,
+        }),
+        k.pos(0, -64),
+        k.anchor("center"),
+    ])
+
+    levelText.onUpdate(() => {
+        levelText.text = `Nivel: ${big.level}`
+    })
+
 
     const healthBarBg = big.add([
         k.rect(barWidth, barHeight, { radius: 5 }), // retangulo 200x20 com cantos arredondados

@@ -1,5 +1,6 @@
 import k from "../../Engine";
 import createPulver from "./Pulver";
+import { componentFill } from "../../components/Fill";
 
 export default function createPlayer() {
     let dir = k.vec2(0, 0);

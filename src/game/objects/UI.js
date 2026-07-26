@@ -28,8 +28,6 @@ export default function createUI(player) {
         k.color(k.WHITE),
     ]);
 
-
-
     // Barra de vida 
     // Fundo da barra de vida (cinza)
     const healthBarBg = uiContainer.add([
@@ -83,6 +81,20 @@ export default function createUI(player) {
         k.anchor("center"),
         k.color(k.WHITE),
     ]);
+
+
+    const aduboCounter = uiLayer.add([
+        k.text("Adubos: ", {
+            size: 25,
+        }),
+        k.pos(20, 80),
+        k.anchor("topleft"),
+        k.fixed()
+    ])
+
+    aduboCounter.onUpdate(() => {
+        aduboCounter.text = `Adubos: ${director.manureCount}`;
+    })
 
     // funcao que atualiza a UI a cada frame
     uiContainer.onUpdate(() => {

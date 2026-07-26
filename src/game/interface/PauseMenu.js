@@ -83,6 +83,7 @@ export default function createPauseMenu() {
         // vai pro menu principal
         if (!menuPauseContainer.enabled) return;
         gameRoot.paused = false;
+
         k.go("menuscene");
     });
 
