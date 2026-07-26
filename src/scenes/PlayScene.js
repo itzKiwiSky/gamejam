@@ -311,15 +311,20 @@ k.scene("playscene", () => {
     });
 
     root.get("player")[0].onDeath(() => {
-        k.go("gameoverscene");
+        director.trigger("gameover");
     });
+
+    director.on("gameover", () => {
+        musicaContext.stop();
+        k.go("gameoverscene");
+    })
 
 
     // Proteção marota aqui pro objetivo não quebrar se morrer
     const objectiveList = root.get("objective");
     if (objectiveList.length > 0) {
         objectiveList[0].onDeath(() => {
-            k.go("gameoverscene");
+            director.trigger("gameover");
         });
     }
 

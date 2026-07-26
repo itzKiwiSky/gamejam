@@ -27,16 +27,10 @@ export default function createBigTomate() {
             manureNeedToGrow: 3,
             count: 0,
             level: 1,
-
-            hurt() { }
         },
 
         "objective",
     ]);
-
-    big.hurt = (dmg) => {
-        big.hp -= dmg;
-    }
 
     const sprite = big.add([
         k.sprite("tomate"),
