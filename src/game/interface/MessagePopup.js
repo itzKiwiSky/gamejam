@@ -1,5 +1,48 @@
 import k from "../../Engine";
 
+function createButton(buttonContainer, popupContainer, text, options = {
+    clicked: "#679b22",
+    normal: "#96f31c",
+    hovered: "#bfff00"
+}, onClick) {
+
+    console.log(options);
+    const spacing = 120;
+    const xPos = (popupContainer.buttons.length - 1) * (160 + spacing);
+    const baseSize = 96;
+    const baseHeight = 48;
+
+    const button = buttonContainer.add([
+        k.pos(0, 0),
+        k.sprite("btn_base"),
+        k.color(options.normal),
+        k.anchor("center"),
+        k.area({ isSensor: true }),
+        k.z(20),
+    ]);
+
+    button.width = baseSize;
+    button.height = baseHeight;
+
+    button.onUpdate(() => {
+        if (button.isClicked()) {
+            button.color = k.Color.fromHex(options.clicked);
+            onClick();
+        }
+        else
+            button.color = button.isHovering() ? k.Color.fromHex(options.hovered) : k.Color.fromHex(options.normal);
+    });
+
+    const btnText = button.add([
+        k.text(text, {
+            size: 22,
+        }),
+        k.pos(0, 0),
+        k.anchor("center"),
+        k.z(20),
+    ]);
+}
+
 export default function createMessagePopup() {
     const root = k.get("root_game")[0];
     const uiLayer = k.get("root_ui")[0];
@@ -72,61 +115,25 @@ export default function createMessagePopup() {
         k.anchor("center"),
     ]);
 
-    function createButton(text, options = {
-        clicked: "#679b22",
-        normal: "#96f31c",
-        hovered: "#bfff00"
-    }, onClick) {
-
-        console.log(options);
-        const spacing = 120;
-        const xPos = (popupContainer.buttons.length - 1) * (160 + spacing);
-        const baseSize = 96;
-        const baseHeight = 48;
-
-        const button = buttonContainer.add([
-            k.pos(0, 0),
-            k.sprite("btn_base"),
-            k.color(options.normal),
-            k.anchor("center"),
-            k.area({ isSensor: true }),
-            k.z(20),
-        ]);
-
-        button.width = baseSize;
-        button.height = baseHeight;
-
-        button.onUpdate(() => {
-            if (button.isClicked()) {
-                button.color = k.Color.fromHex(options.clicked);
-                onClick();
-            }
-            else
-                button.color = button.isHovering() ? k.Color.fromHex(options.hovered) : k.Color.fromHex(options.normal);
-        });
-
-        const btnText = button.add([
-            k.text(text, {
-                size: 22,
-            }),
-            k.pos(0, 0),
-            k.anchor("center"),
-            k.z(20),
-        ]);
-    }
-
     return {
         abrirMensagem(titulo, msg, options = {
             width: 800,
             height: 400,
             buttons: [
-                createButton("OK", undefined, () => {
-                    popupContainer.trigger("popupClose");
-                })
+                {
+                    text: "OK",
+                    action() {
+                        popupContainer.trigger("popupClose");
+                    }
+                }
             ],
         }) {
             popupSprite.width = options.width;
             popupSprite.height = options.height;
+
+            options.buttons.forEach((btn) => {
+                createButton(buttonContainer, popupContainer, btn.text, btn.size ?? undefined, btn.action);
+            })
 
             textTitle.text = titulo;
             textTitle.width = popupSprite.width * 0.5;

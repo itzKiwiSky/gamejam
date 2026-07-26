@@ -200,6 +200,18 @@ export default function createUI(player) {
 
     // dias //
 
+    const timeSprite = uiLayer.add([
+        k.sprite("time_badge"),
+        k.pos(k.center().x, 128),
+        k.scale(2.5),
+        k.anchor("center"),
+        k.fixed(),
+    ]);
+
+    timeSprite.onUpdate(() => {
+        timeSprite.frame = director.state;
+    });
+
     const diaCounter = uiLayer.add([
         k.pos(k.center().x, 67),
         k.text("Dia 1", {
@@ -210,20 +222,14 @@ export default function createUI(player) {
     ]);
 
     diaCounter.onUpdate(() => {
-        diaCounter.text = "Dia " + director.diasJogados;
-    });
 
-    const estado = uiLayer.add([
-        k.pos(k.center().x, 95),
-        k.text("", {
-            size: 26,
-        }),
-        k.anchor("center"),
-        k.fixed(),
-    ]);
-
-    estado.onUpdate(() => {
-        estado.text = director.state === DIA ? "Dia" : "Noite";
+        if (director.diasSobrevividos >= 3)
+            diaCounter.text = "Dia da competicao";
+        else
+            if (director.diasSobrevividos < 2)
+                diaCounter.text = "Dia " + director.diasJogados;
+            else
+                diaCounter.text = "Ultimo dia";
     });
 
     // Retorna o container pra poder destruir depois se necessario

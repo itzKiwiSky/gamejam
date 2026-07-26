@@ -14,7 +14,7 @@ export default function createLojaUI() {
         k.scale(1),
         k.fixed(),
         {
-            onAction() { },
+            onAction(a) { },
         },
         "loja_menu",
     ]);
@@ -101,9 +101,7 @@ export default function createLojaUI() {
     })
 
     btnVenderAdubo.onClick(() => {
-        if (lojaMenuContainer.onAction) {
-            lojaMenuContainer.onAction("vender_carta");
-        }
+        lojaMenuContainer.onAction("vender_carta");
     });
 
     // Opção 2: Usar Adubo para Curar
@@ -141,9 +139,9 @@ export default function createLojaUI() {
     })
 
     btnCurar.onClick(() => {
-        if (lojaMenuContainer.onAction) {
-            lojaMenuContainer.onAction("curar_tomate");
-        }
+
+        lojaMenuContainer.onAction("curar_tomate");
+
     });
 
     // Botão Sair
@@ -179,7 +177,6 @@ export default function createLojaUI() {
     btnSair.onClick(() => {
         lojaMenuContainer.trigger("popupClose");
     });
-
 
 
     return {

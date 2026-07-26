@@ -1,6 +1,6 @@
 
 import k from "../../Engine";
-import { DIA, NOITE } from "../../scenes/PlayScene";
+import { DIA, messagePopup, NOITE } from "../../scenes/PlayScene";
 
 
 export default function createCasa(player) {
@@ -54,8 +54,27 @@ export default function createCasa(player) {
             if (obj.target.is("player")) //evita que ataque objetos que tenha id de inimigo
                 if (k.isKeyPressed("e")) {
                     if (director.state === DIA) {
-                        const UI = rootUI.get("confirmUIChange")[0];
-                        UI.trigger("popupOpen");
+                        if (director.diasSobrevividos >= 3) {
+                            messagePopup.abrirMensagem("Preparado?", "Partiu para a competicao", {
+                                width: 600,
+                                height: 320,
+                                buttons: [
+                                    {
+                                        text: "Bora",
+                                        action() {
+                                            messagePopup.getContainer().trigger("popupClose");
+                                            director.trigger("fimdejogo");
+                                        }
+
+                                    }
+
+                                ]
+                            });
+                        }
+                        else {
+                            const UI = rootUI.get("confirmUIChange")[0];
+                            UI.trigger("popupOpen");
+                        }
                     }
                     else if (director.state === NOITE) {
                         root.get("gun")[0].isReloading = true;

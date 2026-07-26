@@ -1,23 +1,10 @@
 import k from "../Engine";
 
 export const ENDING_TYPES = {
-    FIRST_PLACE: "first",
-    SECOND_PLACE: "second",
-    THIRD_PLACE: "third",
+    FIRST_PLACE: "primeiro_lugar",
+    SECOND_PLACE: "segundo_lugar",
+    THIRD_PLACE: "terceiro_lugar",
 };
-
-
-export function getEndingType(tomatoHealth, maxHealth) {
-    const healthPercentage = (tomatoHealth / maxHealth) * 100;
-
-    if (healthPercentage >= 75) {
-        return ENDING_TYPES.FIRST_PLACE;
-    } else if (healthPercentage >= 40) {
-        return ENDING_TYPES.SECOND_PLACE;
-    } else {
-        return ENDING_TYPES.THIRD_PLACE;
-    }
-}
 
 k.scene("ending", (data) => {
     const endingType = data.endingType;
@@ -34,31 +21,33 @@ k.scene("ending", (data) => {
 
     // Sprite do teste
     const bg = root.add([
-        k.sprite("teste"),
+        k.sprite(endingType),
         k.pos(k.center()),
         k.anchor("center"),
         k.scale(1),
     ]);
 
-    const c = root.add([
-        k.sprite("nd"),
-        k.pos(128, k.height() - 128),
-        k.rotate(0),
-        k.anchor("center"),
-        k.scale(0.25)
-    ])
+    if (endingType === ENDING_TYPES.FIRST_PLACE) {
+        const c = root.add([
+            k.sprite("nd"),
+            k.pos(128, k.height() - 128),
+            k.rotate(0),
+            k.anchor("center"),
+            k.scale(0.25)
+        ])
 
-    c.onUpdate(() => {
-        c.angle = k.wave(-12, 12, k.time() * 2);
-    })
+        c.onUpdate(() => {
+            c.angle = k.wave(-12, 12, k.time() * 2);
+        })
 
-    root.add([
-        k.text("pabens", {
-            size: 20,
-        }),
-        k.pos(180, k.height() - 128),
-        k.anchor("left"),
-    ])
+        root.add([
+            k.text("pabens", {
+                size: 20,
+            }),
+            k.pos(180, k.height() - 128),
+            k.anchor("left"),
+        ])
+    }
 
     bg.scale.x = k.width() / bg.width
     bg.scale.y = k.height() / bg.height
@@ -77,5 +66,3 @@ k.scene("ending", (data) => {
         k.go("menuscene");
     });
 });
-
-export default getEndingType;

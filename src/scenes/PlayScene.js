@@ -10,7 +10,7 @@ import createConfirmChangeUI from "../game/interface/ConfirmChange";
 import createCardSystem from "../game/systems/CardSystem";
 import createCardUI from "../game/interface/CardUI";
 import createLoja from "../game/objects/Loja";
-import getEndingType from "../scenes/EndingScene";
+import { ENDING_TYPES } from "../scenes/EndingScene";
 import createEnemyWaveSystem from "../game/systems/EnemyWaveController";
 import createMessagePopup from "../game/interface/MessagePopup";
 import createLojaUI from "../game/interface/LojaUI";
@@ -26,6 +26,7 @@ k.setLayers([
 export const DIA = 0;
 export const NOITE = 1;
 export let musicaContext;
+export let messagePopup
 
 // Aqui a gente define a posicao dos objetos no mapa, isso foi previamente calculado no editor tiled e exportado //
 const objects = {
@@ -46,6 +47,16 @@ k.scene("playscene", () => {
         loop: true,
     });
     musicaContext.paused = true;
+
+    function getEndingType(lvl) {
+        if (lvl >= 10) {
+            return ENDING_TYPES.FIRST_PLACE;
+        } else if (lvl >= 6 && lvl <= 10) {
+            return ENDING_TYPES.SECOND_PLACE;
+        } else {
+            return ENDING_TYPES.THIRD_PLACE;
+        }
+    }
 
     // função pra transicionar suavemente
     function setNightIntensity(target, duration = 2) {
@@ -96,7 +107,7 @@ k.scene("playscene", () => {
             state: DIA,
             killedTotal: 0,
             currency: 0,
-            manureCount: 0,
+            manureCount: 4,
             anyUIActive: false,
             aliveInBatch: 0,
             enemiesRemainingTotal: 0,
@@ -104,9 +115,9 @@ k.scene("playscene", () => {
             manureDropMultiplier: 1,
 
             waveList: [ // indica quantos inimigos seram gerados em uma wave em cada dia
-                k.randi(13, 16),
-                k.randi(20, 27),
-                k.randi(30, 32),
+                k.randi(18, 22),
+                k.randi(25, 30),
+                k.randi(32, 40),
             ]
         },
         "director"
@@ -150,29 +161,40 @@ k.scene("playscene", () => {
     // Busca a área de colisão da loja (caixa azul)
     const areaAcao = loja.get("areaAcao")[0];
 
+    k.onKeyPress("l", () => {
+        const e = root.get("enemy")
+        e.forEach((j) => {
+            j.hp = 0;
+        })
+    })
+
     if (areaAcao) {
         // onCollideUpdate dispara todo frame que o player estiver ENCIMA da areaAcao
         areaAcao.onCollideUpdate("player", () => {
             // Se já tiver um menu aberto, ignora
             if (director.anyUIActive) return;
 
+            if (director.state === NOITE) return;
+
+            if (director.diasSobrevividos >= 3)
+                return;
+
             // Se apertar E enquanto está na área da loja
             if (k.isKeyPressed("e")) {
-                //  
-                director.anyUIActive = true;
-                root.paused = true;
-
-                lojaUI.show(player.manure, (acao) => {
+                lojaUI.show((acao) => {
 
                     if (acao === "vender_carta") {
-                        if (player.manure >= 4) {
-                            player.manure -= 4;
+                        if (director.manureCount >= 4) {
+                            director.manureCount -= 4;
                             cartasDisponiveisHoje++;
 
                             if (cartasDisponiveisHoje <= 2) {
                                 const drawnCards = cardSystem.drawThreeCards();
 
+                                lojaUI.hide();
+
                                 cardUI.getContainer().trigger("popupOpen");
+
 
                                 cardUI.showCards(drawnCards, (chosenCard) => {
                                     cardSystem.applyCardUpgrade(chosenCard);
@@ -190,8 +212,8 @@ k.scene("playscene", () => {
                             }
                         }
                     } else if (acao === "curar_tomate") {
-                        if (player.manure >= 2) {
-                            player.manure -= 2;
+                        if (director.manureCount >= 2) {
+                            director.manureCount -= 2;
 
                             if (typeof bigTomate.heal === "function") {
                                 const curaAmount = bigTomate.maxHp() * 0.25;
@@ -229,6 +251,7 @@ k.scene("playscene", () => {
             console.log("Wave atual concluída!");
             director.state = DIA;
             director.diasJogados++;
+            director.diasSobrevividos++;
 
             // Reseta as cartas da loja pro próximo dia
             cartasDisponiveisHoje = 0;
@@ -237,7 +260,7 @@ k.scene("playscene", () => {
         },
     });
 
-    const messagePopup = createMessagePopup();
+    messagePopup = createMessagePopup();
     messagePopup.getContainer().hidden = true;
 
     director.on("dia", () => {
@@ -251,20 +274,21 @@ k.scene("playscene", () => {
 
         k.wait(1, () => {
             //messagePopup.abrirMensagem("Bem vindo (a)", "Imagine que aqui esta um tutorial muito bem escrito ta eu to com muita preguiça de escrever algo concreto ksksksksks!!!");
-            if (!cardUI.getContainer().menuActive && !director.anyUIActive) {
-                cardUI.getContainer().trigger("popupOpen");
-                root.paused = true;
+            if (director.diasSobrevividos < 3)
+                if (!cardUI.getContainer().menuActive && !director.anyUIActive) {
+                    cardUI.getContainer().trigger("popupOpen");
+                    root.paused = true;
 
-                const drawnCards = cardSystem.drawThreeCards();
+                    const drawnCards = cardSystem.drawThreeCards();
 
-                cardUI.showCards(drawnCards, (chosenCard) => {
-                    cardSystem.applyCardUpgrade(chosenCard);
-                    console.log(` Carta escolhida: ${chosenCard.nome}`);
+                    cardUI.showCards(drawnCards, (chosenCard) => {
+                        cardSystem.applyCardUpgrade(chosenCard);
+                        console.log(` Carta escolhida: ${chosenCard.nome}`);
 
-                    cardUI.getContainer().trigger("closePopup");
-                    root.paused = false;
-                });
-            }
+                        cardUI.getContainer().trigger("closePopup");
+                        root.paused = false;
+                    });
+                }
         });
 
         setNightIntensity(0, 2);
@@ -282,9 +306,14 @@ k.scene("playscene", () => {
         k.wait(1, () => waveController.start(director.waveList[director.diasSobrevividos]));
     });
 
+    director.on("fimdejogo", () => {
+        k.go("ending", { endingType: getEndingType(bigTomate.level) });
+    });
+
     root.get("player")[0].onDeath(() => {
         k.go("gameoverscene");
     });
+
 
     // Proteção marota aqui pro objetivo não quebrar se morrer
     const objectiveList = root.get("objective");
@@ -318,10 +347,10 @@ k.scene("playscene", () => {
         right: k.vec2(map.width * 0.5, -map.height * 0.5),
     };
 
-    map.add([k.pos(bounds.top), k.rect(map.width, 4), k.area({ collisionIgnore: ["enemy"] }), k.body({ isStatic: true })]);
-    map.add([k.pos(bounds.bottom), k.rect(map.width, 4), k.area({ collisionIgnore: ["enemy"] }), k.body({ isStatic: true })]);
-    map.add([k.pos(bounds.left), k.rect(4, map.height), k.area({ collisionIgnore: ["enemy"] }), k.body({ isStatic: true })]);
-    map.add([k.pos(bounds.right), k.rect(4, map.height), k.area({ collisionIgnore: ["enemy"] }), k.body({ isStatic: true })]);
+    map.add([k.pos(bounds.top), k.rect(map.width, 4,), k.area({ collisionIgnore: ["enemy"] }), k.body({ isStatic: true })]).hidden = true;
+    map.add([k.pos(bounds.bottom), k.rect(map.width, 4), k.area({ collisionIgnore: ["enemy"] }), k.body({ isStatic: true })]).hidden = true;
+    map.add([k.pos(bounds.left), k.rect(4, map.height), k.area({ collisionIgnore: ["enemy"] }), k.body({ isStatic: true })]).hidden = true;
+    map.add([k.pos(bounds.right), k.rect(4, map.height), k.area({ collisionIgnore: ["enemy"] }), k.body({ isStatic: true })]).hidden = true;
 
     function toWorldBound(localVec) {
         return map.pos.add(k.vec2(

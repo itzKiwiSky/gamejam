@@ -16,6 +16,7 @@ export default function createCardUI() {
 
         {
             selectedCard: null,
+            alreadySelectCard: false,
             onCardSelected: null,
             menuActive: false,
             dest: k.vec2(1, 1)
@@ -131,7 +132,11 @@ export default function createCardUI() {
             if (!cardMenuContainer.menuActive)
                 return;
 
+            if (cardsContainer.alreadySelectCard)
+                return;
+
             cardMenuContainer.selectedCard = card;
+            cardsContainer.alreadySelectCard = true;
 
             k.tween(cardObj.pos.y, cardObj.pos.y + 1200, 2, (v) => cardObj.pos.y = v, k.easings.easeInBack).onEnd(() => {
                 k.destroy(cardObj);
@@ -154,6 +159,7 @@ export default function createCardUI() {
 
         showCards(cardsArray, onCardSelectedCallback) {
             cardsContainer.removeAll();
+            cardsContainer.alreadySelectCard = false;
 
             cardsArray.forEach((card, index) => {
                 renderCard(card, index);

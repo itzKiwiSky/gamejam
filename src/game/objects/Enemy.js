@@ -35,7 +35,7 @@ export default function createEnemy(target, player) {
 
         {
             speed: 40,
-            damage: 9,
+            damage: 4,
 
             chasingPlayerPatience: 4, // segundos que ele "aguenta" sem ver o player antes de desistir
             patienceTimer: 4,          // contador atual (começa igual ao max)
@@ -79,7 +79,7 @@ export default function createEnemy(target, player) {
         if (tomato.isDead) return;
         tomato.isDead = true;
 
-        const baseDropChance = 25; // % base de dropar adubo
+        const baseDropChance = 47; // % base de dropar adubo
         const multiplier = director.manureDropMultiplier ?? 1; // fallback 1x se não existir ainda
         const finalDropChance = Math.min(baseDropChance * multiplier, 100); // nunca passa de 100%
 

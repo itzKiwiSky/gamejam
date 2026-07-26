@@ -11,7 +11,9 @@ export default function createBigTomate() {
 
     const big = root.add([
         k.pos(k.center()),
-        k.rect(32, 32),
+        k.rect(32, 32, {
+            fill: false,
+        }),
         k.color(k.RED),
         k.area(),
         k.body({ isStatic: true }),
@@ -47,21 +49,24 @@ export default function createBigTomate() {
         const p = root.get("player")[0];
 
         sprite.z = big.pos.y + big.baseOffset;
-        sprite.frame = big.stage;
+        sprite.frame = Math.min(big.stage, 6);
 
     });
 
-    function hpAtLevel(level, baseHp = 100, growthPerLevel = 15, growthRate = 1.08) {
-        return Math.floor(baseHp + growthPerLevel * level * Math.pow(growthRate, level));
-    }
-
     big.on("grow", () => {
-        big.stage++;
         big.maxHP = statAtLevel(big.level, {
             base: 100,
             linearGrowth: 15,
             growthRate: 1.08
         });
+
+        big.hp = statAtLevel(big.level, {
+            base: 100,
+            linearGrowth: 15,
+            growthRate: 1.08
+        });
+
+        big.level++;
     });
 
     const levelText = big.add([
@@ -87,7 +92,9 @@ export default function createBigTomate() {
 
 
     const actionArea = big.add([
-        k.rect(48, 48),
+        k.rect(48, 48, {
+            fill: false,
+        }),
         k.scale(1.25),
         k.area({
             isSensor: true,
@@ -106,7 +113,7 @@ export default function createBigTomate() {
                         big.count = 0;
                         big.trigger("grow");
 
-                        if (big.level % 4 === 0)
+                        if (big.level % 2 === 0)
                             big.stage++;
                     }
                 }

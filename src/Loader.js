@@ -5,7 +5,9 @@ k.loadRoot("./");
 
 k.loadSprite("nd", "sprites/nd.jpg");
 k.loadSprite("card", "sprites/carddd.png");
-k.loadSprite("teste", "sprites/teste.png");
+k.loadSprite("primeiro_lugar", "sprites/primeiro_lugar.png");
+k.loadSprite("segundo_lugar", "sprites/segundo_lugar.png");
+k.loadSprite("terceiro_lugar", "sprites/terceiro_lugar.png");
 
 Object.keys(assets).forEach((key) => {
     const asset = assets[key];
