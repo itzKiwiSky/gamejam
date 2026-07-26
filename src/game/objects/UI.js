@@ -28,7 +28,7 @@ export default function createUI(player) {
         k.color(k.WHITE),
     ]);
 
-    const
+
 
     // Barra de vida 
     // Fundo da barra de vida (cinza)

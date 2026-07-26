@@ -19,12 +19,9 @@ export default function createLojaUI() {
         "loja_menu",
     ]);
 
-<<<<<<< HEAD
-=======
     lojaMenuContainer.width = 600;
     lojaMenuContainer.height = 400;
 
->>>>>>> master
     lojaMenuContainer.hidden = true;
 
 
@@ -73,17 +70,6 @@ export default function createLojaUI() {
         k.outline(2, new k.Color(100, 200, 255)),
         k.area({ isSensor: true }),
         k.anchor("center"),
-<<<<<<< HEAD
-        { 
-            isHovered: false,
-            textContent: null,
-            descContent: null
-        }
-    ]);
-
-    const btnVenderText = btnVenderAdubo.add([
-        k.text("Vender 4 Adubo -> Pegar Carta de Upgrade", { size: 16 }),
-=======
         k.fixed(),
     ]);
 
@@ -92,7 +78,6 @@ export default function createLojaUI() {
 
     btnVenderAdubo.add([
         k.text("[4 Adubos] -> Pegar Carta de Upgrade", { size: 16 }),
->>>>>>> master
         k.pos(0, -10),
         k.anchor("center"),
         k.fixed(),
