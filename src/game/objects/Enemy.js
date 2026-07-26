@@ -1,4 +1,5 @@
 import k from "../../Engine";
+import { weightedChoice } from "../../utils/Utils";
 
 function circlePolygon(radius, sides = 16) {
     const pts = [];
@@ -18,6 +19,7 @@ function circlePolygon(radius, sides = 16) {
 
 export default function createEnemy(target, player) {
     const root = k.get("root_game")[0];
+    const director = root.get("director")[0];
     const tomato = root.add([
         k.pos(),
         k.rect(16, 16, {
@@ -76,6 +78,14 @@ export default function createEnemy(target, player) {
     tomato.onDeath(() => {
         if (tomato.isDead) return; // evita reprocessar se disparar mais de uma vez
         tomato.isDead = true;
+
+        if (weightedChoice({
+            ["true"]: 25,
+            ["false"]: 75,
+        }) === "true")
+            director.manureCount++;
+
+
 
         if (tomatoSprite?.getCurAnim()?.name !== "death")
             tomatoSprite.play("death");

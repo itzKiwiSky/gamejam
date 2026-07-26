@@ -38,25 +38,70 @@ const objects = {
 k.scene("playscene", () => {
     let cameraScroll = k.getCamPos();
 
+    const gameCanvas = k.makeCanvas(k.width(), k.height());
+    const uiCanvas = k.makeCanvas(k.width(), k.height());
+    let nightIntensity = 0;
+
+
+    // função pra transicionar suavemente
+    function setNightIntensity(target, duration = 2) {
+        k.tween(
+            nightIntensity,
+            target,
+            duration,
+            (val) => {
+                nightIntensity = val;
+            },
+            k.easings.linear
+        );
+    }
+
     const root = k.add([
         k.layer("game"),
+        k.drawon(gameCanvas.fb),
         "root_game",
     ]);
 
     const uiObjects = k.add([
         k.layer("ui"),
-        "root_ui", 
+        "root_ui",
+    ]);
+
+    k.add([ //objeto renderer //
+        k.pos(0, 0),
+        k.fixed(),
+        k.z(-100),
+        {
+            draw() {
+                k.drawUVQuad({
+                    width: gameCanvas.width,
+                    height: gameCanvas.height,
+                    tex: gameCanvas.fb.tex,
+                    flipY: true,
+                    shader: "night",
+                    uniform: { u_intensity: nightIntensity },
+                });
+            },
+        },
     ]);
 
     const director = root.add([
         {
             diasJogados: 1,
+            diasSobrevividos: 0,
             state: DIA,
             killedTotal: 0,
             currency: 0,
+            manureCount: 0,
             anyUIActive: false,
             aliveInBatch: 0,
-            enemiesRemainingTotal: 0
+            enemiesRemainingTotal: 0,
+
+            waveList: [ // indica quantos inimigos seram gerados em uma wave em cada dia
+                k.randi(13, 16),
+                k.randi(20, 27),
+                k.randi(30, 32),
+            ]
         },
         "director"
     ]);
@@ -66,8 +111,11 @@ k.scene("playscene", () => {
 
     const player = createPlayer();
     player.pos = k.vec2(objects["player"].x, objects["player"].y);
+<<<<<<< HEAD
     
     player.manure = 0;
+=======
+>>>>>>> master
 
     const ui = createUI(player);
     const confirmUI = createConfirmChangeUI();
@@ -77,7 +125,7 @@ k.scene("playscene", () => {
 
     function finishGame() {
         const currentHealth = bigTomate.hp;
-        const maxHealth = 100; 
+        const maxHealth = bigTomate.maxHP; // A vida máxima do tomate (conforme criado em BigTomato.js)
 
         const endingType = getEndingType(currentHealth, maxHealth);
 
@@ -86,7 +134,7 @@ k.scene("playscene", () => {
             tomatoHealth: currentHealth,
         });
     }
-    
+
     k.onKeyPress("r", () => {
         finishGame();
     });
@@ -104,14 +152,20 @@ k.scene("playscene", () => {
             cardUI.getContainer().trigger("popupOpen");
             root.paused = true;
 
-            const drawnCards = cardSystem.drawThreeCards(); 
+            const drawnCards = cardSystem.drawThreeCards();
 
+<<<<<<< HEAD
             cardUI.showCards(drawnCards, (chosenCard) => { 
                 cardSystem.applyCardUpgrade(chosenCard); 
                 console.log(`Carta escolhida: ${chosenCard.nome}`);
+=======
+            cardUI.showCards(drawnCards, (chosenCard) => {
+                cardSystem.applyCardUpgrade(chosenCard);
+                console.log(` Carta escolhida: ${chosenCard.nome}`);
+>>>>>>> master
 
                 cardUI.getContainer().trigger("closePopup");
-                root.paused = false; 
+                root.paused = false;
             });
         }
     });
@@ -119,7 +173,11 @@ k.scene("playscene", () => {
     // Sistema de loja
     const lojaUI = createLojaUI();
     let cartasDisponiveisHoje = 0;
+<<<<<<< HEAD
     
+=======
+
+>>>>>>> master
     // Busca a área de colisão da loja (caixa azul)
     const areaAcao = loja.get("areaAcao")[0];
  
@@ -136,7 +194,7 @@ k.scene("playscene", () => {
                 root.paused = true;
  
                 lojaUI.show(player.manure, (acao) => {
-                    
+
                     if (acao === "vender_carta") {
                         if (player.manure >= 4) {
                             player.manure -= 4;
@@ -144,13 +202,13 @@ k.scene("playscene", () => {
  
                             if (cartasDisponiveisHoje <= 2) {
                                 const drawnCards = cardSystem.drawThreeCards();
-                                
+
                                 cardUI.getContainer().trigger("popupOpen");
  
                                 cardUI.showCards(drawnCards, (chosenCard) => {
                                     cardSystem.applyCardUpgrade(chosenCard);
                                     console.log(`Carta obtida: ${chosenCard.nome}`);
-                                    
+
                                     cardUI.getContainer().trigger("closePopup");
                                     lojaUI.hide();
                                     root.paused = false;
@@ -165,7 +223,7 @@ k.scene("playscene", () => {
                     } else if (acao === "curar_tomate") {
                         if (player.manure >= 2) {
                             player.manure -= 2;
-                            
+
                             if (typeof bigTomate.heal === "function") {
                                 const curaAmount = bigTomate.maxHp() * 0.25;
                                 bigTomate.heal(curaAmount);
@@ -175,7 +233,7 @@ k.scene("playscene", () => {
                                 if (bigTomate.hp > 100) bigTomate.hp = 100;
                                 console.log(`Tomate curado manualmente! Vida atual: ${bigTomate.hp}`);
                             }
-                            
+
                             lojaUI.hide();
                             director.anyUIActive = false;
                             root.paused = false;
@@ -189,8 +247,12 @@ k.scene("playscene", () => {
             }
         });
     }
+<<<<<<< HEAD
  
    
+=======
+
+>>>>>>> master
     const waveController = createEnemyWaveSystem({
         batchSize: 6,
         batchSizeMax: 7,
@@ -204,9 +266,9 @@ k.scene("playscene", () => {
             console.log("Wave atual concluída!");
             director.state = DIA;
             director.diasJogados++;
-            
+
             // Reseta as cartas da loja pro próximo dia
-            cartasDisponiveisHoje = 0; 
+            cartasDisponiveisHoje = 0;
         },
     });
 
@@ -216,12 +278,14 @@ k.scene("playscene", () => {
     director.on("dia", () => {
         k.wait(2, () => {
             messagePopup.abrirMensagem("Bem vindo (a)", "Imagine que aqui esta um tutorial muito bem escrito ta eu to com muita preguiça de escrever algo concreto ksksksksks!!!");
-        })
+        });
+
+        setNightIntensity(0, 2);
     });
 
     director.on("noite", () => {
-        console.log("noite");
-        waveController.start(10);
+        setNightIntensity(1, 2);
+        waveController.start(director.waveList[director.diasSobrevividos]);
     });
 
     root.get("player")[0].onDeath(() => {
