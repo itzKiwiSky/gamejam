@@ -103,6 +103,8 @@ k.loadSprite("tileset", "sprites/tilemap_packed.png");
 
 k.loadSprite("mapa", "sprites/mapa.png");
 
+k.loadSprite("littlesom", "sprites/soltaosom.png");
+
 k.loadSprite("logo", "sprites/logo.png");
 
 k.loadSprite("pulver", "sprites/borrifador.png");

@@ -110,17 +110,13 @@ k.scene("menuscene", () => {
 
     // Botao de configuracoes (som)
     const settingsBtn = k.add([
-        k.rect(60, 60, { radius: 5 }),
+        k.sprite("littlesom"),
         k.pos(k.width() - 80, 30),
-        k.color(k.Color.fromHex("#646464")),
+        //k.color(k.Color.fromHex("#646464")),
         k.area(),
         k.anchor("center"),
+        k.scale(1.2),
         k.fixed(),
-    ])
-
-    settingsBtn.add([
-        k.text("Som", { size: 24 }),
-        k.anchor("center"),
     ])
 
     // Variaveis pra armazenar os elementos da barra
@@ -216,7 +212,7 @@ k.scene("menuscene", () => {
 
     // Tambem atualiza enquanto arrasta (drag)
     k.onMouseMove(() => {
-        if (barraMostrando && k.isMousePressed()) {
+        if (barraMostrando && k.isMouseDown()) {
             atualizarVolume()
         }
     })
@@ -244,13 +240,11 @@ k.scene("menuscene", () => {
         volumeText.text = Math.round(volumeAtual * 100) + "%"
     }
 
-    // Hover no botao de som
-    settingsBtn.onHover(() => {
-        settingsBtn.color = k.Color.fromHex("#808080") // cinza mais claro ao passar mouse
-    })
-
-    settingsBtn.onHoverEnd(() => {
-        settingsBtn.color = k.Color.fromHex("#646464") // volta ao cinza original
+    settingsBtn.onUpdate(() => {
+        if (settingsBtn.isHovering())
+            settingsBtn.color = k.Color.fromHex("#646464")
+        else
+            settingsBtn.color = k.WHITE
     })
 
     // Ativa o audio context
