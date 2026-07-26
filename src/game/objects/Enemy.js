@@ -76,16 +76,18 @@ export default function createEnemy(target, player) {
     }
 
     tomato.onDeath(() => {
-        if (tomato.isDead) return; // evita reprocessar se disparar mais de uma vez
+        if (tomato.isDead) return;
         tomato.isDead = true;
 
+        const baseDropChance = 25; // % base de dropar adubo
+        const multiplier = director.manureDropMultiplier ?? 1; // fallback 1x se não existir ainda
+        const finalDropChance = Math.min(baseDropChance * multiplier, 100); // nunca passa de 100%
+
         if (weightedChoice({
-            ["true"]: 25,
-            ["false"]: 75,
+            ["true"]: finalDropChance,
+            ["false"]: 100 - finalDropChance,
         }) === "true")
             director.manureCount++;
-
-
 
         if (tomatoSprite?.getCurAnim()?.name !== "death")
             tomatoSprite.play("death");
@@ -168,8 +170,12 @@ export default function createEnemy(target, player) {
 
             // no momento que o ataque dispara, dá dano em tudo que tiver na área
             for (const obj of attackArea.getCollisions()) {
-                if (!obj.target.is("enemy")) //evita que ataque objetos que tenha id de inimigo
-                    obj.target.hp -= tomato.damage;
+                if (!obj.target.is("enemy")) {
+                    //evita que ataque objetos que tenha id de inimigo
+                    const reduction = obj.target.damageReduction ?? 0; // fallback pra 0 se a prop não existir
+                    const finalDamage = Math.max(tomato.damage - reduction, 0); // nunca fica negativo
+                    obj.target.hp -= finalDamage;
+                }
 
             }
         }

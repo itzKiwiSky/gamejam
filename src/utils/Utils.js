@@ -19,3 +19,11 @@ export function weightedChoice(t) {
         rnd -= v;
     }
 }
+
+export function statAtLevel(level, {
+    base = 100,
+    linearGrowth = 15,
+    growthRate = 1.08,
+} = {}) {
+    return Math.floor(base + linearGrowth * level * Math.pow(growthRate, level));
+}

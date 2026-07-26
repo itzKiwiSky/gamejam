@@ -10,6 +10,12 @@ k.scene("menuscene", () => {
     const barraLargura = 150 // largura da barra
     const barraY = 30
 
+    //forca a criação de um context de audio msm que nao seja ouvido para evitar bugs de undefined 
+    let musicaContext = k.play("menuMusic", {
+        volume: volumeAtual,
+        loop: true, // faz a musica repetir
+    })
+
     // Fundo
     k.add([
         k.rect(k.width(), k.height()),
@@ -36,6 +42,7 @@ k.scene("menuscene", () => {
     playBtn.onClick(() => {
         // vai pra cena "intro"
         k.go("intro")
+        musicaContext.stop();
     })
 
     // Hover do Play
@@ -224,7 +231,7 @@ k.scene("menuscene", () => {
 
         // Toca a musica apenas na primeira vez que o usuario clica
         if (!musicaTocando) {
-            k.play("menuMusic", {
+            musicaContext = k.play("menuMusic", {
                 volume: volumeAtual,
                 loop: true, // faz a musica repetir
             })

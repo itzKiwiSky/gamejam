@@ -34,6 +34,10 @@ export default function createPulver(player) {
 
             isReloading: false,
 
+            // --- sistema de crítico ---
+            criticalChance: 0.15,        // 15% de chance de crítico por bala
+            criticalDamageBonus: 1.5,     // multiplicador de dano no crítico (1.5 = +50%)
+
             //Dano das balas
             bulletDamage: 7,
             shoot() { },
@@ -69,6 +73,7 @@ export default function createPulver(player) {
 
             if (gun.reloadTime <= 0) {
                 gun.bulletCount = gun.maxBulletCount;
+                gun.cooldown = gun.maxReloadTimer;
                 gun.isReloading = false;
             }
         }
@@ -117,19 +122,25 @@ export default function createPulver(player) {
     }
 
     function createBullet(startPos, dir) {
+        const isCritical = k.rand(0, 1) < gun.criticalChance;
+        const finalDamage = isCritical
+            ? Math.round(gun.bulletDamage * gun.criticalDamageBonus)
+            : gun.bulletDamage;
+
         const bullet = root.add([
             k.pos(startPos),
             k.anchor("center"),
             k.rect(8, 8),
             k.opacity(0),
-            k.rotate(dir.angle()), // usa o ângulo do dir real, não gun.angle
+            k.rotate(dir.angle()),
             k.area({ isSensor: true }),
             k.offscreen({ destroy: true }),
             {
                 dir: dir,
                 speed: gun.bulletSpeed,
                 lifetime: 0.465,
-                damage: gun.bulletDamage, //cada bala recebe o dano do pulverizador
+                damage: finalDamage,
+                isCritical: isCritical, // guarda pra usar depois, tipo no efeito visual
             },
             "bullet",
         ]);
@@ -139,7 +150,7 @@ export default function createPulver(player) {
                 frame: k.randi(0, 2),
             }),
             k.anchor("center"),
-            k.scale(k.randi(2, 5) / 5),
+            k.scale(isCritical ? k.randi(3, 6) / 5 : k.randi(2, 5) / 5), // bala crítica um pouco maior, opcional
             k.opacity(1)
         ]);
 
@@ -147,15 +158,10 @@ export default function createPulver(player) {
             bulletSprite.opacity = k.map(bullet.lifetime, 0, 0.25, 0, 1);
         });
 
-        //detectar colisão com o inimigo e aplicar o dano
-
         bullet.onCollide("enemy", (enemy) => {
-            //verifica se o inimigo tem a função hurt
-            //aplica o dano no innimigo
             enemy.hp -= bullet.damage;
-            console.log(`Bala atingiu inimigo! Dano: ${bullet.damage}, Vida restante: ${enemy.hp}`);
+            console.log(`Bala atingiu inimigo! Dano: ${bullet.damage}${bullet.isCritical ? " (CRÍTICO!)" : ""}, Vida restante: ${enemy.hp}`);
 
-            //destroi a bala após atingir o inimigo
             k.destroy(bullet);
         })
 

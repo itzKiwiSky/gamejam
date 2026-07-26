@@ -41,7 +41,10 @@ k.scene("playscene", () => {
     const gameCanvas = k.makeCanvas(k.width(), k.height());
     const uiCanvas = k.makeCanvas(k.width(), k.height());
     let nightIntensity = 0;
-
+    let musicaContext = k.play("dia", {
+        loop: true,
+    });
+    musicaContext.paused = true;
 
     // função pra transicionar suavemente
     function setNightIntensity(target, duration = 2) {
@@ -97,6 +100,8 @@ k.scene("playscene", () => {
             aliveInBatch: 0,
             enemiesRemainingTotal: 0,
 
+            manureDropMultiplier: 1,
+
             waveList: [ // indica quantos inimigos seram gerados em uma wave em cada dia
                 k.randi(13, 16),
                 k.randi(20, 27),
@@ -130,10 +135,6 @@ k.scene("playscene", () => {
         });
     }
 
-    k.onKeyPress("r", () => {
-        finishGame();
-    });
-
     const loja = createLoja();
     loja.pos = k.vec2(objects["loja"].x, objects["loja"].y);
 
@@ -142,24 +143,7 @@ k.scene("playscene", () => {
     const cardUI = createCardUI();
     cardUI.hide();
 
-    k.onKeyPress("c", () => {
-        if (!cardUI.getContainer().menuActive && !director.anyUIActive) {
-            cardUI.getContainer().trigger("popupOpen");
-            root.paused = true;
-
-            const drawnCards = cardSystem.drawThreeCards();
-
-            cardUI.showCards(drawnCards, (chosenCard) => {
-                cardSystem.applyCardUpgrade(chosenCard);
-                console.log(` Carta escolhida: ${chosenCard.nome}`);
-
-                cardUI.getContainer().trigger("closePopup");
-                root.paused = false;
-            });
-        }
-    });
-
-    // Sistema de loja
+    //sistema de loja
     const lojaUI = createLojaUI();
     let cartasDisponiveisHoje = 0;
     // Busca a área de colisão da loja (caixa azul)
@@ -247,6 +231,8 @@ k.scene("playscene", () => {
 
             // Reseta as cartas da loja pro próximo dia
             cartasDisponiveisHoje = 0;
+
+            director.trigger("dia");
         },
     });
 
@@ -254,16 +240,45 @@ k.scene("playscene", () => {
     messagePopup.getContainer().hidden = true;
 
     director.on("dia", () => {
-        k.wait(2, () => {
-            messagePopup.abrirMensagem("Bem vindo (a)", "Imagine que aqui esta um tutorial muito bem escrito ta eu to com muita preguiça de escrever algo concreto ksksksksks!!!");
+        // todo dia, o sistema de cartas aparece //
+        musicaContext?.stop()
+        musicaContext = k.play("dia", {
+            volume: k.getVolume(),
+            loop: true,
+        });
+
+
+        k.wait(1, () => {
+            //messagePopup.abrirMensagem("Bem vindo (a)", "Imagine que aqui esta um tutorial muito bem escrito ta eu to com muita preguiça de escrever algo concreto ksksksksks!!!");
+            if (!cardUI.getContainer().menuActive && !director.anyUIActive) {
+                cardUI.getContainer().trigger("popupOpen");
+                root.paused = true;
+
+                const drawnCards = cardSystem.drawThreeCards();
+
+                cardUI.showCards(drawnCards, (chosenCard) => {
+                    cardSystem.applyCardUpgrade(chosenCard);
+                    console.log(` Carta escolhida: ${chosenCard.nome}`);
+
+                    cardUI.getContainer().trigger("closePopup");
+                    root.paused = false;
+                });
+            }
         });
 
         setNightIntensity(0, 2);
     });
 
     director.on("noite", () => {
+
+        musicaContext?.stop()
+        musicaContext = k.play("noite", {
+            volume: k.getVolume(),
+            loop: true,
+        });
+
         setNightIntensity(1, 2);
-        waveController.start(director.waveList[director.diasSobrevividos]);
+        k.wait(1, () => waveController.start(director.waveList[director.diasSobrevividos]));
     });
 
     root.get("player")[0].onDeath(() => {

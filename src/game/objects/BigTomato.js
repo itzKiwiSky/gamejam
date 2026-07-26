@@ -1,4 +1,5 @@
 import k from "../../Engine";
+import { statAtLevel } from "../../utils/Utils";
 
 
 export default function createBigTomate() {
@@ -21,7 +22,7 @@ export default function createBigTomate() {
         {
             baseOffset: 50,
             stage: 0,
-            manureNeedToGrow: 10,
+            manureNeedToGrow: 3,
             count: 0,
             level: 1,
 
@@ -56,7 +57,11 @@ export default function createBigTomate() {
 
     big.on("grow", () => {
         big.stage++;
-        big.maxHP = hpAtLevel(big.level, 100, 15, 1.08);
+        big.maxHP = statAtLevel(big.level, {
+            base: 100,
+            linearGrowth: 15,
+            growthRate: 1.08
+        });
     });
 
 
@@ -79,6 +84,7 @@ export default function createBigTomate() {
     ]);
 
     actionArea.onUpdate(() => {
+
         if (actionArea.isOverlapping(player))
             if (k.isKeyPressed("e"))
                 if (director.manureCount > 0) {
@@ -87,6 +93,9 @@ export default function createBigTomate() {
                     if (big.count >= big.manureNeedToGrow) {
                         big.count = 0;
                         big.trigger("grow");
+
+                        if (big.level % 4 === 0)
+                            big.stage++;
                     }
                 }
     })
