@@ -3,6 +3,8 @@ import k from "../../Engine";
 
 export default function createBigTomate() {
     const root = k.get("root_game")[0];
+    const player = root.get("player")[0];
+    const director = root.get("director")[0];
     const barWidth = 100; // largura das barras
     const barHeight = 20; // altura das barras
 
@@ -19,6 +21,9 @@ export default function createBigTomate() {
         {
             baseOffset: 50,
             stage: 0,
+            manureNeedToGrow: 10,
+            count: 0,
+            level: 1,
 
             hurt() { }
         },
@@ -45,9 +50,13 @@ export default function createBigTomate() {
 
     });
 
-    big.on("grow", () => {
-        big.stage++
+    function hpAtLevel(level, baseHp = 100, growthPerLevel = 15, growthRate = 1.08) {
+        return Math.floor(baseHp + growthPerLevel * level * Math.pow(growthRate, level));
+    }
 
+    big.on("grow", () => {
+        big.stage++;
+        big.maxHP = hpAtLevel(big.level, 100, 15, 1.08);
     });
 
 
@@ -58,6 +67,29 @@ export default function createBigTomate() {
         k.outline(4, k.Color.fromHex("#111111")), // borda preta mais grossa
         k.anchor("center"), // o ponto de referencia eh o canto superior esquerdo
     ]);
+
+
+    const actionArea = big.add([
+        k.rect(48, 48),
+        k.scale(1.25),
+        k.area({
+            isSensor: true,
+        }),
+        k.anchor("center"),
+    ]);
+
+    actionArea.onUpdate(() => {
+        if (actionArea.isOverlapping(player))
+            if (k.isKeyPressed("e"))
+                if (director.manureCount > 0) {
+                    director.manureCount--;
+                    big.count++;
+                    if (big.count >= big.manureNeedToGrow) {
+                        big.count = 0;
+                        big.trigger("grow");
+                    }
+                }
+    })
 
     // Barra de vida da parte visual (verde)
     const healthBar = healthBarBg.add([
