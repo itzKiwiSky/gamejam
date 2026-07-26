@@ -1,12 +1,18 @@
+import k from "../../Engine";
 import { CARDS_ARRAY } from "./CardData";
 
 
-export default function createCardSystem(player, gun) {
+export default function createCardSystem() {
 
     let chosenCards = {};
 
 
     let availableCards = [...CARDS_ARRAY];
+
+    const root = k.get("root_game")[0];
+    const player = root.get("player")[0];
+    const director = root.get("director")[0];
+    const gun = root.get("gun")[0];
 
     return {
 
@@ -79,10 +85,10 @@ export default function createCardSystem(player, gun) {
                 case "max_hp":
                     // Aumenta vida máxima E cura o player
                     const hpGain = card.valor;
-                    player.maxHp += hpGain;
+                    player.maxHP += hpGain;
                     player.hp = Math.min(
                         player.hp + hpGain,  // Soma o ganho
-                        player.maxHp         // Mas não passa do máximo
+                        player.maxHP         // Mas não passa do máximo
                     );
                     break;
 
@@ -98,10 +104,7 @@ export default function createCardSystem(player, gun) {
                 case "health_regen":
                     // Adiciona regeneração passiva de HP
                     // Armazena em uma propriedade nova do player
-                    if (!player.healthRegenPerSecond) {
-                        player.healthRegenPerSecond = 0;
-                    }
-                    player.healthRegenPerSecond += card.valor;
+                    player.hpRegenRate += card.valor;
                     break;
 
 
@@ -144,7 +147,7 @@ export default function createCardSystem(player, gun) {
                     if (!player.manureDropMultiplier) {
                         player.manureDropMultiplier = 1;
                     }
-                    player.manureDropMultiplier *= card.valor;
+                    director.manureDropMultiplier *= card.valor;
                     break;
 
 

@@ -23,7 +23,7 @@ export default function createPlayer() {
 
         {
             speed: 250,
-            speedMulti: 2.5,        // velocidade do jogador quando o shift estiver apertado
+            speedMulti: 1.25,        // velocidade do jogador quando o shift estiver apertado
             stamina: 100,
             staminaPenalty: 30.654,   // aqui indica quanto vai perder de stamina
             staminaRecover: 14.2,   // quando o jogador estiver sem shift apertado, recarregar a stamina
@@ -31,15 +31,20 @@ export default function createPlayer() {
             isRunning: false,
             isResting: false,
 
+            damageReduction: 0,
+            hpRegenRate: 2,
+            hpRegenDelay: 3,
+            hpRegenTimer: 0,
+
             hurt() { },
         },
 
         "player"
     ]);
 
-    player.hurt = (dmg) => {
-        player.hp -= dmg;
-    }
+    player.onHurt(() => {
+        player.hpRegenTimer = player.hpRegenDelay
+    })
 
     const playerSprite = player.add([
         //k.pos(16, 8),
