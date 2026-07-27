@@ -38,8 +38,6 @@ export default function createPlayer() {
             hpRegenRate: 2,
             hpRegenDelay: 3,
             hpRegenTimer: 0,
-
-            hurt() { },
         },
 
         "player"
@@ -101,6 +99,12 @@ export default function createPlayer() {
         if (player.stamina >= 100 && player.isResting)
             player.isResting = false;
 
+        // regen de vida: só regenera depois do delay pós-dano, e nunca passa do máximo
+        if (player.hpRegenTimer > 0) {
+            player.hpRegenTimer -= dt;
+        } else if (player.hpRegenRate > 0 && player.hp < player.maxHP) {
+            player.hp = Math.min(player.hp + player.hpRegenRate * dt, player.maxHP);
+        }
 
         if (dir.len() > 0) {
             dir = dir.unit();

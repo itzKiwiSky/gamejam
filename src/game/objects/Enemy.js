@@ -5,7 +5,7 @@ function circlePolygon(radius, sides = 16) {
     const pts = [];
 
     for (let i = 0; i < sides; i++) {
-        const angle = (i / sides) * 360; // distribui os pontos igualmente em volta do círculo
+        const angle = (i / sides) * 360;
         const rad = k.deg2rad(angle);
 
         pts.push(k.vec2(
@@ -37,8 +37,8 @@ export default function createEnemy(target, player) {
             speed: 40,
             damage: 4,
 
-            chasingPlayerPatience: 4, // segundos que ele "aguenta" sem ver o player antes de desistir
-            patienceTimer: 4,          // contador atual (começa igual ao max)
+            chasingPlayerPatience: 4,
+            patienceTimer: 4,
 
             lastTarget: target,
             currentTarget: target,
@@ -51,8 +51,6 @@ export default function createEnemy(target, player) {
             attackRadius: 18,
 
             isDead: false,
-
-            hurt() { }
         },
 
         "enemy",
@@ -79,9 +77,9 @@ export default function createEnemy(target, player) {
         if (tomato.isDead) return;
         tomato.isDead = true;
 
-        const baseDropChance = 47; // % base de dropar adubo
-        const multiplier = director.manureDropMultiplier ?? 1; // fallback 1x se não existir ainda
-        const finalDropChance = Math.min(baseDropChance * multiplier, 100); // nunca passa de 100%
+        const baseDropChance = 47;
+        const multiplier = director.manureDropMultiplier ?? 1;
+        const finalDropChance = Math.min(baseDropChance * multiplier, 100);
 
         if (weightedChoice({
             ["true"]: finalDropChance,
@@ -125,26 +123,23 @@ export default function createEnemy(target, player) {
         tomatoSprite.flipX = dir.x > 0;
         tomato.move(dir.scale(tomato.speed));
 
-        // se ainda não tá perseguindo o player e ele entrou na visão, troca o alvo
         if (tomato.currentTarget !== player && tomatoVisionArea.isOverlapping(player)) {
             tomato.enterState("change_target");
             return;
         }
 
-        // se tá perseguindo o player, gerencia a paciência
         if (tomato.currentTarget === player) {
             if (tomatoVisionArea.isOverlapping(player)) {
-                tomato.patienceTimer = tomato.chasingPlayerPatience; // player visível, reseta paciência
+                tomato.patienceTimer = tomato.chasingPlayerPatience;
             } else {
                 tomato.patienceTimer -= k.dt() * 2;
 
                 if (tomato.patienceTimer <= 0) {
-                    tomato.currentTarget = tomato.lastTarget; // desiste e volta pro alvo original
+                    tomato.currentTarget = tomato.lastTarget;
                 }
             }
         }
 
-        // chegou perto o suficiente do alvo atual pra atacar
         if (attackArea.isOverlapping(tomato.currentTarget)) {
             tomato.enterState("attack");
         }
@@ -154,7 +149,7 @@ export default function createEnemy(target, player) {
         if (tomato.isDead) return;
 
         tomato.currentTarget = player;
-        tomato.patienceTimer = tomato.chasingPlayerPatience; // reseta a paciência
+        tomato.patienceTimer = tomato.chasingPlayerPatience;
 
         k.wait(0.3, () => {
             tomato.enterState("move");
@@ -168,15 +163,12 @@ export default function createEnemy(target, player) {
             tomatoSprite.play("attack");
             tomato.attacked = true;
 
-            // no momento que o ataque dispara, dá dano em tudo que tiver na área
             for (const obj of attackArea.getCollisions()) {
                 if (!obj.target.is("enemy")) {
-                    //evita que ataque objetos que tenha id de inimigo
-                    const reduction = obj.target.damageReduction ?? 0; // fallback pra 0 se a prop não existir
-                    const finalDamage = Math.max(tomato.damage - reduction, 0); // nunca fica negativo
+                    const reduction = obj.target.damageReduction ?? 0;
+                    const finalDamage = Math.max(tomato.damage - reduction, 0);
                     obj.target.hp -= finalDamage;
                 }
-
             }
         }
 

@@ -1,14 +1,13 @@
 import k from "../../Engine";
 
 export default function createPulver(player) {
-    console.log("VERSAO DO ARQUIVO: TESTE123");
     const root = k.get("root_game")[0];
     const gun = root.add([
         k.pos(),
         k.anchor("center"),
         k.sprite("pulver"),
         k.scale(1.8),
-        k.rotate(0), // se você quiser que a arma tb rotacione visualmente
+        k.rotate(0),
         k.outline(3, k.WHITE, 1, "round"),
         k.z(60),
 
@@ -18,8 +17,13 @@ export default function createPulver(player) {
             orbitRadius: 32,
 
             cooldown: 0,
-            fireRate: 0.26, // segundos entre tiros
+
+            // valores base + efetivos, pra cartas multiplicarem sem perder a referência original
+            baseFireRate: 0.26,
+            fireRate: 0.26,
+            baseSpreadFireRate: 0.76,
             spreadFireRate: 0.76,
+
             bulletSpeed: 500,
 
             bulletCount: 120,
@@ -30,24 +34,49 @@ export default function createPulver(player) {
 
             bulletPenaltySpread: 4,
             spreadCount: 8,
+            baseSpreadAngle: 50,
             spreadAngle: 50,
 
             isReloading: false,
 
-            // --- sistema de crítico ---
-            criticalChance: 0.15,        // 15% de chance de crítico por bala
-            criticalDamageBonus: 1.5,     // multiplicador de dano no crítico (1.5 = +50%)
+            // --- sistema de crítico (chance aleatória) ---
+            criticalChance: 0.15,
+            criticalDamageBonus: 1.5,
 
-            //Dano das balas
+            // --- crítico bônus a cada N ataques (carta CRITICAL_BOOST) ---
+            shotsFired: 0,
+            criticalBoostValue: 0,      // acumulado das cartas, +2 por carta aplicada
+            criticalBoostInterval: 10,  // a cada 10 tiros, aplica o bônus fixo
+
             bulletDamage: 7,
             shoot() { },
             shootSpread() { },
         },
 
-
         "gun",
         "pulver"
     ]);
+
+    // --- aplica efeitos de cartas na arma ---
+    gun.applyCard = (card) => {
+        switch (card.id) {
+            case "fire_rate":
+                gun.fireRate = gun.baseFireRate * card.valor;
+                gun.spreadFireRate = gun.baseSpreadFireRate * card.valor;
+                break;
+
+            case "spray_spread":
+                gun.spreadAngle = gun.baseSpreadAngle * card.valor;
+                break;
+
+            case "critical_boost":
+                gun.criticalBoostValue += card.valor; // acumula, permite pegar a carta mais de uma vez
+                break;
+
+            default:
+                console.warn("Pulver: carta sem efeito implementado aqui:", card.id);
+        }
+    };
 
     gun.onUpdate(() => {
         const worldMousePos = k.toWorld(k.mousePos());
@@ -80,37 +109,27 @@ export default function createPulver(player) {
     });
 
     gun.shoot = () => {
-        console.log("aimDir no shoot:", gun.aimDir);
-
-        if (gun.bulletCount <= 0)
-            return;
-
-        if (gun.isReloading)
-            return;
+        if (gun.bulletCount <= 0) return;
+        if (gun.isReloading) return;
 
         gun.cooldown = gun.fireRate;
         gun.bulletCount -= 1;
 
-        // usa aimDir, não gun.angle
         createBullet(gun.pos, gun.aimDir);
     }
 
     gun.shootSpread = () => {
-        if (gun.bulletCount <= 0)
-            return;
-
-        if (gun.isReloading)
-            return;
+        if (gun.bulletCount <= 0) return;
+        if (gun.isReloading) return;
 
         gun.cooldown = gun.spreadFireRate;
         gun.bulletCount -= gun.bulletPenaltySpread;
 
-        // usa aimDir aqui também
         shootSpread(gun.pos, gun.aimDir);
     };
 
     function shootSpread(startPos, baseDir) {
-        const baseAngle = baseDir.angle(); // ângulo central em graus
+        const baseAngle = baseDir.angle();
         const step = gun.spreadAngle / (gun.spreadCount - 1);
         const startAngle = baseAngle - gun.spreadAngle / 2;
 
@@ -122,10 +141,15 @@ export default function createPulver(player) {
     }
 
     function createBullet(startPos, dir) {
+        gun.shotsFired += 1;
+
         const isCritical = k.rand(0, 1) < gun.criticalChance;
-        const finalDamage = isCritical
-            ? Math.round(gun.bulletDamage * gun.criticalDamageBonus)
-            : gun.bulletDamage;
+        const isBoostShot = gun.criticalBoostValue > 0 && gun.shotsFired % gun.criticalBoostInterval === 0;
+
+        let finalDamage = gun.bulletDamage;
+
+        if (isCritical) finalDamage = Math.round(finalDamage * gun.criticalDamageBonus);
+        if (isBoostShot) finalDamage += gun.criticalBoostValue;
 
         const bullet = root.add([
             k.pos(startPos),
@@ -140,17 +164,15 @@ export default function createPulver(player) {
                 speed: gun.bulletSpeed,
                 lifetime: 0.465,
                 damage: finalDamage,
-                isCritical: isCritical, // guarda pra usar depois, tipo no efeito visual
+                isCritical: isCritical || isBoostShot,
             },
             "bullet",
         ]);
 
         const bulletSprite = bullet.add([
-            k.sprite("smokeFX", {
-                frame: k.randi(0, 2),
-            }),
+            k.sprite("smokeFX", { frame: k.randi(0, 2) }),
             k.anchor("center"),
-            k.scale(isCritical ? k.randi(3, 6) / 5 : k.randi(2, 5) / 5), // bala crítica um pouco maior, opcional
+            k.scale((isCritical || isBoostShot) ? k.randi(3, 6) / 5 : k.randi(2, 5) / 5),
             k.opacity(1)
         ]);
 
@@ -160,8 +182,6 @@ export default function createPulver(player) {
 
         bullet.onCollide("enemy", (enemy) => {
             enemy.hp -= bullet.damage;
-            console.log(`Bala atingiu inimigo! Dano: ${bullet.damage}${bullet.isCritical ? " (CRÍTICO!)" : ""}, Vida restante: ${enemy.hp}`);
-
             k.destroy(bullet);
         })
 

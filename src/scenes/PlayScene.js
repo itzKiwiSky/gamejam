@@ -112,6 +112,8 @@ k.scene("playscene", () => {
             aliveInBatch: 0,
             enemiesRemainingTotal: 0,
 
+            canShowTutorial: false,
+
             manureDropMultiplier: 1,
 
             waveList: [ // indica quantos inimigos seram gerados em uma wave em cada dia
@@ -122,6 +124,9 @@ k.scene("playscene", () => {
         },
         "director"
     ]);
+
+    if (k.getData("shownTutorial", "false") === "false")
+        director.canShowTutorial = true;
 
     const casa = createCasa();
     casa.pos = k.vec2(objects["casa"].x, objects["casa"].y);
@@ -263,6 +268,24 @@ k.scene("playscene", () => {
     messagePopup = createMessagePopup();
     messagePopup.getContainer().hidden = true;
 
+    director.on("showCardUI", () => {
+        if (director.diasSobrevividos < 3)
+            if (!cardUI.getContainer().menuActive && !director.anyUIActive) {
+                cardUI.getContainer().trigger("popupOpen");
+                root.paused = true;
+
+                const drawnCards = cardSystem.drawThreeCards();
+
+                cardUI.showCards(drawnCards, (chosenCard) => {
+                    cardSystem.applyCardUpgrade(chosenCard);
+                    console.log(` Carta escolhida: ${chosenCard.nome}`);
+
+                    cardUI.getContainer().trigger("closePopup");
+                    root.paused = false;
+                });
+            }
+    })
+
     director.on("dia", () => {
         // todo dia, o sistema de cartas aparece //
         musicaContext?.stop()
@@ -273,22 +296,24 @@ k.scene("playscene", () => {
 
 
         k.wait(1, () => {
-            //messagePopup.abrirMensagem("Bem vindo (a)", "Imagine que aqui esta um tutorial muito bem escrito ta eu to com muita preguiça de escrever algo concreto ksksksksks!!!");
-            if (director.diasSobrevividos < 3)
-                if (!cardUI.getContainer().menuActive && !director.anyUIActive) {
-                    cardUI.getContainer().trigger("popupOpen");
-                    root.paused = true;
-
-                    const drawnCards = cardSystem.drawThreeCards();
-
-                    cardUI.showCards(drawnCards, (chosenCard) => {
-                        cardSystem.applyCardUpgrade(chosenCard);
-                        console.log(` Carta escolhida: ${chosenCard.nome}`);
-
-                        cardUI.getContainer().trigger("closePopup");
-                        root.paused = false;
-                    });
-                }
+            if (director.canShowTutorial)
+                messagePopup.abrirMensagem("Tutorial", [
+                    "Bem vindo jogador(a), esta mensagem so sera mostrada uma vez, servira como um tutorial para o jogo.",
+                    "Seu objetivo e sobreviver tres dias e tres noites.\nutilizando do adubo das criaturas da noite para aumentar o nivel do seu tomate e cura-lo, você tambem pode escolher trocar adubo por cartas.",
+                    "Após finalizar os preparos do dia, proteja seu tomate durante a noite.",
+                    "Sobreviva por 3 dias para conseguir ter um tomate perfeito para a competicao.\nBoa sorte",
+                    ""
+                ], {
+                    onLastPage: () => {
+                        console.log("Player terminou de ler o tutorial!");
+                        director.canShowTutorial = false;
+                        k.setData("shownTutorial", "true");
+                        messagePopup.getContainer().trigger("popupClose")
+                        k.wait(0.9, () => director.trigger("showCardUI"));
+                    },
+                });
+            else
+                director.trigger("showCardUI");
         });
 
         setNightIntensity(0, 2);
