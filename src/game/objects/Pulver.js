@@ -70,12 +70,20 @@ export default function createPulver(player) {
                 break;
 
             case "critical_boost":
-                gun.criticalBoostValue += card.valor; // acumula, permite pegar a carta mais de uma vez
+                gun.criticalBoostValue += card.valor;
                 break;
 
             default:
                 console.warn("Pulver: carta sem efeito implementado aqui:", card.id);
         }
+    };
+
+    // --- inicia uma recarga, sempre resetando o timer (corrige o bug da recarga instantânea) ---
+    gun.startReload = () => {
+        if (gun.isReloading) return; // evita reiniciar uma recarga já em progresso
+
+        gun.isReloading = true;
+        gun.reloadTime = gun.maxReloadTimer; // reseta o timer — é isso que corrige o bug
     };
 
     gun.onUpdate(() => {
@@ -109,7 +117,11 @@ export default function createPulver(player) {
     });
 
     gun.shoot = () => {
-        if (gun.bulletCount <= 0) return;
+        if (gun.bulletCount <= 0) {
+            gun.startReload(); // recarrega automaticamente se tentar atirar sem munição
+            return;
+        }
+
         if (gun.isReloading) return;
 
         gun.cooldown = gun.fireRate;
@@ -119,7 +131,11 @@ export default function createPulver(player) {
     }
 
     gun.shootSpread = () => {
-        if (gun.bulletCount <= 0) return;
+        if (gun.bulletCount <= 0) {
+            gun.startReload();
+            return;
+        }
+
         if (gun.isReloading) return;
 
         gun.cooldown = gun.spreadFireRate;

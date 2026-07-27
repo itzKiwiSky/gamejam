@@ -20,6 +20,9 @@ function circlePolygon(radius, sides = 16) {
 export default function createEnemy(target, player) {
     const root = k.get("root_game")[0];
     const director = root.get("director")[0];
+
+    const barWidth = 100; // largura das barras
+    const barHeight = 20; // altura das barras
     const tomato = root.add([
         k.pos(),
         k.rect(16, 16, {
@@ -56,8 +59,19 @@ export default function createEnemy(target, player) {
         "enemy",
     ]);
 
-    tomato.onUpdate(() => {
-        tomato.z = tomato.pos.y;
+    // Texto de vida (valores dela)
+    const healthText = tomato.add([
+        k.text("100 / 100", { size: 12, weight: "bold" }), // texto vazio que vai atualizando
+        k.pos(0, -20), // centralizado na barra
+        k.scale(0.8),
+        k.anchor("center"), // ponto de referencia eh o centro
+        k.color(k.WHITE), // cor branca
+    ]);
+
+    healthText.onUpdate(() => {
+        // Atualiza o texto mostrando os valores
+
+        healthText.text = `${Math.round(tomato.hp)} / ${tomato.maxHP}`;
     });
 
     const tomatoSprite = tomato.add([
@@ -68,6 +82,10 @@ export default function createEnemy(target, player) {
         }),
         k.anchor("center"),
     ]);
+
+    tomato.onUpdate(() => {
+        tomatoSprite.z = tomato.pos.y;
+    });
 
     tomato.hurt = (dmg) => {
         tomato.hp -= dmg;
@@ -92,11 +110,11 @@ export default function createEnemy(target, player) {
     });
 
     const attackArea = tomato.add([
-        k.area({ isSensor: true, shape: circlePolygon(tomato.attackRadius, 25) }),
+        k.area({ isSensor: true, shape: new k.Circle(k.vec2(0, 0), 14) }),
     ]);
 
     const tomatoVisionArea = tomato.add([
-        k.area({ isSensor: true, shape: circlePolygon(tomato.visionRadius, 25) }),
+        k.area({ isSensor: true, shape: new k.Circle(k.vec2(0, 0), 56) }),
     ]);
 
     tomatoSprite.onAnimEnd((anim) => {

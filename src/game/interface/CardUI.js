@@ -138,7 +138,7 @@ export default function createCardUI() {
             cardMenuContainer.selectedCard = card;
             cardsContainer.alreadySelectCard = true;
 
-            k.tween(cardObj.pos.y, cardObj.pos.y + 1200, 2, (v) => cardObj.pos.y = v, k.easings.easeInBack).onEnd(() => {
+            k.tween(cardObj.pos.y, cardObj.pos.y + 1200, 0.57, (v) => cardObj.pos.y = v, k.easings.easeInBack).onEnd(() => {
                 k.destroy(cardObj);
                 cardMenuContainer.trigger("popupClose");
             });

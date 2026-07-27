@@ -244,8 +244,8 @@ k.scene("playscene", () => {
         });
     }
     const waveController = createEnemyWaveSystem({
-        batchSize: 6,
-        batchSizeMax: 7,
+        batchSize: 5,
+        batchSizeMax: 5,
         player: player,
         spawnFn: (pos) => {
             const enemy = createEnemy(bigTomate, player);
@@ -299,8 +299,8 @@ k.scene("playscene", () => {
             if (director.canShowTutorial)
                 messagePopup.abrirMensagem("Tutorial", [
                     "Bem vindo jogador(a), esta mensagem so sera mostrada uma vez, servira como um tutorial para o jogo.",
-                    "Seu objetivo e sobreviver tres dias e tres noites.\nutilizando do adubo das criaturas da noite para aumentar o nivel do seu tomate e cura-lo, você tambem pode escolher trocar adubo por cartas.",
-                    "Após finalizar os preparos do dia, proteja seu tomate durante a noite.",
+                    "Seu objetivo e sobreviver tres dias e tres noites.\nutilizando do adubo das criaturas da noite para aumentar o nivel do seu tomate e cura-lo, voce tambem pode escolher trocar adubo por cartas.",
+                    "Apos finalizar os preparos do dia, proteja seu tomate durante a noite.",
                     "Sobreviva por 3 dias para conseguir ter um tomate perfeito para a competicao.\nBoa sorte",
                     ""
                 ], {
